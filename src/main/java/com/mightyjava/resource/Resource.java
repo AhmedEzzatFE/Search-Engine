@@ -12,12 +12,9 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 public interface Resource<T> {
-	@GetMapping("/search/{searchText}")
-	ResponseEntity<Page<T>> findAll(Pageable pageable, @PathVariable String searchText);
+	@GetMapping("/search/{Country}/{id}/{searchText}")
+	ResponseEntity<Page<T>> findAll(Pageable pageable,@PathVariable String Country, @PathVariable int id,@PathVariable String searchText);
 
-
-	@GetMapping("/location/{country}")
-	ResponseEntity<Page<T>> GetCountry(Pageable pageable, @PathVariable String country);
 
 	@GetMapping
 	ResponseEntity<Page<T>> findAll(int pageNumber, int pageSize);

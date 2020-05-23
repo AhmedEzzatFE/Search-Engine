@@ -1,0 +1,23 @@
+{
+  "name": "mysqldate",
+  "description": "MySQL Timestamp support for javascript's Date object.",
+  "main": "mysqldate.js",
+  "authors": [
+    "lyoko"
+  ],
+  "license": "Apache-2.0",
+  "keywords": [
+    "mysql",
+    "date",
+    "timestamp",
+    "datetime"
+  ],
+  "homepage": "https://github.com/Okoyl/mysqldate",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}

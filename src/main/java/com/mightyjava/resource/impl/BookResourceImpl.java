@@ -24,14 +24,10 @@ public class BookResourceImpl implements Resource<SearchQuery> {
 
 	//for searching by query
 	@Override
-	public ResponseEntity<Page<SearchQuery>> findAll(Pageable pageable, String searchText) {
-		return new ResponseEntity<>(bookService.findAll(pageable, searchText), HttpStatus.OK);
+	public ResponseEntity<Page<SearchQuery>> findAll(Pageable pageable,String Country,int id, String searchText) {
+		return new ResponseEntity<>(bookService.findAll(pageable,Country,id, searchText), HttpStatus.OK);
 	}
 
-	@Override
-	public ResponseEntity<Page<SearchQuery>> GetCountry(Pageable pageable, String country) {
-		return new ResponseEntity<>(bookService.getcountry(pageable, country), HttpStatus.OK);
-	}
 
 	//for page number searching
 	@Override

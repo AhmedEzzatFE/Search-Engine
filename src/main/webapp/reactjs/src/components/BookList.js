@@ -24,27 +24,31 @@ recognition.lang = 'en-US'
         super(props);
         this.state = {
             books : [],
+            ReservedQueries:[],
             countryName: '',
             countryCode: '',
             search : '',
+            suggestions:[]    ,
             interimTranscript:'',
             finalTranscript:'',
+            text:'',
             listening: false,
+            id:Math.floor((Math.random() * 10000) + 1),
             currentPage : 1,
             booksPerPage : 10,
         };
         this.toggleListen = this.toggleListen.bind(this)
         this.handleListen = this.handleListen.bind(this)
+
     }
+
      toggleListen() {
          this.setState({
              listening: !this.state.listening
          }, this.handleListen)
      }
      handleListen(){
-
          if (this.state.listening) recognition.start()
-
          let finalTranscript = ''
          recognition.onresult = event => {
              let interimTranscript = ''
@@ -56,7 +60,6 @@ recognition.lang = 'en-US'
              }
             this.setState({interimTranscript: interimTranscript,finalTranscript:finalTranscript})
          }
-
     }
 
     getGeoInfo = () => {
@@ -144,9 +147,11 @@ recognition.lang = 'en-US'
     };
 
     searchChange = event => {
+        alert(event.target.value)
         this.setState({
-            [event.target.name] : event.target.value
+            search: event.target.value
         });
+
     };
 
     cancelSearch = () => {
@@ -156,22 +161,37 @@ recognition.lang = 'en-US'
 
     searchData = (currentPage) => {
         currentPage -= 1;
-        axios.get("http://localhost:8081/rest/api/search/"+this.state.search+"?page="+currentPage+"&size="+this.state.booksPerPage)
-            .then(response => response.data)
-            .then((data) => {
-                this.setState({
-                    books: data.content,
-                    totalPages: data.totalPages,
-                    totalElements: data.totalElements,
-                    currentPage: data.number + 1
-                });
-            });
+        alert(this.state.countryName)
+        alert(this.state.id)
+        axios
+       .get("http://localhost:8081/rest/api/search/"+this.state.countryName+"/"+this.state.id+"/"+this.state.search+"?page="+currentPage+"&size="+this.state.booksPerPage)
+       .then(response => response.data)
+       .then((data) => {
+          this.setState({
+            books: data.content,
+            totalPages: data.totalPages,
+            totalElements: data.totalElements,
+            currentPage: data.number + 1
+          });
+       });
         axios.get("http://localhost:8081/rest/api/location/"+this.state.countryName)
             .then(response=> response.data);
+        let x=(this.state.search==="")
+        if(!x){
+            if(this.state.ReservedQueries.find(element=> element===this.state.search)===undefined) {
+
+                const posted = {
+                    "name": this.state.search,
+                    "id": Math.floor((Math.random() * 1000) + 1)
+
+                }
+                axios.post("http://localhost:3000/users", posted).then(r => r.data)
+            }}
+
     };
-     searchVoiceData = (currentPage) => {
+    searchVoiceData = (currentPage) => {
          currentPage -= 1;
-         axios.get("http://localhost:8081/rest/api/search/"+this.state.finalTranscript  +"?page="+currentPage+"&size="+this.state.booksPerPage)
+         axios.get("http://localhost:8081/rest/api/search/"+this.state.countryName+"/"+this.state.id+"/"+this.state.finalTranscript+"?page="+currentPage+"&size="+this.state.booksPerPage)
              .then(response => response.data)
              .then((data) => {
                  this.setState({
@@ -181,46 +201,73 @@ recognition.lang = 'en-US'
                      currentPage: data.number + 1
                  });
              });
-         axios.get("http://localhost:8081/rest/api/location/"+this.state.countryName)
-             .then(response=> response.data);
-     };
+        let x=(this.state.finalTranscript==="")
+        if(x===false){
+         if(this.state.ReservedQueries.find(element=> element===this.state.finalTranscript)===undefined) {
+             const posted = {
+                "name": this.state.finalTranscript,
+                "id": Math.floor((Math.random() * 1000) + 1)
+            }
+            axios.post("http://localhost:3000/users", posted).then(r => r.data)
+        }}
+    };
     componentDidMount() {
-        if ("geolocation" in navigator) {
-            console.log("Available");
-        } else {
-            console.log("Not Available");
-        }
         this.getGeoInfo()
+        this.getResponse()
     }
+    getResponse(){
+        let ReservedQ=[]
+        axios.get("http://localhost:3000/users")
+            .then((response) => { ReservedQ = response.data.map(x => x.name)
+                this.setState({ReservedQueries: ReservedQ})})
+    }
+    onTextChange=(e)=>{
+        this.getResponse()
+        const value = e.target.value;
+        let suggestions=[];
+        if(value.length > 0){
+            const regex=new RegExp(`^${value}`,'i')
+            suggestions=this.state.ReservedQueries.sort().filter(v=>regex.test(v));
+        }
+        this.setState({suggestions:suggestions,search: value})
+    }
+    suggestionselected(value){
+        this.setState(()=>({
+        search:value,
+        suggestions:[]
+        }))}
+    renderSuggestion(){
+         const {suggestions}=this.state;
+         if(suggestions.length===0){return null}
+         return(<ul>{suggestions.map(item=><li onClick={()=>this.suggestionselected(item)}>{item}</li>)}</ul>)
+     }
 
-    render() {
+render() {
         const {books, currentPage, totalPages, search} = this.state;
         return <div>
             <div style={{"display":this.state.show ? "block" : "none"}}>
             </div>
-            <Card className={"border border-dark bg-dark text-white"}>
+            <Card className={"border border-dark  text-black"}>
                 <Card.Header>
                     <div style={{"float":"left"}}>
-                         Google
+                        Google
                     </div>
                     <div style={{"float":"right"}}>
-                         <InputGroup size="sm">
-                            <FormControl placeholder="Enter Search Query" name="search" value={search}
-                                className={"info-border bg-dark text-white"}
-                                onChange={this.searchChange}/>
-                            <InputGroup.Append>
+                        <InputGroup size="sm">
+                            <input value={search}   onChange={this.onTextChange} type="text" />
+                        <InputGroup.Append>
                                 <Button size="sm" variant="outline-info" type="button" onClick={this.searchData}>
                                     <FontAwesomeIcon icon={faSearch}/>
                                 </Button>
-
                                 <Button size="sm"  type="button"  onClick={this.toggleListen}>
                                     <FontAwesomeIcon icon={faMicrophone} />
                                 </Button>
                                 <Button size="sm" variant="outline-danger" type="button" onClick={this.cancelSearch}>
                                     <FontAwesomeIcon icon={faTimes} />
                                 </Button>
-                           </InputGroup.Append>
-                         </InputGroup>
+                            </InputGroup.Append>
+                        </InputGroup>
+                        {this.renderSuggestion()}
                     </div>
                 </Card.Header>
                 <div className={container}>
@@ -288,7 +335,13 @@ recognition.lang = 'en-US'
                     </Card.Footer> : null
                  }
             </Card>
-        </div>;
+
+                )}
+
+            />
+
+        </div>
+
     }
 }
 const styles = {
@@ -322,6 +375,6 @@ const styles = {
     }
 }
 
-const { container, button } = styles
+const { container } = styles
 
 export default BookList;

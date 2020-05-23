@@ -180,7 +180,7 @@ public class QueryProcessorForWI {
 	       	 double Popularity_Geo_Date=0.0;
 				 for(URL url : webLinks) {
 					Popularity_Geo_Date=Popularity.get(Popularity_Geo_Date_Count)+Geo_Date.get(Popularity_Geo_Date_Count);
-					queryForInsert = "INSERT INTO `rankedurls1` (`Urls`,`Rank`)"
+					queryForInsert = "INSERT INTO `rankedurlsezza` (`Urls`,`Rank`)"
 	       		 		+ " VALUES ('" + url + "','" 
 	       		 		+ Popularity_Geo_Date + "')";
 					st_InsertFinalRank.executeUpdate(queryForInsert);
@@ -201,12 +201,12 @@ public class QueryProcessorForWI {
 //	       	List<Double> RelvanceRank = new ArrayList<>();
 				
 	       	for (String word : FinalQuery) {
-		            query = "SELECT * FROM indexertable1 WHERE Words = '"+word+"'";
+		            query = "SELECT * FROM indexertableezza WHERE Words = '"+word+"'";
 		        	rs =  st.executeQuery(query);
 					while(rs.next()){
 						tempUrl=rs.getString("URLs");
 						
-			            CountQuery = "SELECT COUNT(*) FROM indexertable1 WHERE Words = '"+word+"'";
+			            CountQuery = "SELECT COUNT(*) FROM indexertableezza WHERE Words = '"+word+"'";
 			            rs_Count = st_Count.executeQuery(CountQuery);
 			            while(rs_Count.next()){
 			            	DocCounter = Double.parseDouble(rs_Count.getString("COUNT(*)"));
@@ -227,14 +227,14 @@ public class QueryProcessorForWI {
 		            			Double.parseDouble(rs.getString("H6Occurrences")),
 		            			Double.parseDouble(rs.getString("BoldOccurrences")));
 		            	FinalScore_Score=final_score.getFinalScore();
-			            query = "SELECT * FROM rankedurls1 WHERE Urls = '"+tempUrl+"'";
+			            query = "SELECT * FROM rankedurlsezza WHERE Urls = '"+tempUrl+"'";
 			            rs_ToGetThePrevRank=st_ToGetThePrevRank.executeQuery(query);
 		            	while(rs_ToGetThePrevRank.next())
 		            	{
 		            		PreviousRank=Double.parseDouble(rs_ToGetThePrevRank.getString("Rank"));
 		            	}
 		            	TotalRank=PreviousRank+FinalScore_Score;
-		            	UpdateQuery="UPDATE `rankedurls1` SET `Rank`= '"+TotalRank +"' WHERE Urls = '"+tempUrl+"'";	
+		            	UpdateQuery="UPDATE `rankedurlsezza` SET `Rank`= '"+TotalRank +"' WHERE Urls = '"+tempUrl+"'";
 						st_InsertFinalRank.executeUpdate(UpdateQuery);
 		            	TF_Score=0.0;
 		    			IDF_Score=0.0;
@@ -251,7 +251,7 @@ public class QueryProcessorForWI {
 	       	Pattern pattern;
 	       	Matcher matcher;
 	       	if(PhraseSearching == true)
-	       	{   query="SELECT * FROM rankedurls1 ORDER BY Rank DESC";
+	       	{   query="SELECT * FROM rankedurlsezza ORDER BY Rank DESC";
 	       		rs =  st.executeQuery(query);
 		       	while(rs.next())
 		       	{
@@ -265,14 +265,14 @@ public class QueryProcessorForWI {
 		
 		    		while (matcher.find()) {
 		    		    System.out.println(matcher.group(1));
-		    		    query = "SELECT * FROM rankedurls1 WHERE Urls = '"+tempUrl+"'";
+		    		    query = "SELECT * FROM rankedurlsezza WHERE Urls = '"+tempUrl+"'";
 			            rs_ToGetThePrevRank=st_ToGetThePrevRank.executeQuery(query);
 		            	while(rs_ToGetThePrevRank.next())
 		            	{
 		            		PreviousRank=Double.parseDouble(rs_ToGetThePrevRank.getString("Rank"));
 		            	}
 		            	TotalRank=PreviousRank+100;
-		            	UpdateQuery="UPDATE `rankedurls1` SET `Rank`= '"+TotalRank +"' WHERE Urls = '"+tempUrl+"'";	
+		            	UpdateQuery="UPDATE `rankedurlsezza` SET `Rank`= '"+TotalRank +"' WHERE Urls = '"+tempUrl+"'";
 						st_InsertFinalRank.executeUpdate(UpdateQuery);
 		    		    
 		    		}
