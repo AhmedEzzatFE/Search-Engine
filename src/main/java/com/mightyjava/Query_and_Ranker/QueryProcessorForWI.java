@@ -1,16 +1,28 @@
 package com.mightyjava.Query_and_Ranker;
 
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Scanner;
+import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
+import org.apache.commons.lang3.StringUtils;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
 import org.tartarus.snowball.ext.porterStemmer;
 
 import com.mightyjava.Query_and_Ranker.Ranker.FinalScore;
+import com.mightyjava.Query_and_Ranker.Ranker.Geographic_and_DatePublished;
 import com.mightyjava.Query_and_Ranker.Ranker.IDF;
 import com.mightyjava.Query_and_Ranker.Ranker.ScoreTf_Idf;
 import com.mightyjava.Query_and_Ranker.Ranker.TF;
@@ -18,50 +30,71 @@ import com.mightyjava.Query_and_Ranker.Ranker.TF;
 public class QueryProcessorForWI {
 	public static Connection con;
 	 public static Statement st;
-	 public static Statement st2;
+	 public static Statement st_ToGetThePrevRank;
+	 public static Statement st_Count; // to delete the ranker table
+
 	 public static Statement st_TruncateRT; // to delete the ranker table
 	 public static Statement st_OrdereRT; // to delete the ranker table
 	 public static Statement st_Old; // to delete the ranker table
 	 public static Statement st_InsertFinalRank; // to delete the ranker table
 	 public static ResultSet rs;
-	 public static ResultSet rs_2; // to count the documents have a single word
+	 public static ResultSet rs_ToGetThePrevRank;
+
+	 public static ResultSet rs_Count; // to count the documents have a single word
 	 public static ResultSet rs_InsertRT; // for insert 
 	 public static ResultSet rs_ReadOldPopularity; // for insert 
 	 public static int UrlsCount;
-	 public static String tempUrl;
+	 public static Set<URL> webLinks = new HashSet<>();
+
+	 public static String Location = "uk";
+
+	 public static String tempUrl =null;
 	 public static String temp2Url;
 	 public static String[] wordsToIgnore={" ","","a","about", "above", "after", "again",
-     		"against", "ain", "all", "am", "an", "and", "any", "are", "aren",
-     		"aren't", "as", "at", "be", "because", "been", "before", "being",
-     		"below", "between", "both", "but", "by", "can", "could", "couldn",
-     		"couldn't", "d", "did", "didn", "didn't", "do", "does", "doesn",
-     		"doesn't", "doing", "don", "don't", "down", "during", "each", "few",
-     		"for", "from", "furr", "had", "hadn", "hadn't", "has", "hasn",
-     		"hasn't", "have", "haven", "haven't", "having", "he", "he'd", "he'll",
-     		"he's","her", "here","here's" ,"hers", "herself", "him", "himself",
-     		"his", "how","how's" ,"i","i'd", "i'll", "i'm", "i've","if", "in",
-     		"into", "is", "isn", "isn't", "it", "it's", "its", "itself", "just",
-     		"ll", "m", "ma", "me", "mightn", "mightn't", "more", "most", "mustn",
-     		"mustn't", "my", "myself", "needn", "needn't", "no", "nor", "not",
-     		"now", "o", "of", "off", "on", "once", "only", "or", "other", "ought",
-     		"our", "ours", "ourselves", "out", "over", "own", "re", "s", "same",
-     		"shan", "shan't", "she",  "she'd", "she'll", "she's", "should",
-     		"should've", "shouldn", "shouldn't", "so", "some", "such", "t",
-     		"than", "that", "that'll","that's", "the", "their", "theirs", "them",
-     		"themselves", "then", "there","there's","these", "they", "they'd",
-     		"they'll", "they're", "they've", "this", "those", "through", "to",
-     		"too", "under", "until", "up", "ve", "very", "was", "wasn", "wasn't",
-     		"we", "we'd", "we'll", "we're", "we've", "were", "weren", "weren't",
-     		"what", "what's","when", "when's" , "where", "where's","which",
-     		"while", "who", "who's","whom", "why", "will", "why's", "with",
-     		"won", "won't","would","wouldn", "wouldn't", "y", "you", "you'd",
-     		"you'll", "you're", "you've", "your", "yours", "yourself", "yourselves"};
+    		"against", "ain", "all", "am", "an", "and", "any", "are", "aren",
+    		"aren't", "as", "at", "be", "because", "been", "before", "being",
+    		"below", "between", "both", "but", "by", "can", "could", "couldn",
+    		"couldn't", "d", "did", "didn", "didn't", "do", "does", "doesn",
+    		"doesn't", "doing", "don", "don't", "down", "during", "each", "few",
+    		"for", "from", "furr", "had", "hadn", "hadn't", "has", "hasn",
+    		"hasn't", "have", "haven", "haven't", "having", "he", "he'd", "he'll",
+    		"he's","her", "here","here's" ,"hers", "herself", "him", "himself",
+    		"his", "how","how's" ,"i","i'd", "i'll", "i'm", "i've","if", "in",
+    		"into", "is", "isn", "isn't", "it", "it's", "its", "itself", "just",
+    		"ll", "m", "ma", "me", "mightn", "mightn't", "more", "most", "mustn",
+    		"mustn't", "my", "myself", "needn", "needn't", "no", "nor", "not",
+    		"now", "o", "of", "off", "on", "once", "only", "or", "other", "ought",
+    		"our", "ours", "ourselves", "out", "over", "own", "re", "s", "same",
+    		"shan", "shan't", "she",  "she'd", "she'll", "she's", "should",
+    		"should've", "shouldn", "shouldn't", "so", "some", "such", "t",
+    		"than", "that", "that'll","that's", "the", "their", "theirs", "them",
+    		"themselves", "then", "there","there's","these", "they", "they'd",
+    		"they'll", "they're", "they've", "this", "those", "through", "to",
+    		"too", "under", "until", "up", "ve", "very", "was", "wasn", "wasn't",
+    		"we", "we'd", "we'll", "we're", "we've", "were", "weren", "weren't",
+    		"what", "what's","when", "when's" , "where", "where's","which",
+    		"while", "who", "who's","whom", "why", "will", "why's", "with",
+    		"won", "won't","would","wouldn", "wouldn't", "y", "you", "you'd",
+    		"you'll", "you're", "you've", "your", "yours", "yourself", "yourselves","!","@","#","$",
+    		"%","^","&","*","(",")","-","_","=","+","/","\\",">","<",";",":","\'","{","}","`","[","]","\""};
+	
+
+
 		  String QueryWI;
 		  public QueryProcessorForWI(String query){
 			  QueryWI=query;
 		  }
-		  public boolean Processor() {
-			  String[] words = QueryWI.split(" ");
+		  public void Processor() throws IOException {
+			  String[] words = QueryWI.replace("\"", "").split(" ");
+			  boolean PhraseSearching=false;
+			  List<String> tokens = new ArrayList<>();
+
+			  if(QueryWI.charAt(0)=='"' && QueryWI.charAt(QueryWI.length()-1)=='"'  ) {
+				  PhraseSearching=true;
+				  String word = QueryWI.replace("\"", "");
+				  tokens.add(word.toLowerCase());
+				  
+			  }
 			  porterStemmer stemmer = new porterStemmer();
 			  // List to add the Query after Removing the Stopping words
 			  List<String> semiFinalQuery = new ArrayList<>();
@@ -85,168 +118,177 @@ public class QueryProcessorForWI {
 				  }
 				  addable=true;
 			  }
-	          for (String word : semiFinalQuery) {
-	              if ("".equals(word)) {
-	                  continue;
-	              }
-	              stemmer.setCurrent(word);
-	              stemmer.stem();
-	              stemmedWord = stemmer.getCurrent();
-	              stemmedWord=stemmedWord.toLowerCase();
-	              FinalQuery.add(stemmedWord);
+	         for (String word : semiFinalQuery) {
+	             if ("".equals(word)) {
+	                 continue;
+	             }
+	             stemmer.setCurrent(word);
+	             stemmer.stem();
+	             stemmedWord = stemmer.getCurrent();
+	             stemmedWord=stemmedWord.toLowerCase();
+	             FinalQuery.add(stemmedWord);
 
-	          }
-	    	  System.out.println(FinalQuery);
+	         }
+	   	  System.out.println(FinalQuery);
 
 			 try {
 		        	Class.forName("com.mysql.jdbc.Driver");
 		        	con=DriverManager.getConnection("jdbc:mysql://localhost/projectdb1?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC", "root", "");
 		        	st = con.createStatement();
-		        	st2= con.createStatement();
+		        	st_ToGetThePrevRank= con.createStatement();
 		        	st_TruncateRT= con.createStatement(); // to empty the ranked table
 		        	st_OrdereRT= con.createStatement(); // to empty the ranked table
 		        	st_Old = con.createStatement();
 		        	st_InsertFinalRank= con.createStatement();
+		        	st_Count=con.createStatement();
 
 		        }catch(Exception e){
 		        	System.out.println(e.getMessage());
-	        }    
-			String deleteQuery = "TRUNCATE TABLE rankedurlsezza";
-	        String query = "SELECT * FROM indexertableezza";
-	        String queryForInsert;
-	        String queryIndexedUrls = "SELECT * FROM indexedurls";
+	       }   
+			String query;
+			String deleteQuery = "TRUNCATE TABLE rankedurls1";
+			String queryForInsert;
 			String query_ReadOld="SELECT * FROM `oldpopularity`";
+			String UpdateQuery;
+	       try {
+	    	   
+	    	   queryForInsert = "INSERT INTO `userqueries` (`Query`,`Country`)"
+	      		 		+ " VALUES ('" + QueryWI + "','" 
+	      		 		+ Location + "')";  
+	    	   st.executeUpdate(queryForInsert);
+	    	   
+	        List<Double> Geo_Date = new ArrayList<>(); 
+	    	query= "SELECT * FROM `indexedurls`" ;
+	    	rs=st.executeQuery(query);
+	    	while(rs.next())
+	    	{
 
-
-	        try {
-	        	rs =  st.executeQuery(queryIndexedUrls);
-	        	double TotalNumberOfDocuments=0;
-	        	
-	        	while(rs.next())
-	        	{
-	        		TotalNumberOfDocuments++;
-	        	}
-				rs =  st.executeQuery(query);
-	        	List<String> AllUrls = new ArrayList<>();
-				st_TruncateRT.executeUpdate(deleteQuery); // empty the ranked Table
-	            TF tf;
-	            IDF idf;
-	            ScoreTf_Idf tf_idf;
-	            FinalScore final_score;
-				
+	    		Geographic_and_DatePublished G_D= new Geographic_and_DatePublished(Location,(rs.getString("URLExtension")),rs.getString("DatePublished"));
+	    		Geo_Date.add(G_D.GeographicDateScore());
+	    	}
+	       	st_TruncateRT.executeUpdate(deleteQuery); // empty the ranked Table
+	       	List<Double> Popularity = new ArrayList<>();
+	       	double TotalNumberOfDocuments=0;
+	       	rs =  st.executeQuery(query_ReadOld);
+	       	while(rs.next())
+	       	{
+	       		TotalNumberOfDocuments++;
+	       		webLinks.add(new URL (rs.getString("URLs")));
+	       		Popularity.add(Double.parseDouble(rs.getString("Popularity")));
+	       	}
+	       	 int Popularity_Geo_Date_Count=0;
+	       	 double Popularity_Geo_Date=0.0;
+				 for(URL url : webLinks) {
+					Popularity_Geo_Date=Popularity.get(Popularity_Geo_Date_Count)+Geo_Date.get(Popularity_Geo_Date_Count);
+					queryForInsert = "INSERT INTO `rankedurls1` (`Urls`,`Rank`)"
+	       		 		+ " VALUES ('" + url + "','" 
+	       		 		+ Popularity_Geo_Date + "')";
+					st_InsertFinalRank.executeUpdate(queryForInsert);
+					Popularity_Geo_Date_Count++;
+	       	}
+				TF tf;
+				IDF idf;
+	           	ScoreTf_Idf tf_idf;
+	           	FinalScore final_score;
+				String CountQuery;
 				double TF_Score=0.0;
 				double IDF_Score=0.0;
 				double TF_IDF_Score=0.0;
 				double FinalScore_Score=0.0;
 				double DocCounter =0.0; // to count how many documents have the word 
 				double TotalRank=0.0; // for every link
-	        	List<Double> RelvanceRank = new ArrayList<>();
-
-				while(rs.next()){
+				double PreviousRank=0.0;
+//	       	List<Double> RelvanceRank = new ArrayList<>();
 				
-					if(!("A new url is comming".equals(rs.getString("URLs"))))
-					{
+	       	for (String word : FinalQuery) {
+		            query = "SELECT * FROM indexertable1 WHERE Words = '"+word+"'";
+		        	rs =  st.executeQuery(query);
+					while(rs.next()){
 						tempUrl=rs.getString("URLs");
-				          for (String word : FinalQuery) {
-				              if (word.equals(rs.getString("Words"))) {	
-				            	 rs_2 =  st2.executeQuery(query);
-				            	 while(rs_2.next()) {
-				            		 if (word.equals(rs_2.getString("Words"))) {
-				            			 DocCounter++;
-				            		 }
-				            	 }
-			            		tf=new TF(Double.parseDouble(rs.getString("Occurrences")),Double.parseDouble(rs.getString("NumberOfWordsInThisLink")));
-								TF_Score=tf.getNormalizedTf();
-				            	idf=new IDF(TotalNumberOfDocuments,DocCounter);
-				            	IDF_Score=idf.getIDf();
-				            	tf_idf= new ScoreTf_Idf(TF_Score,IDF_Score);
-				            	TF_IDF_Score=tf_idf.getScore_TF_IDF();
-				            	final_score=new FinalScore(TF_IDF_Score,Double.parseDouble(rs.getString("TitleOccurrences")),
-				            			Double.parseDouble(rs.getString("H1Occurrences")),
-				            			Double.parseDouble(rs.getString("H2Occurrences")),
-				            			Double.parseDouble(rs.getString("H3Occurrences")),
-				            			Double.parseDouble(rs.getString("H4Occurrences")),
-				            			Double.parseDouble(rs.getString("H5Occurrences")),
-				            			Double.parseDouble(rs.getString("H6Occurrences")),
-				            			Double.parseDouble(rs.getString("BoldOccurrences")));
-				            	FinalScore_Score=final_score.getFinalScore();
-				            	TotalRank=TotalRank+FinalScore_Score;
-				            	TF_Score=0.0;
-				    			IDF_Score=0.0;
-				    			TF_IDF_Score=0.0;
-				    			FinalScore_Score=0.0;
-				    			DocCounter =0.0; 
+						
+			            CountQuery = "SELECT COUNT(*) FROM indexertable1 WHERE Words = '"+word+"'";
+			            rs_Count = st_Count.executeQuery(CountQuery);
+			            while(rs_Count.next()){
+			            	DocCounter = Double.parseDouble(rs_Count.getString("COUNT(*)"));
+			            }
+			            DocCounter=2;
+	           		tf=new TF(Double.parseDouble(rs.getString("Occurrences")),Double.parseDouble(rs.getString("NumberOfWordsInThisLink")));
+						TF_Score=tf.getNormalizedTf();
+		            	idf=new IDF(TotalNumberOfDocuments,DocCounter);
+		            	IDF_Score=idf.getIDf();
+		            	tf_idf= new ScoreTf_Idf(TF_Score,IDF_Score);
+		            	TF_IDF_Score=tf_idf.getScore_TF_IDF();
+		            	final_score=new FinalScore(TF_IDF_Score,Double.parseDouble(rs.getString("TitleOccurrences")),
+		            			Double.parseDouble(rs.getString("H1Occurrences")),
+		            			Double.parseDouble(rs.getString("H2Occurrences")),
+		            			Double.parseDouble(rs.getString("H3Occurrences")),
+		            			Double.parseDouble(rs.getString("H4Occurrences")),
+		            			Double.parseDouble(rs.getString("H5Occurrences")),
+		            			Double.parseDouble(rs.getString("H6Occurrences")),
+		            			Double.parseDouble(rs.getString("BoldOccurrences")));
+		            	FinalScore_Score=final_score.getFinalScore();
+			            query = "SELECT * FROM rankedurls1 WHERE Urls = '"+tempUrl+"'";
+			            rs_ToGetThePrevRank=st_ToGetThePrevRank.executeQuery(query);
+		            	while(rs_ToGetThePrevRank.next())
+		            	{
+		            		PreviousRank=Double.parseDouble(rs_ToGetThePrevRank.getString("Rank"));
+		            	}
+		            	TotalRank=PreviousRank+FinalScore_Score;
+		            	UpdateQuery="UPDATE `rankedurls1` SET `Rank`= '"+TotalRank +"' WHERE Urls = '"+tempUrl+"'";	
+						st_InsertFinalRank.executeUpdate(UpdateQuery);
+		            	TF_Score=0.0;
+		    			IDF_Score=0.0;
+		    			TF_IDF_Score=0.0;
+		    			FinalScore_Score=0.0;
 				            	
 				              }
 				          }
-					}
-					// insert the urls and its rank in the ranked urls
+	       	rs.close();
 	 
-					else if(("A new url is comming".equals(rs.getString("URLs")))) {
-						if(tempUrl!= null) {
-								RelvanceRank.add(TotalRank);
-								AllUrls.add(tempUrl);
-								TotalRank=0;	
-								tempUrl=null;
-						}
-					}
-					
-				}
-				int Counter=0;
-				double Final_Rank=0.0;
-	        	List<Double> FinalList = new ArrayList<>();
-				// Read the old Popularity and added to the the Relvance Rank
-				rs_ReadOldPopularity=st_Old.executeQuery(query_ReadOld);
-				UrlsCount=0;
-				while(rs_ReadOldPopularity.next())
-	        	{
-					Final_Rank=RelvanceRank.get(Counter)+Double.parseDouble(rs_ReadOldPopularity.getString("Popularity"));
-					FinalList.add(Final_Rank);
-					Counter++;
-	        	}
+	       	int count=0;
+	       	String text;
+	       	String patternString;
+	       	Pattern pattern;
+	       	Matcher matcher;
+	       	if(PhraseSearching == true)
+	       	{   query="SELECT * FROM rankedurls1 ORDER BY Rank DESC";
+	       		rs =  st.executeQuery(query);
+		       	while(rs.next())
+		       	{
+		       		tempUrl=rs.getString("Urls");
+		       		System.out.println(rs.getString("Rank"));
+		       		Document document = Jsoup.connect(tempUrl).get();
+		       		text = document.body().text().toLowerCase();
+		       		patternString = "\\b(" + StringUtils.join(tokens, "|") + ")\\b";
+		    		pattern = Pattern.compile(patternString);
+		    		matcher = pattern.matcher(text);
 		
-				for (int i = 0; i < TotalNumberOfDocuments-1; i++)
-		        {
-		            // Find the minimum element in unsorted array
-		            int max_idx = i;
-		            for (int j = i+1; j < TotalNumberOfDocuments; j++)
-		            {
-		                if (FinalList.get(j) > FinalList.get(max_idx))
-		                	max_idx = j;
-		            }
-
-		            // Swap the found minimum element with the first
-		            // element
-		            double temp = FinalList.get(max_idx);
-		            FinalList.set(max_idx, FinalList.get(i));
-		            FinalList.set(i, temp);
-		            String tempString=AllUrls.get(max_idx);
-		            AllUrls.set(max_idx, AllUrls.get(i));
-		            AllUrls.set(i, tempString);
-
-		        }
-				rs_ReadOldPopularity=st_Old.executeQuery(query_ReadOld);
-				UrlsCount=0;
-				Counter=0;
-				while(rs_ReadOldPopularity.next())
-	        	{
-
-					queryForInsert = "INSERT INTO `rankedurlsezza` (`URLs`,`Rank`)"
-	        		 		+ " VALUES ('" + AllUrls.get(UrlsCount) + "','" 
-	        		 		+ FinalList.get(Counter) + "')";
-					st_InsertFinalRank.executeUpdate(queryForInsert);
-					UrlsCount++;
-					Counter++;
-	        	}
-
+		    		while (matcher.find()) {
+		    		    System.out.println(matcher.group(1));
+		    		    query = "SELECT * FROM rankedurls1 WHERE Urls = '"+tempUrl+"'";
+			            rs_ToGetThePrevRank=st_ToGetThePrevRank.executeQuery(query);
+		            	while(rs_ToGetThePrevRank.next())
+		            	{
+		            		PreviousRank=Double.parseDouble(rs_ToGetThePrevRank.getString("Rank"));
+		            	}
+		            	TotalRank=PreviousRank+100;
+		            	UpdateQuery="UPDATE `rankedurls1` SET `Rank`= '"+TotalRank +"' WHERE Urls = '"+tempUrl+"'";	
+						st_InsertFinalRank.executeUpdate(UpdateQuery);
+		    		    
+		    		}
+		    		count++;
+		       		if(count == 20)
+		       		{
+		       			break;
+		       		}
+		       	}
+	       	}
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			return true;
-	        
 
 	    }
 
-
+	   
 	}

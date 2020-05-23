@@ -11,6 +11,6 @@ import org.springframework.data.domain.Pageable;
 @Repository
 public interface BookRepository extends PagingAndSortingRepository<SearchQuery, Long> {
 
-    @Query("From SearchQuery b ")
+    @Query("From SearchQuery b where b.Rank > 0.5  ")
     Page<SearchQuery> findAllBooks(Pageable pageable);
 }

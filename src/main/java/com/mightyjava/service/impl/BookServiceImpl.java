@@ -11,6 +11,8 @@ import com.mightyjava.domain.SearchQuery;
 import com.mightyjava.repository.BookRepository;
 import com.mightyjava.service.IService;
 
+import java.io.IOException;
+
 @Service
 public class BookServiceImpl implements IService<SearchQuery> {
 
@@ -20,7 +22,11 @@ public class BookServiceImpl implements IService<SearchQuery> {
 	@Override
 	public Page<SearchQuery> findAll(Pageable pageable, String searchText) {
 		QueryProcessorForWI x = new QueryProcessorForWI(searchText);
-		boolean temp = x.Processor();
+		try {
+			x.Processor();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		return bookRepository.findAllBooks(pageable);
 	}
 

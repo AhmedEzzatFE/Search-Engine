@@ -1,5 +1,8 @@
 package com.mightyjava.Query_and_Ranker;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Ranker {
 
 	public static class TF{
@@ -83,7 +86,7 @@ public class Ranker {
 		}
 		
 		public double getFinalScore() {
-			return (Tf_Idf+10.0*Title+5.0*H1+2.5*H2+1.5*H3+1.3*H4+1.2*H5+1.0*H6+2.0*Bold);
+			return (Tf_Idf+20.0*Title+10.0*H1+2.5*H2+1.5*H3+1.3*H4+1.2*H5+1.0*H6+1.7*Bold);
 		}
 	}
 	public static class Popularity_Relevance{
@@ -98,6 +101,107 @@ public class Ranker {
 		
 		public double getFinalScore() {
 			return (popularity+relevance);
+		}
+	}
+	public static class Geographic_and_DatePublished{
+		String Location;
+		String Extension;
+		int Date;
+		
+		
+		Geographic_and_DatePublished(String loc , String ex, String date ){
+			Location=loc.toLowerCase();
+			Extension=ex.toLowerCase();
+			Date=Integer.parseInt(date);
+		}
+		
+		public double GeographicDateScore() {
+			double total=0;
+			if(Extension.equals(Location) && !Extension.equals("0")) {
+				total=2.5;
+				if(Date != 0 && Date >= 2015) {
+					total+= 1.5;
+					return total;
+				}
+				else if(Date != 0 && Date < 2015 && Date >=2000) {
+					total+= 0.75;
+					return total;
+				}
+				else if(Date != 0 && Date < 2000 && Date >=1950) {
+					total+= 0.25;
+					return total;
+				}
+				else {
+					return total;
+				}
+			}
+			else {
+				if(Date != 0 && Date >= 2015) {
+					total+= 1.5;
+					return total;
+				}
+				else if(Date != 0 && Date < 2015 && Date >=2000) {
+					total+= 0.75;
+					return total;
+				}
+				else if(Date != 0 && Date < 2000 && Date >=1950) {
+					total+= 0.25;
+					return total;
+				}
+				else {
+					return total;
+				}
+			}
+		}
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	public static class ImageRanker{
+		List<String> Words ;
+		String Title_image;
+		String Alt;
+		String Title_url;
+		
+		
+		
+		ImageRanker(List<String> word , String title_url, String title_image,String alt ){
+			Words=word;
+			Title_image=title_image.toLowerCase();
+			Title_url=title_image.toLowerCase();
+			Alt=alt.toLowerCase();
+
+		}
+		
+		public double ImageScore() {
+			double totalRank=0;
+	          for (String word : Words) {
+	        		if(!Title_url.equals("") && Title_url.contains(word) )
+	    			{
+	    				totalRank+=7;
+	    				
+	    			}
+	    			if(!Title_image.equals("0") && Title_image.contains(word) ) {
+	    				totalRank+=10;
+	    			}
+	    			if(!Alt.equals("0") && Alt.contains(word) ) {
+	    				totalRank+=15;
+	    			}
+	          }
+	 
+		
+			return totalRank;
 		}
 	}
 }
