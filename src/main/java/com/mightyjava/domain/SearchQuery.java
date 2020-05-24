@@ -23,6 +23,18 @@ public class SearchQuery {
 	private String title;
 	@Column
 	private int id;
+	@Column
+	private String searchQuery;
+
+	public String getSearchQuery() {
+		return searchQuery;
+	}
+
+	public void setSearchQuery(String searchQuery) {
+		this.searchQuery = searchQuery;
+	}
+
+
 
 	@Override
 	public String toString() {
