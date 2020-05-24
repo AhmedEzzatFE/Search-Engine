@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import './Style.css';
+import { Form } from 'react-advanced-form'
 import {Card, Table,Button, InputGroup, FormControl} from 'react-bootstrap';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {
@@ -170,22 +171,18 @@ recognition.lang = 'en-US'
             currentPage: response.data.number + 1
         });}
        )
-
-
         let x=(this.state.search==="")
         if(!x){
             this.getResponse()
 
             if(this.state.ReservedQueries.find(element=> element===this.state.search)===undefined) {
-                alert("Not the same")
                 const posted = {
                     "name": this.state.search,
                     "id": Math.floor((Math.random() * 1000) + 1)
                 }
                 axios.post("http://localhost:3000/users", posted).then(r => r.data)
             }}
-
-this.setState({suggestions:[]})
+this.setState({suggestions:[],search:''})
     };
 
     searchVoiceData = (currentPage) => {
@@ -244,6 +241,10 @@ this.setState({suggestions:[]})
          if(suggestions.length===0){return null}
          return(<ul>{suggestions.map(item=><li onClick={()=>this.suggestionselected(item)}>{item}</li>)}</ul>)
      }
+     handleSubmitted = ({ form }) => {
+         form.reset() // resets "username" field to "admin"
+     }
+
 
 render() {
     const labels = ['2016', '2017', '2018'];
@@ -260,7 +261,9 @@ render() {
                     </div>
                     <div style={{"float":"right"}}>
                         <InputGroup size="sm">
-                            <input value={search} onChange={this.onTextChange } type="text" />
+                            <form onSubmitted={this.handleSubmitted}>
+                                <input value={search} onChange={this.onTextChange } type="text" />
+                            </form>
                         <InputGroup.Append>
                                 <Button size="sm" variant="outline-info" type="button" onClick={this.searchData}>
                                     <FontAwesomeIcon icon={faSearch}/>
@@ -297,24 +300,17 @@ render() {
                                   <td colSpan="7">No Results yet.</td>
                                 </tr> :
                                 books.map((book) => <tr key={book.id}>
+
                                     <td>
-                                   <a href={book.urls}>{book.urls}</a>
+                                        <a href={book.urls}>{book.urls}</a>
+
                                    </td>
+                                    {book.title}
                                 </tr>)
                             }
                           </tbody>
                     </Table>
                     <p>Country Name: {this.state.countryName}</p>
-                    <div>
-                        <Histogram
-                            xLabels={labels}
-                            yValues={data}
-                            width='400'
-                            height='200'
-                            options={options}
-                        />
-                    </div>
-
                 </Card.Body>
                 {books.length > 0 ?
                     <Card.Footer>
