@@ -86,9 +86,6 @@ public class QueryProcessorForWI {
 			  this.id=id;
 		  }
 		  public void Processor() throws IOException {
-			 
-
-
 			  String[] words = QueryWI.replace("\"", "").split(" "); 
 			  boolean PhraseSearching=false;
 			  List<String> tokens = new ArrayList<>();
@@ -150,7 +147,7 @@ public class QueryProcessorForWI {
 		        	System.out.println(e.getMessage());
 	       }   
 			String query;
-			String deleteQuery = "TRUNCATE TABLE rankedurls1";
+//			String deleteQuery = "TRUNCATE TABLE rankedurls1";
 			String queryForInsert;
 			String query_ReadOld="SELECT * FROM `oldpopularity`";
 			String UpdateQuery;
@@ -181,13 +178,12 @@ public class QueryProcessorForWI {
 	           while(rs_Count.next()){
 	        	   SearchedBefore = Integer.parseInt(rs_Count.getString("COUNT(*)"));
 	           }
+			   queryForInsert = "INSERT INTO `userqueries` (`Query`,`Country`,`id`)"
+					   + " VALUES ('" + QueryWI + "','"
+					   + Location + "','"+id+"')";
+			   st.executeUpdate(queryForInsert);
 	    	   if(SearchedBefore == 0)
 	    	   {
-	    		   queryForInsert = "INSERT INTO `userqueries` (`Query`,`Country`,`id`)"
-	         		 		+ " VALUES ('" + QueryWI + "','" 
-	         		 		+ Location + "','"+id+"')";  
-	       	   st.executeUpdate(queryForInsert);
-	       	   
 	           List<Double> Geo_Date = new ArrayList<>(); 
 	           List<String> Titles = new ArrayList<>(); 
 	           
@@ -199,7 +195,7 @@ public class QueryProcessorForWI {
 	       		Geographic_and_DatePublished G_D= new Geographic_and_DatePublished(Location,(rs.getString("URLExtension")),rs.getString("DatePublished"));
 	       		Geo_Date.add(G_D.GeographicDateScore());
 	       	}
-	          	st_TruncateRT.executeUpdate(deleteQuery); // empty the ranked Table
+//	          	st_TruncateRT.executeUpdate(deleteQuery); // empty the ranked Table
 	          	List<Double> Popularity = new ArrayList<>();
 	          	double TotalNumberOfDocuments=0;
 	          	rs =  st.executeQuery(query_ReadOld);

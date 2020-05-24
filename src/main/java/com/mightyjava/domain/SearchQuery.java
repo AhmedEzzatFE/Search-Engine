@@ -17,12 +17,21 @@ public class SearchQuery {
 	private URL URLs;
 	@Column
 	private int Rank;
+	@Column
+	private String description;
+	@Column
+	private String title;
+	@Column
+	private int id;
 
 	@Override
 	public String toString() {
 		return "SearchQuery{" +
 				"URLs=" + URLs +
 				", Rank=" + Rank +
+				", description='" + description + '\'' +
+				", title='" + title + '\'' +
+				", id=" + id +
 				'}';
 	}
 
@@ -41,4 +50,29 @@ public class SearchQuery {
 	public void setRank(int rank) {
 		Rank = rank;
 	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
 }
