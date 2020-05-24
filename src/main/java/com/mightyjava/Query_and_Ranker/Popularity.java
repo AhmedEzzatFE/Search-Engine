@@ -57,6 +57,8 @@ public class Popularity {
 		String query_InsertInOld;
 		String query_InsertInNew;
 		String query_ReadOld="SELECT * FROM `oldpopularity`";
+		String query_ReadOld_NewEdition;
+
 		String query_ReadNew="SELECT * FROM `newpopularity`";
 		String query_DeleteOld="TRUNCATE TABLE `oldpopularity`";
 		String query_DeleteNew="TRUNCATE TABLE `newpopularity`";
@@ -98,39 +100,38 @@ public class Popularity {
         		Counter++;
         	}
         	/// here the place for the forLoop
-        	for(int i=0;i<2;i++)
+        	for(int i=0;i<5;i++)
         	{
-        		System.out.println("Iteration Number:"+i);
         		UrlPopularity=0.0; // PR(A)
       		  	LinksPopularity = 0.0; // (1-d) + d*(PR(T)/C(T)
       		  	Counter =0;
             	// Calculating the popularity
     			rs =  st.executeQuery(query);
+    			String pointingToit;
     			while(rs.next()){
     				if(!("A new url is comming".equals(rs.getString("URLs"))))
     				{	tempUrl=rs.getString("URLs");
-    					rs_OldPopularity =  st_Old.executeQuery(query_ReadOld);
+    					pointingToit=rs.getString("PointingToIt");
+    					query_ReadOld_NewEdition="SELECT * FROM `oldpopularity` WHERE URLs= '"+pointingToit+"'";
+    					rs_OldPopularity =  st_Old.executeQuery(query_ReadOld_NewEdition);
     					while(rs_OldPopularity.next()){
-    						if((rs.getString("PointingToIt")).equals(rs_OldPopularity.getString("URLs"))){
+//    						if((rs.getString("PointingToIt")).equals(rs_OldPopularity.getString("URLs"))){
     							if((Double.parseDouble(rs_OldPopularity.getString("OutboundLinks"))) !=0)
     									{
     								LinksPopularity+=(Double.parseDouble(rs_OldPopularity.getString("Popularity")))/(Double.parseDouble(rs_OldPopularity.getString("OutboundLinks")));
     									}
     							    
-    						}
-    						
-    						
+//    						}
     					}				 
     				}
     				// insert the urls and its rank in the ranked urls
     				else if(("A new url is comming".equals(rs.getString("URLs")))) {
-    				
     					UrlPopularity= (1-d) + d*(LinksPopularity);
     					query_InsertInNew = "INSERT INTO `newpopularity` (`URLs`,`Popularity`,`OutboundLinks`)"
     	        		 		+ " VALUES ('" + tempUrl + "','" 
     	        		 		+ UrlPopularity +"','"
     	        		 		+ OutBoundLinks.get(Counter) +"')";
-    					System.out.println("The Popularity of The Url is :" + UrlPopularity);
+    					System.out.println(UrlPopularity);
     					st_New.executeUpdate(query_InsertInNew);
     	        		Counter++;
     	        		UrlPopularity=0.0;

@@ -1,4 +1,5 @@
 package com.mightyjava.Query_and_Ranker;
+
 import java.util.Properties;
 
 import edu.stanford.nlp.pipeline.StanfordCoreNLP;

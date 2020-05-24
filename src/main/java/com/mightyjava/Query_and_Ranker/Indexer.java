@@ -6,6 +6,7 @@ import java.util.*;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.tartarus.snowball.ext.porterStemmer;
 
@@ -44,7 +45,9 @@ public class Indexer {
      		"what", "what's","when", "when's" , "where", "where's","which",
      		"while", "who", "who's","whom", "why", "will", "why's", "with",
      		"won", "won't","would","wouldn", "wouldn't","x", "y", "you", "you'd",
-     		"you'll", "you're", "you've", "your", "yours", "yourself", "yourselves","z"};   
+     		"you'll", "you're", "you've", "your", "yours", "yourself", "yourselves","z",
+     		"!","@","#","$","%","^","&","*","(",")","-","_","=","+","/","\\",">","<",";",
+     		":","\'","{","}","`","[","]"};   
 	//This class will implement comparable because I want 
 	//to sort objects according to no. of occurrences using the compareTo() method
 	 public static class Word {
@@ -58,6 +61,7 @@ public class Indexer {
 	        int noOfOccurrencesHeader6;
 	        int noOfOccurrencesTitle;
 	        int noOfOccurrencesBold;
+	        String paragraph;
 	        
 	        Word()
 	        {
@@ -70,6 +74,7 @@ public class Indexer {
 	 	         noOfOccurrencesHeader6=0;
 	 	         noOfOccurrencesTitle=0;
 	 	         noOfOccurrencesBold=0;
+	 	         paragraph="";
 	        }
 	        //Overriding the original function in Java.lang.object because equals() method
 	        //was overridden
@@ -98,7 +103,7 @@ public class Indexer {
         }    
 		 
 		//Retrieve what's in the crawler database
-        String query = "SELECT * FROM crawlertableurlezza";
+        String query = "SELECT * FROM crawlertableurls1";
         try {
 			rs =  st.executeQuery(query);
 			while(rs.next()){
@@ -139,32 +144,204 @@ public class Indexer {
 	            Map<String, Word> wordsMap = new HashMap<String, Word>();
 	            
 		        Document document = Jsoup.connect(url.toString()).get();
+		        
+		        
+		        
+
+		        //for date modified
+		        //Document document = Jsoup.connect("https://experienceleaguecommunities.adobe.com/t5/adobe-experience-manager/published-time-for-assets-and-sites-on-publish-instance/qaq-p/175732/comment-id/6949").get();
+		        //for pubdate
+		        //Document document = Jsoup.connect("http://html5doctor.com/the-time-element/").get();
+		        //for uk extension
+		        //Document document = Jsoup.connect("https://amp.webcreationuk.co.uk/dt/wsd?gclid=EAIaIQobChMI8aXdmPKl6QIVUeJ3Ch2iDQEsEAAYAyAAEgJQTfD_BwE").get();
+		        String Host = url.getHost();
+		        String region="0";
+		        String checkRegion=Host.substring(Host.length()-2);
+		        if(checkRegion.equals("ae"))
+		        {
+		        	region="United Arab Emirates";
+		        }
+		        else if(checkRegion.equals("ar"))
+		        {
+		        	region="Argentina";
+		        }
+		        else if(checkRegion.equals("au"))
+		        {
+		        	region="Australia";
+		        }
+		        else if(checkRegion.equals("be"))
+		        {
+		        	region="Belgium";
+		        }
+		        else if(checkRegion.equals("bg"))
+		        {
+		        	region="Bulgaria";
+		        }
+		        else if(checkRegion.equals("br"))
+		        {
+		        	region="Brazil";
+		        }
+		        else if(checkRegion.equals("ca"))
+		        {
+		        	region="Canada";
+		        }
+		        else if(checkRegion.equals("cn"))
+		        {
+		        	region="People's Republic of China";
+		        }
+		        else if(checkRegion.equals("de"))
+		        {
+		        	region="Germany";
+		        }
+		        else if(checkRegion.equals("eg"))
+		        {
+		        	region="Egypt";
+		        }
+		        else if(checkRegion.equals("es"))
+		        {
+		        	region="Spain";
+		        }
+		        else if(checkRegion.equals("eu"))
+		        {
+		        	region="European Union";
+		        }
+		        else if(checkRegion.equals("fr"))
+		        {
+		        	region="France";
+		        }
+		        else if(checkRegion.equals("gr"))
+		        {
+		        	region="Greece";
+		        }
+		        else if(checkRegion.equals("in"))
+		        {
+		        	region="India";
+		        }
+		        else if(checkRegion.equals("it"))
+		        {
+		        	region="Italy";
+		        }
+		        else if(checkRegion.equals("ru"))
+		        {
+		        	region="Russia";
+		        }
+		        else if(checkRegion.equals("tr"))
+		        {
+		        	region="Turkey";
+		        }
+		        else if(checkRegion.equals("uk"))
+		        {
+		        	region="United Kingdom";
+		        }
+		        else if(checkRegion.equals("us"))
+		        {
+		        	region="United States of America";
+		        }
+		        
+		        //document.select("meta[itemprop=dateModified]") will select all meta-elements with 
+		        //attribute itemprop and attribute value datePublished.
+		        //.first(); will only take the first one from all the elements that are found
+		        //meta is used if the website creator wants to hide this information
+		        //time is used if the website creator wants to show this information which is irrational
+		        Element meta = document.select("meta[itemprop=datePublished]").first();
+		        Element time1 = document.select("time[itemprop=datePublished]").first();
+		        Element time2 = document.select("time[pubdate]").first();
+		        //Element meta = doc.select("meta[itemprop=datePublished]").first();
+		        //getting the content attribute from the selected element
+		        //getting the datetime attribute from the selected element
+		        String date="0";
+		        if(meta!=null)
+		        {
+		        	date = meta.attr("content");
+		        	if(!(date.equals("")))
+			        {
+		        		Integer x=1950;
+			            for(int i=0;i<100;i++)
+			            {
+			            	x+=1;
+			            	if(date.contains(x.toString()))
+			            	{
+			            		date=x.toString();
+			            	}
+	
+			            }
+		            }
+		        	else
+		        	{
+		        		date="0";
+		        	}
+
+		        }
+		        if(time1!=null)
+		        {
+		        
+		        	date = time1.attr("datetime");
+		        	if(!(date.equals("")))
+		        	{
+	        		 Integer x=1950;
+			            for(int i=0;i<100;i++)
+			            {
+			            	x+=1;
+			            	if(date.contains(x.toString()))
+			            	{
+			            		date=x.toString();
+			            	}
+
+			            }
+		        	}
+		        	else
+		        	{
+		        		date="0";
+		        	}
+
+		        }
+		        if(time2!=null)
+		        {
+		        	date = time2.attr("datetime");
+		        	if(!(date.equals("")))
+		        	{
+	        		 Integer x=1950;
+			            for(int i=0;i<100;i++)
+			            {
+			            	x+=1;
+			            	if(date.contains(x.toString()))
+			            	{
+			            		date=x.toString();
+			            	}
+
+			            }
+		        	}
+		        	else
+		        	{
+		        		date="0";
+		        	}
+		           
+
+		        }
+		        
+		        
+		        
+		        
 		        //Getting the combined text and all its children from 
 		        //the page body, excluding the HTML
-		        String text = document.body().text().toLowerCase();
+		        //these strings would be empty if no headers or bold words were found
+		        String text = document.body().text();
 	        	 ////////////////////////////////////////////////////////////////////
-		        // Group of all h-Tags
 		        Elements hTags = document.select("h1, h2, h3, h4, h5, h6");
-		        // Group of all h1-Tags
 		        Elements h1Tags = hTags.select("h1");
 		        String textH1 = h1Tags.text().toLowerCase();
-		        // Group of all h2-Tags
 		        Elements h2Tags = hTags.select("h2");
 		        String textH2 = h2Tags.text().toLowerCase();
-		        // Group of all h3-Tags
 		        Elements h3Tags = hTags.select("h3");
 		        String textH3 = h3Tags.text().toLowerCase();
-		        // Group of all h4-Tags
 		        Elements h4Tags = hTags.select("h4");
 		        String textH4 = h4Tags.text().toLowerCase();
-		        // Group of all h5-Tags
 		        Elements h5Tags = hTags.select("h5");
 		        String textH5 = h5Tags.text().toLowerCase();
-		        // Group of all h6-Tags
 		        Elements h6Tags = hTags.select("h6");
 		        String textH6 = h6Tags.text().toLowerCase();
 		        ////////////////////////////////////////////////////////////////////
-		        String textTitle = document.title();
+		        String textTitle = document.title().toLowerCase();
 		        ////////////////////////////////////////////////////////////////////
 		        Elements boldTags = document.getElementsByTag("b");
 		        String textBold = boldTags.text().toLowerCase();
@@ -227,7 +404,10 @@ public class Indexer {
 			        	//output:
 			        	//geekss
 			        	//for@geekss
-		        		String[] words = lineHeader1.split("[^a-z0-9��������������������]+");
+		        		
+
+			        	//String[] words = lineHeader1.split(" ");
+		        		String[] words = lineHeader1.split("[^a-z0-9���������������������]+");
 		                 for (String word : words) {
 		                     if ("".equals(word)) {
 		                         continue;
@@ -254,7 +434,10 @@ public class Indexer {
 		        	}
 		        	
 		        	if((lineHeader2 = readerHeader2.readLine()) != null) {
-		        		String[] words = lineHeader2.split("[^a-z0-9��������������������]+");
+		        		
+
+			        	//String[] words = lineHeader2.split(" ");
+		        		String[] words = lineHeader2.split("[^a-z0-9���������������������]+");
 		                for (String word : words) {
 		                    if ("".equals(word)) {
 		                        continue;
@@ -278,7 +461,9 @@ public class Indexer {
 		        	}
 		        	
 		        	if((lineHeader3 = readerHeader3.readLine()) != null) {
-		        		String[] words = lineHeader3.split("[^a-z0-9��������������������]+");
+		        		
+			        	//String[] words = lineHeader3.split(" ");
+		        		String[] words = lineHeader3.split("[^a-z0-9���������������������]+");
 		                for (String word : words) {
 		                    if ("".equals(word)) {
 		                        continue;
@@ -302,7 +487,10 @@ public class Indexer {
 		        	}
 		        	
 		        	if((lineHeader4 = readerHeader4.readLine()) != null) {
-		        		String[] words = lineHeader4.split("[^a-z0-9��������������������]+");
+		        		
+
+			        	//String[] words = lineHeader4.split(" ");
+		        		String[] words = lineHeader4.split("[^a-z0-9���������������������]+");
 		                for (String word : words) {
 		                    if ("".equals(word)) {
 		                        continue;
@@ -327,7 +515,10 @@ public class Indexer {
 		        	}
 		        	
 		        	if((lineHeader5 = readerHeader5.readLine()) != null) {
-		        		String[] words = lineHeader5.split("[^a-z0-9��������������������]+");
+		        		
+
+			        	//String[] words = lineHeader5.split(" ");
+		        		String[] words = lineHeader5.split("[^a-z0-9���������������������]+");
 		                for (String word : words) {
 		                    if ("".equals(word)) {
 		                        continue;
@@ -351,7 +542,10 @@ public class Indexer {
 		        	}
 		        	
 		        	if((lineHeader6 = readerHeader6.readLine()) != null) {
-		        		String[] words = lineHeader6.split("[^a-z0-9��������������������]+");
+		        		
+
+			        	//String[] words = lineHeader6.split(" ");
+		        		String[] words = lineHeader6.split("[^a-z0-9���������������������]+");
 		                for (String word : words) {
 		                    if ("".equals(word)) {
 		                        continue;
@@ -375,7 +569,10 @@ public class Indexer {
 		        	}
 		        	
 		        	if((lineTitle = readerTitle.readLine()) != null) {
-		        		String[] words = lineTitle.split("[^a-z0-9��������������������]+");
+		        		
+
+			        	//String[] words = lineTitle.split(" ");
+		        		String[] words = lineTitle.split("[^a-z0-9���������������������]+");
 		                   for (String word : words) {
 		                       if ("".equals(word)) {
 		                           continue;
@@ -399,7 +596,10 @@ public class Indexer {
 		           	}
 		        	
 		        	if((lineBold = readerBold.readLine()) != null) {
-		        		String[] words = lineBold.split("[^a-z0-9��������������������]+");
+		        		
+
+			        	//String[] words = lineBold.split(" ");
+		        		String[] words = lineBold.split("[^a-z0-9���������������������]+");
 		                for (String word : words) {
 		                    if ("".equals(word)) {
 		                        continue;
@@ -422,22 +622,47 @@ public class Indexer {
 		                }
 		        	}
 		        	
-		        	String[] words = line.split("[^a-z0-9��������������������]+");
+
+		        	line=line.replace("\""," ");
+		        	line=line.replace("\'"," ");
+		        	//String[] words = line.split(" ");
+	        		String[] words = line.split("[^a-z0-9���������������������]+");
 		            for (String word : words) {
 		                if ("".equals(word)) {
 		                    continue;
 		                }
 	                    
-		                
-		                if (!(Arrays.asList(wordsToIgnore).contains(word))) {
-	                    	 stemmer.setCurrent(word);
+		                String word2=word.toLowerCase();
+		                if (!(Arrays.asList(wordsToIgnore).contains(word2))) {
+	                    	 stemmer.setCurrent(word2);
 			                 stemmer.stem();
 			                 String stemmedWord= stemmer.getCurrent();
-			                 
 		                     Word wordObject = wordsMap.get(stemmedWord);
 		                     if (wordObject == null) {
 		                     	wordObject = new Word();
 		                     	wordObject.word = stemmedWord;
+		    		        	
+		                        int startIndex=0;
+		                        int endIndex=0;
+		                        int after=50;
+		                        int before=50;
+		                        int temp1=line.length();
+		                        int temp2=line.indexOf(word);
+		                        int temp3=temp2+word.length();
+		                        while(temp2-before<0)
+		                        {
+		                        	before-=1;
+		                        }
+		                        while(temp3+after>temp1-1)
+		                        {
+		                        	after-=1;
+		                        }
+		                        startIndex=temp2-before;
+		                        endIndex=temp3+after;
+		                        String temp4="..."+ line.substring(startIndex, endIndex) +"...";
+		                        wordObject.paragraph=temp4;
+		                       
+		                        
 		                        wordsMap.put(stemmedWord, wordObject);
 		                     }
 		                     wordObject.noOfOccurrences++;
@@ -458,10 +683,10 @@ public class Indexer {
 		        for (Map.Entry<String, Word> word : wordsMap.entrySet()) {
 	        		 try {
 	        			 //
-	        		 query = "INSERT INTO `indexertableezza` (`URLs`,`Words`,`Occurrences`,"
+	        		 query = "INSERT INTO `indexertable1` (`URLs`,`Words`,`Occurrences`,"
 	        		 		+ "`H1Occurrences`,`H2Occurrences`,`H3Occurrences`,`H4Occurrences`,"
 	        		 		+ "`H5Occurrences`,`H6Occurrences`,`TitleOccurrences`,`BoldOccurrences`"
-	        		 		+ ",`NumberOfWordsInThisLink`)"
+	        		 		+ ",`NumberOfWordsInThisLink`,`Sentence`)"
 	        		 		+ " VALUES ('" + url.toString() + "','" 
 	        		 		+ word.getValue().word + "','"
 	        		 		+ word.getValue().noOfOccurrences + "','" 
@@ -473,7 +698,8 @@ public class Indexer {
 	        		 		+ word.getValue().noOfOccurrencesHeader6 + "','" 
 	        		 		+ word.getValue().noOfOccurrencesTitle + "','" 
 	        		 		+ word.getValue().noOfOccurrencesBold + "','"
-	        		 		+ counterForNumberOfWords + "')";
+	        		 		+ counterForNumberOfWords + "','"
+	        		 		+ word.getValue().paragraph + "')";
   	    			 
 						st.executeUpdate(query);
 					} catch (SQLException e) {
@@ -482,38 +708,48 @@ public class Indexer {
 					}
 		
 				}
-		        //splitter for query processor
-		        try {
-	        		 query = "INSERT INTO `indexertableezza` (`URLs`,`Words`,`Occurrences`,"
-	        		 		+ "`H1Occurrences`,`H2Occurrences`,`H3Occurrences`,`H4Occurrences`,"
-	        		 		+ "`H5Occurrences`,`H6Occurrences`,`TitleOccurrences`,`BoldOccurrences`"
-	        		 		+ ",`NumberOfWordsInThisLink`)"
-	        		 		+ " VALUES ('" + "A new url is comming" + "','" 
-	        		 		+ "0" + "','"
-	        		 		+ "0" + "','" 
-	        		 		+"0" + "','" 
-	        		 		+ "0" + "','" 
-	        		 		+ "0" + "','" 
-	        		 		+ "0" + "','" 
-	        		 		+ "0" + "','" 
-	        		 		+ "0" + "','" 
-	        		 		+ "0" + "','" 
-	        		 		+ "0" + "','" 
-	        		 		+ "0" + "')";
-						st.executeUpdate(query);
-					} catch (SQLException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
+		        if(counterForNumberOfWords>0)
+		        {
+		        	//splitter for query processor
+			        try {
+		        		 query = "INSERT INTO `indexertable1` (`URLs`,`Words`,`Occurrences`,"
+		        		 		+ "`H1Occurrences`,`H2Occurrences`,`H3Occurrences`,`H4Occurrences`,"
+		        		 		+ "`H5Occurrences`,`H6Occurrences`,`TitleOccurrences`,`BoldOccurrences`"
+		        		 		+ ",`NumberOfWordsInThisLink`,`Sentence`)"
+		        		 		+ " VALUES ('" + "A new url is comming" + "','" 
+		        		 		+ "0" + "','"
+		        		 		+ "0" + "','" 
+		        		 		+ "0" + "','" 
+		        		 		+ "0" + "','" 
+		        		 		+ "0" + "','" 
+		        		 		+ "0" + "','" 
+		        		 		+ "0" + "','" 
+		        		 		+ "0" + "','" 
+		        		 		+ "0" + "','" 
+		        		 		+ "0" + "','" 
+		        		 		+ "0" + "','" 
+		        		 		+ "0" + "')";
+							st.executeUpdate(query);
+						} catch (SQLException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+			        textTitle=textTitle.replace("\"", " ");
+			        textTitle=textTitle.replace("\'", " ");
+			        try {
+			        	 query = "INSERT INTO `indexedurls` (`URLs`,`URLExtension`,"
+			        		 		+ "`DatePublished`,`Title`)"
+			        		 		+ " VALUES ('" + url.toString() + "','" 
+			        		 		+ region + "','"
+			        		 		+ date + "','"
+			        		 		+ textTitle + "')";
+							st.executeUpdate(query);
+						} catch (SQLException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+		        }
 		        
-		        try {
-	        		 query = "INSERT INTO `indexedurls` (`URLs`)"
-	        		 		+ " VALUES ('" + url.toString() +"')";
-						st.executeUpdate(query);
-					} catch (SQLException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
 	        	
 	        }catch(final Exception | Error ignored) {}
 	       

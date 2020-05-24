@@ -23,7 +23,7 @@ public class BookServiceImpl implements IService<SearchQuery> {
 	public Page<SearchQuery> findAll(Pageable pageable,String Country,int id, String searchText) {
 		System.out.println("Your search is :"+searchText);
 
-		QueryProcessorForWI x = new QueryProcessorForWI(searchText);
+		QueryProcessorForWI x = new QueryProcessorForWI(searchText,Country,id);
 
 		try {
 			x.Processor();

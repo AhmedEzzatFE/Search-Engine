@@ -9,7 +9,7 @@
       <jdbc-driver>com.mysql.cj.jdbc.Driver</jdbc-driver>
       <jdbc-url>jdbc:mysql://localhost/projectdb1?useUnicode=true&amp;useJDBCCompliantTimezoneShift=true&amp;useLegacyDatetimeCode=false&amp;serverTimezone=UTC</jdbc-url>
     </data-source>
-    <data-source source="LOCAL" name="projectdb1@localhost" uuid="1699a1b6-af68-40c6-ac95-8e8eb35eba75">
+    <data-source source="LOCAL" name="projectdb1@localhost" uuid="a3e97a5c-2e5e-41a3-8e29-64469d8e08a5">
       <driver-ref>mysql.8</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>com.mysql.cj.jdbc.Driver</jdbc-driver>

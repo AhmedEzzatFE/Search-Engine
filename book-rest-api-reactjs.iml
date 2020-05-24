@@ -7,7 +7,7 @@
         <setting name="provider-name" value="Hibernate" />
         <datasource-mapping>
           <factory-entry name="book-rest-api-reactjs" value="3d940305-91f4-4d41-bd71-048729b793b3" />
-          <factory-entry name="entityManagerFactory" value="1699a1b6-af68-40c6-ac95-8e8eb35eba75" />
+          <factory-entry name="entityManagerFactory" value="a3e97a5c-2e5e-41a3-8e29-64469d8e08a5" />
         </datasource-mapping>
         <naming-strategy-map />
       </configuration>

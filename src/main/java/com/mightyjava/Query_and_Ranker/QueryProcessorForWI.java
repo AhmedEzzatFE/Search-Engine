@@ -28,28 +28,6 @@ import com.mightyjava.Query_and_Ranker.Ranker.ScoreTf_Idf;
 import com.mightyjava.Query_and_Ranker.Ranker.TF;
 
 public class QueryProcessorForWI {
-	public static Connection con;
-	 public static Statement st;
-	 public static Statement st_ToGetThePrevRank;
-	 public static Statement st_Count; // to delete the ranker table
-
-	 public static Statement st_TruncateRT; // to delete the ranker table
-	 public static Statement st_OrdereRT; // to delete the ranker table
-	 public static Statement st_Old; // to delete the ranker table
-	 public static Statement st_InsertFinalRank; // to delete the ranker table
-	 public static ResultSet rs;
-	 public static ResultSet rs_ToGetThePrevRank;
-
-	 public static ResultSet rs_Count; // to count the documents have a single word
-	 public static ResultSet rs_InsertRT; // for insert 
-	 public static ResultSet rs_ReadOldPopularity; // for insert 
-	 public static int UrlsCount;
-	 public static Set<URL> webLinks = new HashSet<>();
-
-	 public static String Location = "uk";
-
-	 public static String tempUrl =null;
-	 public static String temp2Url;
 	 public static String[] wordsToIgnore={" ","","a","about", "above", "after", "again",
     		"against", "ain", "all", "am", "an", "and", "any", "are", "aren",
     		"aren't", "as", "at", "be", "because", "been", "before", "being",
@@ -81,11 +59,37 @@ public class QueryProcessorForWI {
 
 
 		  String QueryWI;
-		  public QueryProcessorForWI(String query){
-			  QueryWI=query;
+		  String Location;
+		  int id;
+		  Connection con;
+		  Statement st;
+		  Statement st_ToGetThePrevRank;
+	      Statement st_Count; // to delete the ranker table
+
+		  Statement st_TruncateRT; // to delete the ranker table
+		  Statement st_OrdereRT; // to delete the ranker table
+		  Statement st_Old; // to delete the ranker table
+		  Statement st_InsertFinalRank; // to delete the ranker table
+		  ResultSet rs;
+		  ResultSet rs_ToGetThePrevRank;
+
+		 ResultSet rs_Count; // to count the documents have a single word
+		 ResultSet rs_InsertRT; // for insert 
+		 ResultSet rs_ReadOldPopularity; // for insert 
+		 int UrlsCount;
+		 Set<URL> webLinks = new HashSet<>();
+		 String tempUrl =null;
+		  public QueryProcessorForWI(String query,String Location,int id){
+			  this.QueryWI=query;
+			  this.Location=Location;
+			  this.id=id;
 		  }
 		  public void Processor() throws IOException {
+			 
+
+
 			  String[] words = QueryWI.replace("\"", "").split(" ");
+//			  String[] words = SearchQuery.replace("\"", "").split(" ");
 			  boolean PhraseSearching=false;
 			  List<String> tokens = new ArrayList<>();
 
@@ -153,16 +157,18 @@ public class QueryProcessorForWI {
 	       try {
 	    	   
 	    	   queryForInsert = "INSERT INTO `userqueries` (`Query`,`Country`)"
-	      		 		+ " VALUES ('" + QueryWI + "','" 
+	      		 		+ " VALUES ('" + QueryWI + "','"
 	      		 		+ Location + "')";  
 	    	   st.executeUpdate(queryForInsert);
 	    	   
 	        List<Double> Geo_Date = new ArrayList<>(); 
+	        List<String> Titles = new ArrayList<>(); 
+	        
 	    	query= "SELECT * FROM `indexedurls`" ;
 	    	rs=st.executeQuery(query);
 	    	while(rs.next())
 	    	{
-
+	    		Titles.add(rs.getString("Title"));
 	    		Geographic_and_DatePublished G_D= new Geographic_and_DatePublished(Location,(rs.getString("URLExtension")),rs.getString("DatePublished"));
 	    		Geo_Date.add(G_D.GeographicDateScore());
 	    	}
@@ -176,15 +182,17 @@ public class QueryProcessorForWI {
 	       		webLinks.add(new URL (rs.getString("URLs")));
 	       		Popularity.add(Double.parseDouble(rs.getString("Popularity")));
 	       	}
-	       	 int Popularity_Geo_Date_Count=0;
+	       	 int Popularity_Geo_Date_Title_Count=0;
 	       	 double Popularity_Geo_Date=0.0;
 				 for(URL url : webLinks) {
-					Popularity_Geo_Date=Popularity.get(Popularity_Geo_Date_Count)+Geo_Date.get(Popularity_Geo_Date_Count);
-					queryForInsert = "INSERT INTO `rankedurlsezza` (`Urls`,`Rank`)"
+					Popularity_Geo_Date=Popularity.get(Popularity_Geo_Date_Title_Count)+Geo_Date.get(Popularity_Geo_Date_Title_Count);
+					queryForInsert = "INSERT INTO `rankedurls1` (`Urls`,`Rank`,`description`,`Title`,`id`)"
 	       		 		+ " VALUES ('" + url + "','" 
-	       		 		+ Popularity_Geo_Date + "')";
+	       		 		+ Popularity_Geo_Date + "','"+""+"','" 
+	       		 		+ Titles.get(Popularity_Geo_Date_Title_Count) + "','"
+	       		 		+ id + "')";
 					st_InsertFinalRank.executeUpdate(queryForInsert);
-					Popularity_Geo_Date_Count++;
+					Popularity_Geo_Date_Title_Count++;
 	       	}
 				TF tf;
 				IDF idf;
@@ -198,21 +206,23 @@ public class QueryProcessorForWI {
 				double DocCounter =0.0; // to count how many documents have the word 
 				double TotalRank=0.0; // for every link
 				double PreviousRank=0.0;
+				String PreviousDesc="";
+				String Desc="";
 //	       	List<Double> RelvanceRank = new ArrayList<>();
 				
 	       	for (String word : FinalQuery) {
-		            query = "SELECT * FROM indexertableezza WHERE Words = '"+word+"'";
+		            query = "SELECT * FROM indexertable1 WHERE Words = '"+word+"'";
 		        	rs =  st.executeQuery(query);
 					while(rs.next()){
 						tempUrl=rs.getString("URLs");
 						
-			            CountQuery = "SELECT COUNT(*) FROM indexertableezza WHERE Words = '"+word+"'";
+			            CountQuery = "SELECT COUNT(*) FROM indexertable1 WHERE Words = '"+word+"'";
 			            rs_Count = st_Count.executeQuery(CountQuery);
 			            while(rs_Count.next()){
 			            	DocCounter = Double.parseDouble(rs_Count.getString("COUNT(*)"));
 			            }
 			            DocCounter=2;
-	           		tf=new TF(Double.parseDouble(rs.getString("Occurrences")),Double.parseDouble(rs.getString("NumberOfWordsInThisLink")));
+			            tf=new TF(Double.parseDouble(rs.getString("Occurrences")),Double.parseDouble(rs.getString("NumberOfWordsInThisLink")));
 						TF_Score=tf.getNormalizedTf();
 		            	idf=new IDF(TotalNumberOfDocuments,DocCounter);
 		            	IDF_Score=idf.getIDf();
@@ -227,14 +237,18 @@ public class QueryProcessorForWI {
 		            			Double.parseDouble(rs.getString("H6Occurrences")),
 		            			Double.parseDouble(rs.getString("BoldOccurrences")));
 		            	FinalScore_Score=final_score.getFinalScore();
-			            query = "SELECT * FROM rankedurlsezza WHERE Urls = '"+tempUrl+"'";
+			            query = "SELECT * FROM rankedurls1 WHERE Urls = '"+tempUrl+"' AND id= '"+id+"' ";
 			            rs_ToGetThePrevRank=st_ToGetThePrevRank.executeQuery(query);
 		            	while(rs_ToGetThePrevRank.next())
 		            	{
 		            		PreviousRank=Double.parseDouble(rs_ToGetThePrevRank.getString("Rank"));
+		            		PreviousDesc=rs_ToGetThePrevRank.getString("description");
 		            	}
 		            	TotalRank=PreviousRank+FinalScore_Score;
-		            	UpdateQuery="UPDATE `rankedurlsezza` SET `Rank`= '"+TotalRank +"' WHERE Urls = '"+tempUrl+"'";
+		            	Desc=rs.getString("Sentence");
+		            	System.out.println(Desc);
+		            	Desc.concat(PreviousDesc);
+		            	UpdateQuery="UPDATE `rankedurls1` SET `Rank`= '"+TotalRank +"', `description`= '"+ Desc +"' WHERE Urls = '"+tempUrl+"' AND id='"+id+"'";	
 						st_InsertFinalRank.executeUpdate(UpdateQuery);
 		            	TF_Score=0.0;
 		    			IDF_Score=0.0;
@@ -251,7 +265,7 @@ public class QueryProcessorForWI {
 	       	Pattern pattern;
 	       	Matcher matcher;
 	       	if(PhraseSearching == true)
-	       	{   query="SELECT * FROM rankedurlsezza ORDER BY Rank DESC";
+	       	{   query="SELECT * FROM rankedurls1 WHERE id='"+id+"' ORDER BY Rank DESC ";
 	       		rs =  st.executeQuery(query);
 		       	while(rs.next())
 		       	{
@@ -265,14 +279,14 @@ public class QueryProcessorForWI {
 		
 		    		while (matcher.find()) {
 		    		    System.out.println(matcher.group(1));
-		    		    query = "SELECT * FROM rankedurlsezza WHERE Urls = '"+tempUrl+"'";
+		    		    query = "SELECT * FROM rankedurls1 WHERE Urls = '"+tempUrl+"'";
 			            rs_ToGetThePrevRank=st_ToGetThePrevRank.executeQuery(query);
 		            	while(rs_ToGetThePrevRank.next())
 		            	{
 		            		PreviousRank=Double.parseDouble(rs_ToGetThePrevRank.getString("Rank"));
 		            	}
 		            	TotalRank=PreviousRank+100;
-		            	UpdateQuery="UPDATE `rankedurlsezza` SET `Rank`= '"+TotalRank +"' WHERE Urls = '"+tempUrl+"'";
+		            	UpdateQuery="UPDATE `rankedurls1` SET `Rank`= '"+TotalRank +"' WHERE Urls = '"+tempUrl+"'";	
 						st_InsertFinalRank.executeUpdate(UpdateQuery);
 		    		    
 		    		}
@@ -287,8 +301,7 @@ public class QueryProcessorForWI {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-
-	    }
+		  }
 
 	   
 	}

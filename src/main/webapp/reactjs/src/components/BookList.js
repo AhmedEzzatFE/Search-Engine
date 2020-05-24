@@ -153,42 +153,34 @@ recognition.lang = 'en-US'
         });
 
     };
-
     cancelSearch = () => {
         this.setState({"search" : ''});
          this.findAllBooks(this.state.currentPage);
     };
-
     searchData = (currentPage) => {
         currentPage -= 1;
-        alert(this.state.countryName)
-        alert(this.state.id)
-        axios
-       .get("http://localhost:8081/rest/api/search/"+this.state.countryName+"/"+this.state.id+"/"+this.state.search+"?page="+currentPage+"&size="+this.state.booksPerPage)
-       .then(response => response.data)
-       .then((data) => {
-          this.setState({
-            books: data.content,
-            totalPages: data.totalPages,
-            totalElements: data.totalElements,
-            currentPage: data.number + 1
-          });
-       });
-        axios.get("http://localhost:8081/rest/api/location/"+this.state.countryName)
-            .then(response=> response.data);
+        axios.get("http://localhost:8081/rest/api/search/"+this.state.countryName+"/"+this.state.id+"/"+this.state.search+"?page="+currentPage+"&size="+this.state.booksPerPage)
+       .then(response =>{
+        console.log(response.data);
+        this.setState({
+            books: response.data.content,
+            totalPages: response.data.totalPages,
+            totalElements: response.data.totalElements,
+            currentPage: response.data.number + 1
+        });}
+       )
+
         let x=(this.state.search==="")
         if(!x){
             if(this.state.ReservedQueries.find(element=> element===this.state.search)===undefined) {
-
                 const posted = {
                     "name": this.state.search,
                     "id": Math.floor((Math.random() * 1000) + 1)
-
                 }
                 axios.post("http://localhost:3000/users", posted).then(r => r.data)
             }}
-
     };
+
     searchVoiceData = (currentPage) => {
          currentPage -= 1;
          axios.get("http://localhost:8081/rest/api/search/"+this.state.countryName+"/"+this.state.id+"/"+this.state.finalTranscript+"?page="+currentPage+"&size="+this.state.booksPerPage)

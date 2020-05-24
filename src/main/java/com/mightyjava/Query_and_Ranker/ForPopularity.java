@@ -37,8 +37,7 @@ public class ForPopularity{
 			insideLink=discoveredURL;
         }
     }
-
-
+    
     public static void main(String[] args) throws MalformedURLException {
     	List<Link> LinkAndLinkesInsideIt = new ArrayList<Link>();
 
@@ -78,8 +77,6 @@ public class ForPopularity{
 	            }  
 			} catch (final Exception | Error ignored) {}
         }
-        
-
         
     	try {
         	query = "TRUNCATE TABLE urlspointingtourl";
@@ -146,6 +143,7 @@ public class ForPopularity{
 			}
       	
       }
+      
     //For finding the number of urls (in the database) inside a url (in the database)
     for(URL url : webLinks) {
     	int counter=0;
@@ -159,7 +157,8 @@ public class ForPopularity{
                 }
     		}
     	}
-    	try {
+		
+		try {
 			query = "INSERT INTO `numberoflinksinurl` (`URLs`,`NumberOfLinks`)"
 	        	 		+ " VALUES ('" + url.toString() + "','" 
 	        	 		+ counter + "')";
@@ -178,6 +177,16 @@ public class ForPopularity{
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
+		
+		 
 		}
+
+          
+
+       
+          
     }
+
+
+
 }

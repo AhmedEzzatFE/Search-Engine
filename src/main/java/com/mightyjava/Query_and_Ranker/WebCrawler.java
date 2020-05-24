@@ -233,11 +233,12 @@ public class WebCrawler implements Runnable{
             		Pattern p = Pattern.compile(unwanted);
 	            	for(URL url : URLs) {
 	            		Matcher m = p.matcher(url.getHost());
-	            		if(!(m.find())) {
+	            		boolean b;
+		     	    	if(!(b = m.find())) {
 			     	    		if(webLinks.add(url)==true) {
 			 	    			try {
 			 	    					 counter++;
-			 	     	    			 query = "INSERT INTO `crawlertableurlezza` (`URLs`) VALUES ('" + url.toString() + "')";
+			 	     	    			 query = "INSERT INTO `crawlertableurls1` (`URLs`) VALUES ('" + url.toString() + "')";
 			 	     	    			 st.executeUpdate(query);
 			 	     	    	}catch(Exception e){
 			 	     	    		System.out.println(e.getMessage());
@@ -310,7 +311,7 @@ public class WebCrawler implements Runnable{
         }    
         
         //Retrieve what's already in the database
-        String query = "SELECT * FROM crawlertableurlezza";
+        String query = "SELECT * FROM crawlertableurls1";
         try {
 			rs =  st.executeQuery(query);
 			while(rs.next()){

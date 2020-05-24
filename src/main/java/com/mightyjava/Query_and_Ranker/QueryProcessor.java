@@ -1,22 +1,18 @@
 package com.mightyjava.Query_and_Ranker;
 
 
-import java.io.IOException;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
+import java.io.*;
+import java.net.URL;
+import java.util.*;
+
 
 import org.tartarus.snowball.ext.porterStemmer;
 
-import com.mightyjava.Query_and_Ranker.Ranker.FinalScore;
+import java.sql.*;
+import com.mightyjava.Query_and_Ranker.Ranker.TF;
 import com.mightyjava.Query_and_Ranker.Ranker.IDF;
 import com.mightyjava.Query_and_Ranker.Ranker.ScoreTf_Idf;
-import com.mightyjava.Query_and_Ranker.Ranker.TF;
+import com.mightyjava.Query_and_Ranker.Ranker.FinalScore;
 
 
 
@@ -37,7 +33,7 @@ public class QueryProcessor {
 	 public static ResultSet rs_ReadOldPopularity; // for insert 
 	 public static int UrlsCount;
 
-	 public static String tempUrl;
+	 public static String tempUrl =null;
 	 public static String temp2Url;
 	 public static String[] wordsToIgnore={" ","","a","about", "above", "after", "again",
      		"against", "ain", "all", "am", "an", "and", "any", "are", "aren",
@@ -122,13 +118,11 @@ public class QueryProcessor {
 	        }catch(Exception e){
 	        	System.out.println(e.getMessage());
         }    
-		String deleteQuery = "TRUNCATE TABLE rankedurlsezza";
-        String query = "SELECT * FROM indexertableezza";
+		String deleteQuery = "TRUNCATE TABLE rankedurls1";
+        String query = "SELECT * FROM indexertable1";
         String queryForInsert;
         String queryIndexedUrls = "SELECT * FROM indexedurls";
 		String query_ReadOld="SELECT * FROM `oldpopularity`";
-
-
         try {
         	rs =  st.executeQuery(queryIndexedUrls);
         	double TotalNumberOfDocuments=0;
@@ -192,7 +186,6 @@ public class QueryProcessor {
 			          }
 				}
 				// insert the urls and its rank in the ranked urls
- 
 				else if(("A new url is comming".equals(rs.getString("URLs")))) {
 					if(tempUrl!= null) {
 							RelvanceRank.add(TotalRank);
@@ -215,9 +208,7 @@ public class QueryProcessor {
 				FinalList.add(Final_Rank);
 				Counter++;
         	}
-			
-	
-			for (int i = 0; i < TotalNumberOfDocuments-1; i++) 
+		for (int i = 0; i < TotalNumberOfDocuments-1; i++) 
 	        { 
 	            // Find the minimum element in unsorted array 
 	            int max_idx = i; 
@@ -226,7 +217,6 @@ public class QueryProcessor {
 	                if (FinalList.get(j) > FinalList.get(max_idx)) 
 	                	max_idx = j; 
 	            }
-	  
 	            // Swap the found minimum element with the first 
 	            // element 
 	            double temp = FinalList.get(max_idx); 
@@ -243,7 +233,7 @@ public class QueryProcessor {
 			while(rs_ReadOldPopularity.next())
         	{
 
-				queryForInsert = "INSERT INTO `rankedurlsezza` (`Urls`,`Rank`)"
+				queryForInsert = "INSERT INTO `rankedurls1` (`Urls`,`Rank`)"
         		 		+ " VALUES ('" + AllUrls.get(UrlsCount) + "','" 
         		 		+ FinalList.get(Counter) + "')";
 				st_InsertFinalRank.executeUpdate(queryForInsert);

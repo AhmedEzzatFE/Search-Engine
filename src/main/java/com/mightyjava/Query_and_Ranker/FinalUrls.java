@@ -55,7 +55,7 @@ public class FinalUrls{
 					QueryDeleteSelected="DELETE FROM indexedurls WHERE URLs = '"+url_Final+"' ";
 					st3.executeUpdate(QueryDeleteSelected);
 					
-					QueryDeleteSelected="DELETE FROM indexertableezza WHERE URLs = '"+url_Final+"' ";
+					QueryDeleteSelected="DELETE FROM indexertable1 WHERE URLs = '"+url_Final+"' ";
 					st3.executeUpdate(QueryDeleteSelected);
 				
 					}

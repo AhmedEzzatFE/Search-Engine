@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<project version="4">
-  <component name="SqlDialectMappings">
-    <file url="file://$PROJECT_DIR$/src/main/java/com/mightyjava/Query_and_Ranker/Indexer.java" dialect="GenericSQL" />
-    <file url="file://$PROJECT_DIR$/src/main/java/com/mightyjava/Query_and_Ranker/QueryProcessorForWI.java" dialect="GenericSQL" />
-    <file url="file://$PROJECT_DIR$/src/main/java/com/mightyjava/Query_and_Ranker/WebCrawler.java" dialect="GenericSQL" />
-  </component>
-</project>

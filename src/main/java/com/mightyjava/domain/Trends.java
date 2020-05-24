@@ -15,11 +15,11 @@ public class Trends {
     @Column
     private Long id;
     @Column
-    private double name;
+    private String name;
     @Column
-    private double Count;
+    private int Count;
     @Column
-    private double location;
+    private String location;
 
     @Override
     public String toString() {
@@ -31,35 +31,5 @@ public class Trends {
                 '}';
     }
 
-    public Long getId() {
-        return id;
-    }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public double getName() {
-        return name;
-    }
-
-    public void setName(double name) {
-        this.name = name;
-    }
-
-    public double getCount() {
-        return Count;
-    }
-
-    public void setCount(double count) {
-        Count = count;
-    }
-
-    public double getLocation() {
-        return location;
-    }
-
-    public void setLocation(double location) {
-        this.location = location;
-    }
 }

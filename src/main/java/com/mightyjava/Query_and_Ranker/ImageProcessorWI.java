@@ -8,7 +8,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import  com.mightyjava.Query_and_Ranker.Ranker.ImageRanker;
+import com.mightyjava.Query_and_Ranker.Ranker.ImageRanker;
 
 
 public class ImageProcessorWI {

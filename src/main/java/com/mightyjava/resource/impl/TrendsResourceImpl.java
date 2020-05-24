@@ -23,16 +23,16 @@ import com.mightyjava.service.IService;
 public class TrendsResourceImpl implements TrendResource<Trends> {
 
     @Autowired
-    private TrendService<Trends> bookService;
+    private TrendService<Trends> trendService;
 
 
     @Override
-    public ResponseEntity<Page<Trends>> findAll(Pageable pageable) {
-        return new ResponseEntity<>(bookService.findAllTrends(pageable), HttpStatus.OK);
+    public ResponseEntity<Page<Trends>> findAll(Pageable pageable,int id) {
+        return new ResponseEntity<>(trendService.findAllTrends(pageable,id), HttpStatus.OK);
     }
     @Override
     public ResponseEntity<Page<Trends>> findAll(int pageNumber, int pageSize) {
-        return new ResponseEntity<>(bookService.findAll(
+        return new ResponseEntity<>(trendService.findAll(
                 PageRequest.of(
                         pageNumber, pageSize)
         ), HttpStatus.OK);

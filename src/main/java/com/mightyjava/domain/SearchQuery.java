@@ -9,7 +9,7 @@ import javax.persistence.*;
 import java.net.URL;
 
 @Entity
-@Table(name="rankedurlsezza")
+@Table(name="rankedurls1")
 public class SearchQuery {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
