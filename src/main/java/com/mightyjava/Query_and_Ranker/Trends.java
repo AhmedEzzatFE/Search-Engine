@@ -91,8 +91,8 @@ public class Trends {
         	
         }
         
-        query= "TRUNCATE TABLE userqueries";
-       	st.executeUpdate(query); // empty the ranked Table
+//        query= "TRUNCATE TABLE userqueries";
+//       	st.executeUpdate(query); // empty the ranked Table
 
         
 

@@ -10,6 +10,7 @@ public class FinalUrls{
     public static Connection con;
     public static Statement st;
     public static Statement st2;
+
     public static Statement st3;
 
     public static ResultSet rs;
