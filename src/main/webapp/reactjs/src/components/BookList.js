@@ -12,6 +12,7 @@ import {
     faMicrophone, faAssistiveListeningSystems
 } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
+import Histogram from 'react-chart-histogram';
 
 const SpeechRecognition = window.webkitSpeechRecognition
 var recognition = new SpeechRecognition();
@@ -24,7 +25,7 @@ recognition.lang = 'en-US'
         super(props);
         this.state = {
             books : [],
-            ReservedQueries:[],
+            ReservedQueries: {},
             countryName: '',
             countryCode: '',
             search : '',
@@ -151,11 +152,15 @@ recognition.lang = 'en-US'
         this.setState({
             search: event.target.value
         });
+        this.getResponse()
+
 
     };
     cancelSearch = () => {
         this.setState({"search" : ''});
          this.findAllBooks(this.state.currentPage);
+        this.getResponse()
+
     };
     searchData = (currentPage) => {
         currentPage -= 1;
@@ -170,15 +175,22 @@ recognition.lang = 'en-US'
         });}
        )
 
+        alert(this.state.ReservedQueries)
+
         let x=(this.state.search==="")
         if(!x){
+            this.getResponse()
+
             if(this.state.ReservedQueries.find(element=> element===this.state.search)===undefined) {
+                alert("Not the same")
                 const posted = {
                     "name": this.state.search,
                     "id": Math.floor((Math.random() * 1000) + 1)
                 }
                 axios.post("http://localhost:3000/users", posted).then(r => r.data)
             }}
+
+
     };
 
     searchVoiceData = (currentPage) => {
@@ -193,6 +205,7 @@ recognition.lang = 'en-US'
                      currentPage: data.number + 1
                  });
              });
+        this.getResponse()
         let x=(this.state.finalTranscript==="")
         if(x===false){
          if(this.state.ReservedQueries.find(element=> element===this.state.finalTranscript)===undefined) {
@@ -202,10 +215,13 @@ recognition.lang = 'en-US'
             }
             axios.post("http://localhost:3000/users", posted).then(r => r.data)
         }}
+
+
     };
     componentDidMount() {
         this.getGeoInfo()
         this.getResponse()
+        axios.get("http://localhost:8081/rest/Trending/trend/"+this.state.id).then(response=>console.log(response.data.content))
     }
     getResponse(){
         let ReservedQ=[]
@@ -235,6 +251,9 @@ recognition.lang = 'en-US'
      }
 
 render() {
+    const labels = ['2016', '2017', '2018'];
+    const data = [324, 45, 672];
+    const options = { fillColor: '#FFFFFF', strokeColor: '#0000FF' };
         const {books, currentPage, totalPages, search} = this.state;
         return <div>
             <div style={{"display":this.state.show ? "block" : "none"}}>
@@ -246,7 +265,7 @@ render() {
                     </div>
                     <div style={{"float":"right"}}>
                         <InputGroup size="sm">
-                            <input value={search}   onChange={this.onTextChange} type="text" />
+                            <input value={search} onChange={this.onTextChange } type="text" />
                         <InputGroup.Append>
                                 <Button size="sm" variant="outline-info" type="button" onClick={this.searchData}>
                                     <FontAwesomeIcon icon={faSearch}/>
@@ -291,6 +310,16 @@ render() {
                           </tbody>
                     </Table>
                     <p>Country Name: {this.state.countryName}</p>
+                    <div>
+                        <Histogram
+                            xLabels={labels}
+                            yValues={data}
+                            width='400'
+                            height='200'
+                            options={options}
+                        />
+                    </div>
+                    )
                 </Card.Body>
                 {books.length > 0 ?
                     <Card.Footer>
