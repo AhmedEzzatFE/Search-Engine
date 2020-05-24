@@ -306,13 +306,13 @@ render() {
                     </Table>
                     <p>Country Name: {this.state.countryName}</p>
                     <div>
-                        <Histogram
-                            xLabels={labels}
-                            yValues={data}
-                            width='400'
-                            height='200'
-                            options={options}
-                        />
+                        {/*<Histogram*/}
+                        {/*    xLabels={labels}*/}
+                        {/*    yValues={data}*/}
+                        {/*    width='400'*/}
+                        {/*    height='200'*/}
+                        {/*    options={options}*/}
+                        {/*/>*/}
                     </div>
 
                 </Card.Body>
