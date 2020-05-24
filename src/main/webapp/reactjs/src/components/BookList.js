@@ -148,14 +148,10 @@ recognition.lang = 'en-US'
     };
 
     searchChange = event => {
-        alert(event.target.value)
         this.setState({
             search: event.target.value
         });
-        this.getResponse()
-
-
-    };
+        this.getResponse()    };
     cancelSearch = () => {
         this.setState({"search" : ''});
          this.findAllBooks(this.state.currentPage);
@@ -175,7 +171,6 @@ recognition.lang = 'en-US'
         });}
        )
 
-        alert(this.state.ReservedQueries)
 
         let x=(this.state.search==="")
         if(!x){
@@ -190,7 +185,7 @@ recognition.lang = 'en-US'
                 axios.post("http://localhost:3000/users", posted).then(r => r.data)
             }}
 
-
+this.setState({suggestions:[]})
     };
 
     searchVoiceData = (currentPage) => {
@@ -253,7 +248,7 @@ recognition.lang = 'en-US'
 render() {
     const labels = ['2016', '2017', '2018'];
     const data = [324, 45, 672];
-    const options = { fillColor: '#FFFFFF', strokeColor: '#0000FF' };
+    const options = { fillColor: '#FFFFFF', strokeColor: '#00f7ff' };
         const {books, currentPage, totalPages, search} = this.state;
         return <div>
             <div style={{"display":this.state.show ? "block" : "none"}}>
@@ -304,7 +299,7 @@ render() {
                                 books.map((book) => <tr key={book.id}>
                                     <td>
                                    <a href={book.urls}>{book.urls}</a>
-                                    </td>
+                                   </td>
                                 </tr>)
                             }
                           </tbody>
@@ -319,7 +314,7 @@ render() {
                             options={options}
                         />
                     </div>
-                    )
+
                 </Card.Body>
                 {books.length > 0 ?
                     <Card.Footer>
