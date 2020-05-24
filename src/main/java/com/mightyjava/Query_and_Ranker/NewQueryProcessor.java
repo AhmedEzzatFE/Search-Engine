@@ -175,13 +175,13 @@ public class NewQueryProcessor {
            while(rs_Count.next()){
         	   SearchedBefore = Integer.parseInt(rs_Count.getString("COUNT(*)"));
            }
-		   queryForInsert = "INSERT INTO `userqueries` (`Query`,`Country`,`id`)"
-				   + " VALUES ('" + SearchQuery + "','"
-				   + Location + "','"+id+"')";
-		   st.executeUpdate(queryForInsert);
+
     	   if(SearchedBefore == 0)
     	   {
-
+			   queryForInsert = "INSERT INTO `userqueries` (`Query`,`Country`,`id`)"
+					   + " VALUES ('" + SearchQuery + "','"
+					   + Location + "','"+id+"')";
+			   st.executeUpdate(queryForInsert);
        	   
            List<Double> Geo_Date = new ArrayList<>(); 
            List<String> Titles = new ArrayList<>(); 

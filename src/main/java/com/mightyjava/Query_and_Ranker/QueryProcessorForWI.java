@@ -178,14 +178,16 @@ public class QueryProcessorForWI {
 	           while(rs_Count.next()){
 	        	   SearchedBefore = Integer.parseInt(rs_Count.getString("COUNT(*)"));
 	           }
-			   queryForInsert = "INSERT INTO `userqueries` (`Query`,`Country`,`id`)"
-					   + " VALUES ('" + QueryWI + "','"
-					   + Location + "','"+id+"')";
-			   st.executeUpdate(queryForInsert);
+
 	    	   if(SearchedBefore == 0)
 	    	   {
-	           List<Double> Geo_Date = new ArrayList<>(); 
-	           List<String> Titles = new ArrayList<>(); 
+				   queryForInsert = "INSERT INTO `userqueries` (`Query`,`Country`,`id`)"
+						   + " VALUES ('" + QueryWI + "','"
+						   + Location + "','"+id+"')";
+				   st.executeUpdate(queryForInsert);
+
+				   List<Double> Geo_Date = new ArrayList<>();
+				   List<String> Titles = new ArrayList<>();
 	           
 	       	query= "SELECT * FROM `indexedurls`";
 	       	rs=st.executeQuery(query);

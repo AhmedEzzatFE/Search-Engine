@@ -305,15 +305,15 @@ render() {
                           </tbody>
                     </Table>
                     <p>Country Name: {this.state.countryName}</p>
-                    <div>
-                        <Histogram
-                            xLabels={labels}
-                            yValues={data}
-                            width='400'
-                            height='200'
-                            options={options}
-                        />
-                    </div>
+                    {/*<div>*/}
+                    {/*    <Histogram*/}
+                    {/*        xLabels={labels}*/}
+                    {/*        yValues={data}*/}
+                    {/*        width='400'*/}
+                    {/*        height='200'*/}
+                    {/*        options={options}*/}
+                    {/*    />*/}
+                    {/*</div>*/}
 
                 </Card.Body>
                 {books.length > 0 ?
