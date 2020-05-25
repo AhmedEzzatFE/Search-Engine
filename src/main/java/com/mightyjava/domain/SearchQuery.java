@@ -25,6 +25,16 @@ public class SearchQuery {
 	private int id;
 	@Column
 	private String searchquery;
+	@Column
+	private int image;
+
+	public int getImage() {
+		return image;
+	}
+
+	public void setImage(int image) {
+		this.image = image;
+	}
 
 	public String getSearchQuery() {
 		return searchquery;

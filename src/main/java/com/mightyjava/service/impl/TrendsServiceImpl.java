@@ -19,16 +19,15 @@ public class TrendsServiceImpl implements TrendService<Trends> {
     private IndexRepo indexRepo;
 
     @Override
-    public Page<Trends> findAllTrends(Pageable pageable,int id) {
-        //hna hnady el trend
-        System.out.println("hna hnady el trend");
+    public Page<Trends> findAllTrends(Pageable pageable,int id,String Country) {
         TrendsWI x= new TrendsWI(id);
         try {
             x.GetTrends();
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
-        return indexRepo.findAllTrends(pageable);
+        System.out.println("Trends Finished");
+        return indexRepo.findAllTrends(pageable,Country);
     }
 
 

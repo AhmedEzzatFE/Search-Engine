@@ -16,7 +16,7 @@ import com.mightyjava.service.IService;
 
 @RestController
 @RequestMapping("/api")
-@CrossOrigin(origins="http://localhost:3001")
+@CrossOrigin(origins = "*")
 public class BookResourceImpl implements Resource<SearchQuery> {
 	
 	@Autowired
@@ -24,8 +24,8 @@ public class BookResourceImpl implements Resource<SearchQuery> {
 
 	//for searching by query
 	@Override
-	public ResponseEntity<Page<SearchQuery>> findAll(Pageable pageable,String Country,int id, String searchText) {
-		return new ResponseEntity<>(bookService.findAll(pageable,Country,id, searchText), HttpStatus.OK);
+	public ResponseEntity<Page<SearchQuery>> findAll(Pageable pageable,String Country,int id, String searchText,int isImage) {
+		return new ResponseEntity<>(bookService.findAll(pageable,Country,id, searchText,isImage), HttpStatus.OK);
 	}
 
 

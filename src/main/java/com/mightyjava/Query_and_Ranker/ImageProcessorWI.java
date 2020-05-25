@@ -101,6 +101,7 @@ public class ImageProcessorWI {
 				tempUrl=rs.getString("SRC");
 	        	ImageRanker IR = new ImageRanker(FinalQuery,rs.getString("Title_Url"),rs.getString("Title_image"),rs.getString("Alt_image"));
 	        	TotalRank= IR.ImageScore();
+	        	System.out.println(TotalRank);
 	        	query="INSERT INTO `rankedurls1` (`Urls`,`Rank`,`description`,`Title`,`id`,`searchQuery`,`image`)"
 	    		 		+ " VALUES ('" + tempUrl + "','" 
 	    		 		+ TotalRank + "','"+ " " +"', '"+" "+"','"+ this.id+"','"+this.QueryWI+"','"+1+"')";

@@ -1,6 +1,6 @@
 import React from 'react';
 import './App.css';
-import {Container, Row, Col} from 'react-bootstrap';
+import {Container} from 'react-bootstrap';
 import {BrowserRouter as Router, Switch, Route} from 'react-router-dom';
 import SearchEngine from './components/SearchEngine';
 import Trending from './components/Trending';

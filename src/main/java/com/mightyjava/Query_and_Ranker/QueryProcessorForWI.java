@@ -204,11 +204,11 @@ public class QueryProcessorForWI {
 	          	 double Popularity_Geo_Date=0.0;
 	   			 for(URL url : webLinks) {
 	   				Popularity_Geo_Date=Popularity.get(Popularity_Geo_Date_Title_Count)+Geo_Date.get(Popularity_Geo_Date_Title_Count);
-	   				queryForInsert = "INSERT INTO `rankedurls1` (`Urls`,`Rank`,`description`,`Title`,`id`,`searchQuery`)"
+	   				queryForInsert = "INSERT INTO `rankedurls1` (`Urls`,`Rank`,`description`,`Title`,`id`,`searchQuery`,`image`)"
 	          		 		+ " VALUES ('" + url + "','"
 	          		 		+ Popularity_Geo_Date + "','"+""+"','"
 	          		 		+ Titles.get(Popularity_Geo_Date_Title_Count) + "','"
-	          		 		+ id + "','"+ QueryWI +"')";
+	          		 		+ id + "','"+ QueryWI +"','"+0+"')";
 	   				st_InsertFinalRank.executeUpdate(queryForInsert);
 	   				Popularity_Geo_Date_Title_Count++;
 	          	}
@@ -251,7 +251,6 @@ public class QueryProcessorForWI {
 	   	            	}
 	   	            	TotalRank=PreviousRank+FinalScore_Score;
 	   	            	Desc=rs.getString("Sentence");
-	   	            	System.out.println(Desc);
 	   	            	Desc.concat(PreviousDesc);
 	   	            	UpdateQuery="UPDATE `rankedurls1` SET `Rank`= '"+TotalRank +"', `description`= '"+ Desc +"' WHERE Urls = '"+tempUrl+"' AND id='"+id+"'";	
 	   					st_InsertFinalRank.executeUpdate(UpdateQuery);
@@ -270,7 +269,6 @@ public class QueryProcessorForWI {
 	    	       	while(rs.next())
 	    	       	{
 	    	       		tempUrl=rs.getString("Urls");
-	    	       		System.out.println(rs.getString("Rank"));
 	    	       		Document document = Jsoup.connect(tempUrl).get();
 	    	       		text = document.body().text().toLowerCase();
 	    	       		patternString = "\\b(" + StringUtils.join(tokens, "|") + ")\\b";
@@ -278,7 +276,6 @@ public class QueryProcessorForWI {
 	    	    		matcher = pattern.matcher(text);
 	    	
 	    	    		while (matcher.find()) {
-	    	    		    System.out.println(matcher.group(1));
 	    	    		    query = "SELECT * FROM rankedurls1 WHERE Urls = '"+tempUrl+"' AND id= '"+id+"' ";
 	    		            rs_ToGetThePrevRank=st_ToGetThePrevRank.executeQuery(query);
 	    	            	while(rs_ToGetThePrevRank.next())
