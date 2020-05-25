@@ -2,18 +2,21 @@ import React from 'react';
 import './App.css';
 import {Container, Row, Col} from 'react-bootstrap';
 import {BrowserRouter as Router, Switch, Route} from 'react-router-dom';
-import BookList from './components/BookList';
+import SearchEngine from './components/SearchEngine';
+import Trending from './components/Trending';
+
 export default function App() {
   return (
     <Router>
         <Container>
-            <Row>
-                <Col lg={12} className={"margin-top"}>
+                <div className={"margin-top"}>
                     <Switch>
-                        <Route path="/" exact component={BookList}/>
+                        <Route path="/" exact component={SearchEngine}/>
+                        <Route path="/Trending" exact component={Trending}/>
+
                     </Switch>
-                </Col>
-            </Row>
+                </div>
+
         </Container>
     </Router>
   );

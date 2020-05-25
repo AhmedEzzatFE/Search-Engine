@@ -12,7 +12,6 @@ import {
     faMicrophone, faAssistiveListeningSystems
 } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
-import Histogram from 'react-chart-histogram';
 
 const SpeechRecognition = window.webkitSpeechRecognition
 var recognition = new SpeechRecognition();
@@ -20,7 +19,7 @@ recognition.continous = true
 recognition.interimResults = true
 recognition.lang = 'en-US'
 
- class BookList extends Component {
+ class SearchEngine extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -185,7 +184,7 @@ recognition.lang = 'en-US'
                 axios.post("http://localhost:3000/users", posted).then(r => r.data)
             }}
 
-this.setState({suggestions:[]})
+this.setState({suggestions:[],search:''})
     };
 
     searchVoiceData = (currentPage) => {
@@ -216,7 +215,7 @@ this.setState({suggestions:[]})
     componentDidMount() {
         this.getGeoInfo()
         this.getResponse()
-        axios.get("http://localhost:8081/rest/Trending/trend/"+this.state.id).then(response=>console.log(response.data.content))
+        // axios.get("http://localhost:8081/rest/Trending/trend/"+this.state.id).then(response=>console.log(response.data.content))
     }
     getResponse(){
         let ReservedQ=[]
@@ -246,9 +245,6 @@ this.setState({suggestions:[]})
      }
 
 render() {
-    const labels = ['2016', '2017', '2018'];
-    const data = [324, 45, 672];
-    const options = { fillColor: '#FFFFFF', strokeColor: '#00f7ff' };
         const {books, currentPage, totalPages, search} = this.state;
         return <div>
             <div style={{"display":this.state.show ? "block" : "none"}}>
@@ -296,27 +292,16 @@ render() {
                                 <tr align="center">
                                   <td colSpan="7">No Results yet.</td>
                                 </tr> :
-                                books.map((book) => <tr key={book.id}>
+                                books.map((book) => <div>
                                     {book.title}
-                                    <td>
+                                    <br/>
                                    <a href={book.urls}>{book.urls}</a>
-                                   </td>
+                                    <br/>
                                     {book.description}
-                                </tr>)
+                                </div>)
                             }
                           </tbody>
                     </Table>
-                    <p>Country Name: {this.state.countryName}</p>
-                    <div>
-                        {/*<Histogram*/}
-                        {/*    xLabels={labels}*/}
-                        {/*    yValues={data}*/}
-                        {/*    width='400'*/}
-                        {/*    height='200'*/}
-                        {/*    options={options}*/}
-                        {/*/>*/}
-                    </div>
-
                 </Card.Body>
                 {books.length > 0 ?
                     <Card.Footer>
@@ -395,4 +380,4 @@ const styles = {
 
 const { container } = styles
 
-export default BookList;
+export default SearchEngine;
