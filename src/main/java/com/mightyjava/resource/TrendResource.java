@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 
 public interface TrendResource<T> {
-    @GetMapping("/trend/{id}")
-    ResponseEntity<Page<T>> findAll(Pageable pageable,@PathVariable("id")int id);
+    @GetMapping("/trend/{id}/{Country}")
+    ResponseEntity<Page<T>> findAll(Pageable pageable,@PathVariable("id")int id,@PathVariable("Country")String Country);
 
 
     @GetMapping

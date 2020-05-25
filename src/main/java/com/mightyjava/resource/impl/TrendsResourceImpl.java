@@ -19,7 +19,7 @@ import com.mightyjava.service.IService;
 
 @RestController
 @RequestMapping("/Trending")
-@CrossOrigin(origins="http://localhost:3001")
+@CrossOrigin(origins="*")
 public class TrendsResourceImpl implements TrendResource<Trends> {
 
     @Autowired
@@ -27,8 +27,8 @@ public class TrendsResourceImpl implements TrendResource<Trends> {
 
 
     @Override
-    public ResponseEntity<Page<Trends>> findAll(Pageable pageable,int id) {
-        return new ResponseEntity<>(trendService.findAllTrends(pageable,id), HttpStatus.OK);
+    public ResponseEntity<Page<Trends>> findAll(Pageable pageable,int id,String Country) {
+        return new ResponseEntity<>(trendService.findAllTrends(pageable,id,Country), HttpStatus.OK);
     }
     @Override
     public ResponseEntity<Page<Trends>> findAll(int pageNumber, int pageSize) {

@@ -1,10 +1,14 @@
 package com.mightyjava.Query_and_Ranker;
 
-import com.mightyjava.Query_and_Ranker.Ranker.ImageRanker;
-
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+
+import com.mightyjava.Query_and_Ranker.Ranker.ImageRanker;
 
 
 public class ImageProcessorWI {
@@ -97,7 +101,7 @@ public class ImageProcessorWI {
 				tempUrl=rs.getString("SRC");
 	        	ImageRanker IR = new ImageRanker(FinalQuery,rs.getString("Title_Url"),rs.getString("Title_image"),rs.getString("Alt_image"));
 	        	TotalRank= IR.ImageScore();
-
+	        	System.out.println(TotalRank);
 	        	query="INSERT INTO `rankedurls1` (`Urls`,`Rank`,`description`,`Title`,`id`,`searchQuery`,`image`)"
 	    		 		+ " VALUES ('" + tempUrl + "','" 
 	    		 		+ TotalRank + "','"+ " " +"', '"+" "+"','"+ this.id+"','"+this.QueryWI+"','"+1+"')";

@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-
 import axios from 'axios';
 import Histogram from 'react-chart-histogram';
 
@@ -8,36 +7,51 @@ class Trending extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            data:[],
+            countOccurrences:[],
+            countryName:'',
+            labels:[],
+            Location:'',
             id:Math.floor((Math.random() * 10000) + 1),
         };
 
 
     }
     componentDidMount() {
-        axios.get("http://localhost:8081/rest/Trending/trend/"+this.state.id)
-            .then(response =>{
-                console.log(response.data);
-                this.setState({
-                    books: response.data.content,
-                    totalPages: response.data.totalPages,
-                    totalElements: response.data.totalElements,
-                    currentPage: response.data.number + 1
-                });}
-            )
+        this.getGeoInfo()
     }
-    render() {
-        const labels = ['2016', '2017', '2018'];
-        const data = [324, 45, 672];
-        const options = { fillColor: '#FFFFFF', strokeColor: '#0000FF' };
+    getGeoInfo = () => {
+        let ReservedLabels=[]
+        let ReservedY=[]
+
+        axios.get('https://ipapi.co/json/').then((response) => {
+            let data = response.data;
+            this.setState({
+                countryName: data.country_name,
+            });
+            axios.get("http://localhost:8081/rest/Trending/trend/"+this.state.id+"/"+this.state.countryName)
+                .then((response) =>
+                { ReservedLabels = response.data.content.map(x => x.name);
+                    this.setState({labels: ReservedLabels})
+                    ReservedY=response.data.content.map(x => x.count);
+                    this.setState({countOccurrences: ReservedY}
+
+                    )})})
+  }
+    render(){
+
+        const options = { fillColor: '#7f6464', strokeColor: '#4a4aaa' };
         return (
             <div>
-                <Histogram
-                    xLabels={labels}
-                    yValues={data}
-                    width='1000'
-                    height='1000'
-                    options={options}
-                />
+                {this.state.labels.length===0?
+                <div>Getting Trends </div>: <Histogram
+                        xLabels={this.state.labels}
+                        yValues={this.state.countOccurrences}
+                        width='1000'
+                        height='1000'
+                        options={options}
+                    />}
+
             </div>
         )
     }

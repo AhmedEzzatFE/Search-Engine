@@ -67,7 +67,6 @@ recognition.lang = 'en-US'
             let data = response.data;
             this.setState({
                 countryName: data.country_name,
-                countryCode: data.country_calling_code
             });
         }).catch((error) => {
             console.log(error);
@@ -149,8 +148,7 @@ recognition.lang = 'en-US'
     searchChange = event => {
         this.setState({
             search: event.target.value
-        });
-        this.getResponse()    };
+        });};
     cancelSearch = () => {
         this.setState({"search" : ''});
          this.findAllBooks(this.state.currentPage);
@@ -161,7 +159,6 @@ recognition.lang = 'en-US'
         currentPage -= 1;
         axios.get("http://localhost:8081/rest/api/search/"+this.state.countryName+"/"+this.state.id+"/"+this.state.search+"?page="+currentPage+"&size="+this.state.booksPerPage)
        .then(response =>{
-        console.log(response.data);
         this.setState({
             books: response.data.content,
             totalPages: response.data.totalPages,
@@ -169,14 +166,10 @@ recognition.lang = 'en-US'
             currentPage: response.data.number + 1
         });}
        )
-
-
         let x=(this.state.search==="")
         if(!x){
             this.getResponse()
-
             if(this.state.ReservedQueries.find(element=> element===this.state.search)===undefined) {
-                alert("Not the same")
                 const posted = {
                     "name": this.state.search,
                     "id": Math.floor((Math.random() * 1000) + 1)
@@ -215,7 +208,6 @@ this.setState({suggestions:[],search:''})
     componentDidMount() {
         this.getGeoInfo()
         this.getResponse()
-        // axios.get("http://localhost:8081/rest/Trending/trend/"+this.state.id).then(response=>console.log(response.data.content))
     }
     getResponse(){
         let ReservedQ=[]
