@@ -204,11 +204,11 @@ public class QueryProcessorForWI {
 	          	 double Popularity_Geo_Date=0.0;
 	   			 for(URL url : webLinks) {
 	   				Popularity_Geo_Date=Popularity.get(Popularity_Geo_Date_Title_Count)+Geo_Date.get(Popularity_Geo_Date_Title_Count);
-	   				queryForInsert = "INSERT INTO `rankedurls1` (`Urls`,`Rank`,`description`,`Title`,`id`,`searchQuery`)"
+	   				queryForInsert = "INSERT INTO `rankedurls1` (`Urls`,`Rank`,`description`,`Title`,`id`,`searchQuery`,`image`)"
 	          		 		+ " VALUES ('" + url + "','"
 	          		 		+ Popularity_Geo_Date + "','"+""+"','"
 	          		 		+ Titles.get(Popularity_Geo_Date_Title_Count) + "','"
-	          		 		+ id + "','"+ QueryWI +"')";
+	          		 		+ id + "','"+ QueryWI +"','"+0+"')";
 	   				st_InsertFinalRank.executeUpdate(queryForInsert);
 	   				Popularity_Geo_Date_Title_Count++;
 	          	}

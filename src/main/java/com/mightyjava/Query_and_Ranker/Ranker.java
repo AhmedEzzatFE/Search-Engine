@@ -1,6 +1,5 @@
 package com.mightyjava.Query_and_Ranker;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class Ranker {
@@ -154,18 +153,7 @@ public class Ranker {
 			}
 		}
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
 	
 	
 	public static class ImageRanker{
@@ -179,7 +167,7 @@ public class Ranker {
 		ImageRanker(List<String> word , String title_url, String title_image,String alt ){
 			Words=word;
 			Title_image=title_image.toLowerCase();
-			Title_url=title_image.toLowerCase();
+			Title_url=title_url.toLowerCase();
 			Alt=alt.toLowerCase();
 
 		}
@@ -187,7 +175,7 @@ public class Ranker {
 		public double ImageScore() {
 			double totalRank=0;
 	          for (String word : Words) {
-	        		if(!Title_url.equals("") && Title_url.contains(word) )
+	        		if(Title_url.contains(word))
 	    			{
 	    				totalRank+=7;
 	    				
