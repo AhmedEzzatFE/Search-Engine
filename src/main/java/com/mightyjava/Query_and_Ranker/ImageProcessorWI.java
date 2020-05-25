@@ -12,15 +12,7 @@ import com.mightyjava.Query_and_Ranker.Ranker.ImageRanker;
 
 
 public class ImageProcessorWI {
-	public static Connection con;
-	 public static Statement st;
 
-	 public static Statement st_TruncateRT; // to delete the ranker table
-	 public static Statement st_InsertFinalRank; // to delete the ranker table
-	 public static ResultSet rs;
-	 public static ResultSet rs_ToGetThePrevRank;
-	 
-	 public static String tempUrl =null;
 	 public static String[] wordsToIgnore={" ","","a","about", "above", "after", "again",
      		"against", "ain", "all", "am", "an", "and", "any", "are", "aren",
      		"aren't", "as", "at", "be", "because", "been", "before", "being",
@@ -49,9 +41,19 @@ public class ImageProcessorWI {
      		"you'll", "you're", "you've", "your", "yours", "yourself", "yourselves","!","@","#","$",
      		"%","^","&","*","(",")","-","_","=","+","/","\\",">","<",";",":","\'","{","}","`","[","]"};
 	
-		  String QueryWI;
-		  public ImageProcessorWI(String query){
+			 String QueryWI;
+			 int id;
+			 Connection con;
+			 Statement st;
+
+			 Statement st_TruncateRT; // to delete the ranker table
+			 Statement st_InsertFinalRank; // to delete the ranker table
+			 ResultSet rs;
+			 ResultSet rs_ToGetThePrevRank;
+			 String tempUrl =null;
+		  public ImageProcessorWI(String query,int id){
 			  QueryWI=query;
+			  this.id=id;
 		  }
 		  public void Processor_Image() {
 			  String[] words = QueryWI.split(" ");
@@ -91,27 +93,27 @@ public class ImageProcessorWI {
 			 
 		   String query;		
 	       try {  
-	    	query ="TRUNCATE TABLE rankedurls1";  
-	       	st_TruncateRT.executeUpdate(query); // empty the ranked Table
+//	    	query ="TRUNCATE TABLE rankedurls1";
+//	       	st_TruncateRT.executeUpdate(query); // empty the ranked Table
 	        query = "SELECT * FROM image";
 	        rs =  st.executeQuery(query);
 			while(rs.next()){
 				tempUrl=rs.getString("SRC");
 	        	ImageRanker IR = new ImageRanker(FinalQuery,rs.getString("Title_Url"),rs.getString("Title_image"),rs.getString("Alt_image"));
 	        	TotalRank= IR.ImageScore();
-	        	query="INSERT INTO `rankedurls1` (`Urls`,`Rank`)"
+	        	query="INSERT INTO `rankedurls1` (`Urls`,`Rank`,`description`,`Title`,`id`,`searchQuery`,`image`)"
 	    		 		+ " VALUES ('" + tempUrl + "','" 
-	    		 		+ TotalRank + "')";
+	    		 		+ TotalRank + "','"+ " " +"', '"+" "+"','"+ this.id+"','"+this.QueryWI+"','"+1+"')";
 				st_InsertFinalRank.executeUpdate(query);
 		          }
 	       	rs.close();
-	       	query="SELECT * FROM rankedurls1 ORDER BY Rank DESC";
-	       	rs =  st.executeQuery(query);
-	       	while(rs.next())
-	       	{
-	       		System.out.println(rs.getString("Rank"));
-	       		System.out.println(rs.getString("Urls"));
-	       	}
+//	       	query="SELECT * FROM rankedurls1 ORDER BY Rank DESC";
+//	       	rs =  st.executeQuery(query);
+//	       	while(rs.next())
+//	       	{
+//	       		System.out.println(rs.getString("Rank"));
+//	       		System.out.println(rs.getString("Urls"));
+//	       	}
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
