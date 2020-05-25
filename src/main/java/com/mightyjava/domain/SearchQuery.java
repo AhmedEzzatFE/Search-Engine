@@ -24,17 +24,11 @@ public class SearchQuery {
 	@Column
 	private int id;
 	@Column
-	private String searchQuery;
+	private String searchquery;
 
 	public String getSearchQuery() {
-		return searchQuery;
+		return searchquery;
 	}
-
-	public void setSearchQuery(String searchQuery) {
-		this.searchQuery = searchQuery;
-	}
-
-
 
 	@Override
 	public String toString() {
@@ -46,6 +40,10 @@ public class SearchQuery {
 				", id=" + id +
 				'}';
 	}
+	public void setSearchQuery(String searchQuery) {
+		this.searchquery = searchQuery;
+	}
+
 
 	public URL getURLs() {
 		return URLs;

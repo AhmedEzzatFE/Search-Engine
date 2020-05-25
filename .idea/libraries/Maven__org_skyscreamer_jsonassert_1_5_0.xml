@@ -8,6 +8,8 @@
     </JAVADOC>
     <SOURCES>
       <root url="jar://$MAVEN_REPOSITORY$/org/skyscreamer/jsonassert/1.5.0/jsonassert-1.5.0-sources.jar!/" />
+      <root url="file://$USER_HOME$/Desktop/stanford-corenlp-latest_2/stanford-corenlp-4.0.0" />
     </SOURCES>
+    <jarDirectory url="file://$USER_HOME$/Desktop/stanford-corenlp-latest_2/stanford-corenlp-4.0.0" recursive="false" type="SOURCES" />
   </library>
 </component>

@@ -1,16 +1,12 @@
 package com.mightyjava.Query_and_Ranker;
-import java.io.IOException;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.List;
 
 import edu.stanford.nlp.ling.CoreAnnotations;
 import edu.stanford.nlp.ling.CoreLabel;
 import edu.stanford.nlp.pipeline.CoreDocument;
 import edu.stanford.nlp.pipeline.StanfordCoreNLP;
+
+import java.sql.*;
+import java.util.List;
 
 public class TrendsWI {
 	Connection con;
@@ -38,7 +34,7 @@ public class TrendsWI {
 		StanfordCoreNLP stanfordCoreNLP= Piepline.getPipeline();
 
 
-		String query = "SELECT * FROM `userqueries`";
+		String query = "SELECT * FROM `userqueriestrends`";
 		rs =  st.executeQuery(query);
 
 		String UserQuery;
@@ -90,8 +86,8 @@ public class TrendsWI {
 
 		}
 
-//		query= "TRUNCATE TABLE userqueries";
-//		st.executeUpdate(query); // empty the ranked Table
+		query= "TRUNCATE TABLE userqueriestrends";
+		st.executeUpdate(query); // empty the ranked Table
 
 
 	}

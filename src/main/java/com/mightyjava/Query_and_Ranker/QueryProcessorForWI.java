@@ -1,31 +1,20 @@
 package com.mightyjava.Query_and_Ranker;
 
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Scanner;
-import java.util.Set;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
+import com.mightyjava.Query_and_Ranker.Ranker.*;
 import org.apache.commons.lang3.StringUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.tartarus.snowball.ext.porterStemmer;
 
-import com.mightyjava.Query_and_Ranker.Ranker.FinalScore;
-import com.mightyjava.Query_and_Ranker.Ranker.Geographic_and_DatePublished;
-import com.mightyjava.Query_and_Ranker.Ranker.IDF;
-import com.mightyjava.Query_and_Ranker.Ranker.ScoreTf_Idf;
-import com.mightyjava.Query_and_Ranker.Ranker.TF;
+import java.io.IOException;
+import java.net.URL;
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class QueryProcessorForWI {
 	 public static String[] wordsToIgnore={" ","","a","about", "above", "after", "again",
@@ -179,13 +168,17 @@ public class QueryProcessorForWI {
 	        	   SearchedBefore = Integer.parseInt(rs_Count.getString("COUNT(*)"));
 	           }
 
+			   queryForInsert = "INSERT INTO `userqueriestrends` (`Query`,`Country`)"
+					   + " VALUES ('" + QueryWI + "','"
+					   + Location + "')";
+			   st.executeUpdate(queryForInsert);
+
 	    	   if(SearchedBefore == 0)
 	    	   {
 				   queryForInsert = "INSERT INTO `userqueries` (`Query`,`Country`,`id`)"
 						   + " VALUES ('" + QueryWI + "','"
 						   + Location + "','"+id+"')";
 				   st.executeUpdate(queryForInsert);
-
 				   List<Double> Geo_Date = new ArrayList<>();
 				   List<String> Titles = new ArrayList<>();
 	           
@@ -212,8 +205,8 @@ public class QueryProcessorForWI {
 	   			 for(URL url : webLinks) {
 	   				Popularity_Geo_Date=Popularity.get(Popularity_Geo_Date_Title_Count)+Geo_Date.get(Popularity_Geo_Date_Title_Count);
 	   				queryForInsert = "INSERT INTO `rankedurls1` (`Urls`,`Rank`,`description`,`Title`,`id`,`searchQuery`)"
-	          		 		+ " VALUES ('" + url + "','" 
-	          		 		+ Popularity_Geo_Date + "','"+""+"','" 
+	          		 		+ " VALUES ('" + url + "','"
+	          		 		+ Popularity_Geo_Date + "','"+""+"','"
 	          		 		+ Titles.get(Popularity_Geo_Date_Title_Count) + "','"
 	          		 		+ id + "','"+ QueryWI +"')";
 	   				st_InsertFinalRank.executeUpdate(queryForInsert);
