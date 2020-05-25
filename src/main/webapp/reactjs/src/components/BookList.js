@@ -297,9 +297,11 @@ render() {
                                   <td colSpan="7">No Results yet.</td>
                                 </tr> :
                                 books.map((book) => <tr key={book.id}>
+                                    {book.title}
                                     <td>
                                    <a href={book.urls}>{book.urls}</a>
                                    </td>
+                                    {book.description}
                                 </tr>)
                             }
                           </tbody>

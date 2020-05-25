@@ -215,7 +215,7 @@ public class QueryProcessorForWI {
 	          		 		+ " VALUES ('" + url + "','" 
 	          		 		+ Popularity_Geo_Date + "','"+""+"','" 
 	          		 		+ Titles.get(Popularity_Geo_Date_Title_Count) + "','"
-	          		 		+ id + "'','"+ QueryWI +"')";
+	          		 		+ id + "','"+ QueryWI +"')";
 	   				st_InsertFinalRank.executeUpdate(queryForInsert);
 	   				Popularity_Geo_Date_Title_Count++;
 	          	}

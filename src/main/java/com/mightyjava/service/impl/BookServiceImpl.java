@@ -21,21 +21,16 @@ public class BookServiceImpl implements IService<SearchQuery> {
 
 	@Override
 	public Page<SearchQuery> findAll(Pageable pageable,String Country,int id, String searchText) {
-		System.out.println("Your search is :"+searchText);
 
 		QueryProcessorForWI x = new QueryProcessorForWI(searchText,Country,id);
-
 		try {
 			x.Processor();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		System.out.println("Finished");
 
-		System.out.println("Your Country is :"+Country);
-		System.out.println("Your id is :"+id);
-
-
-		return bookRepository.findAllBooks(pageable,id);
+		return bookRepository.findAllBooks(pageable,id,searchText);
 	}
 
 
