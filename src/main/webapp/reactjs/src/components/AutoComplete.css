@@ -47,3 +47,13 @@
     width:70%;
     padding: 30px;
 }
+
+.rc{
+    position: relative;
+    display: block;
+}
+.r{
+    line-height: 1.5;
+    font-size: small;
+    font-weight: normal;
+}

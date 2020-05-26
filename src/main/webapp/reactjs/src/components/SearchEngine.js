@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import './Style.css';
-import './AutoComplete.css'
+import './AutoComplete.css';
+import LoadingComponent from './LoadingComponent';
 import {Card, Table, Button, InputGroup, FormControl} from 'react-bootstrap';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {
@@ -33,6 +34,7 @@ recognition.lang = 'en-US'
             suggestions:[]    ,
             interimTranscript:'',
             finalTranscript:'',
+            isLoading:false,
             text:'',
             listening: false,
             id:Math.floor((Math.random() * 10000) + 1),
@@ -158,6 +160,7 @@ recognition.lang = 'en-US'
 
     };
      searchImage = (currentPage) => {
+         this.setState({isLoading:true})
          currentPage -= 1;
          axios.get("http://localhost:8081/rest/api/search/"+this.state.countryName+"/"+this.state.id+"/"+this.state.search+"/1?page="+currentPage+"&size="+this.state.booksPerPage)
              .then(response =>{
@@ -165,7 +168,8 @@ recognition.lang = 'en-US'
                      books: response.data.content,
                      totalPages: response.data.totalPages,
                      totalElements: response.data.totalElements,
-                     currentPage: response.data.number + 1
+                     currentPage: response.data.number + 1,
+                     isLoading:false
                  });}
              )
          let x=(this.state.search==="")
@@ -182,11 +186,13 @@ recognition.lang = 'en-US'
          this.setState({suggestions:[],search:'',image:1})
      };
     searchData = (currentPage) => {
+        this.setState({isLoading:true})
         currentPage -= 1;
         axios.get("http://localhost:8081/rest/api/search/"+this.state.countryName+"/"+this.state.id+"/"+this.state.search+"/0?page="+currentPage+"&size="+this.state.booksPerPage)
        .then(response =>{
         this.setState({
             books: response.data.content,
+            isLoading:false,
             totalPages: response.data.totalPages,
             totalElements: response.data.totalElements,
             currentPage: response.data.number + 1
@@ -207,12 +213,14 @@ this.setState({suggestions:[],search:'',image:0})
     };
 
     searchVoiceData = (currentPage) => {
+        this.setState({isLoading:true})
          currentPage -= 1;
-         axios.get("http://localhost:8081/rest/api/search/"+this.state.countryName+"/"+this.state.id+"/"+this.state.finalTranscript+"?page="+currentPage+"&size="+this.state.booksPerPage)
+         axios.get("http://localhost:8081/rest/api/search/"+this.state.countryName+"/"+this.state.id+"/"+this.state.finalTranscript+"/0?page="+currentPage+"&size="+this.state.booksPerPage)
              .then(response => response.data)
              .then((data) => {
                  this.setState({
                      books: data.content,
+                     isLoading:false,
                      totalPages: data.totalPages,
                      totalElements: data.totalElements,
                      currentPage: data.number + 1
@@ -317,17 +325,22 @@ Google
                             </thead>
                             <tbody>
                             {
-                                books.length === 0 ?
+                                this.state.isLoading ?
                                     <tr align="center">
-                                        <td colSpan="7">No Results yet.</td>
+                                       <LoadingComponent/>
                                     </tr> :
-                                    books.map((book) => <div>
-                                        {book.title}
-                                        <br/>
-                                        <a href={book.urls}>{book.urls}</a>
-                                        <br/>
-                                        {book.description}
-                                    </div>)
+                                    books.map((book) =>
+                                        <div className="rc">
+                                            <div className="r">
+                                                <h3>{book.title}</h3>
+                                            </div>
+                                        <h4><a href={book.urls}>{book.urls}</a></h4>
+                                        <span>
+                                        {book.description===''?book.description:<p>...</p>}
+                                        </span>
+                                            <hr/>
+                                            <br/>
+                                        </div>)
                             }
                             </tbody>
                         </Table>
