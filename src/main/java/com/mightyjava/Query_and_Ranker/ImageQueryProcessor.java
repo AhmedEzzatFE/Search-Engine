@@ -1,13 +1,13 @@
 package com.mightyjava.Query_and_Ranker;
 
 
-import java.io.*;
-import java.util.*;
-
-
-
-import java.sql.*;
 import com.mightyjava.Query_and_Ranker.Ranker.ImageRanker;
+
+import java.io.IOException;
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
 
 
 
@@ -59,74 +59,80 @@ public class ImageQueryProcessor {
 	
 
 	 public static void main(String[] args) throws IOException {
-		 
-		  Scanner myObj = new Scanner(System.in);  // Create a Scanner object
-		  System.out.println("Enter the Search Query");
-		  String SearchQuery = myObj.nextLine();  // Read user input
-		  String[] words = SearchQuery.split(" ");
-		  // List to add the Query after Removing the Stopping words
-		  // List to add the Query after stemming
-		  List<String> FinalQuery = new ArrayList<>();
-		  // if true, so the word isnt a stopping word and it will be added to the semiFinalQuery
-		  boolean addable=true; 
 
-		  // looping on the query word by word, then looping on the Stopping words, if the query 
-		  //word is a stopping word it won't be added to the list
-		  for (int i=0; i<words.length;i++) {
-			  for (String StoppingWords : wordsToIgnore) {
-	              if (words[i].equals(StoppingWords)) {
-	            	  addable=false;
-	            	  break;
-	              }	  
-	          }  
-			  if(addable== true) {
-				  FinalQuery.add(words[i]);
-			  }
-			  addable=true;
-		  }
-       
-   	  System.out.println(FinalQuery);
-   	  double TotalRank=0.0;
+		 int id=2;
+		 Scanner myObj = new Scanner(System.in);  // Create a Scanner object
+		 System.out.println("Enter the Search Query");
+		 String SearchQuery = myObj.nextLine();  // Read user input
+		 String[] words = SearchQuery.split(" ");
+		 // List to add the Query after Removing the Stopping words
+		 // List to add the Query after stemming
+		 List<String> FinalQuery = new ArrayList<>();
+		 // if true, so the word isnt a stopping word and it will be added to the semiFinalQuery
+		 boolean addable=true;
+
+		 // looping on the query word by word, then looping on the Stopping words, if the query
+		 //word is a stopping word it won't be added to the list
+		 for (int i=0; i<words.length;i++) {
+			 for (String StoppingWords : wordsToIgnore) {
+				 if (words[i].equals(StoppingWords)) {
+					 addable=false;
+					 break;
+				 }
+			 }
+			 if(addable== true) {
+				 FinalQuery.add(words[i]);
+			 }
+			 addable=true;
+		 }
+
+		 System.out.println(FinalQuery);
+		 double TotalRank=0.0;
 		 try {
-	        	Class.forName("com.mysql.jdbc.Driver");
-	        	con=DriverManager.getConnection("jdbc:mysql://localhost/projectdb1?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC", "root", "");
-	        	st = con.createStatement();
-	        	st_TruncateRT= con.createStatement(); // to empty the ranked table
-	        	st_InsertFinalRank= con.createStatement();
+			 Class.forName("com.mysql.jdbc.Driver");
+			 con=DriverManager.getConnection("jdbc:mysql://localhost/projectdb1?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC", "root", "");
+			 st = con.createStatement();
+			 st_TruncateRT= con.createStatement(); // to empty the ranked table
+			 st_InsertFinalRank= con.createStatement();
 
-	        }catch(Exception e){
-	        	System.out.println(e.getMessage());
-       }   
-		 
-	   String query;		
-       try {  
-    	query ="TRUNCATE TABLE rankedurls1";  
-       	st_TruncateRT.executeUpdate(query); // empty the ranked Table
-        query = "SELECT * FROM image";
-        rs =  st.executeQuery(query);
-		while(rs.next()){
-			tempUrl=rs.getString("SRC");
-        	ImageRanker IR = new ImageRanker(FinalQuery,rs.getString("Title_Url"),rs.getString("Title_image"),rs.getString("Alt_image"));
-        	TotalRank= IR.ImageScore();
-        	query="INSERT INTO `rankedurls1` (`Urls`,`Rank`)"
-    		 		+ " VALUES ('" + tempUrl + "','" 
-    		 		+ TotalRank + "')";
-			st_InsertFinalRank.executeUpdate(query);
-	          }
-       	rs.close();
-       	query="SELECT * FROM rankedurls1 ORDER BY Rank DESC";
-       	rs =  st.executeQuery(query);
-       	while(rs.next())
-       	{
-       		System.out.println(rs.getString("Rank"));
-       		System.out.println(rs.getString("Urls"));
-       	}
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		 }catch(Exception e){
+			 System.out.println(e.getMessage());
+		 }
 
-    }
+		 String query = " ";
+		 try {
+//    	query ="TRUNCATE TABLE rankedurls1";
+//       	st_TruncateRT.executeUpdate(query); // empty the ranked Table
+			 query = "SELECT * FROM image";
+			 rs =  st.executeQuery(query);
+			 while(rs.next()){
+				 tempUrl=rs.getString("SRC");
+				 System.out.println( FinalQuery + " ///// " + rs.getString("Title_Url") +" ///// " + rs.getString("Title_image") + " ////// " +rs.getString("Alt_image"));
+
+				 ImageRanker IR = new ImageRanker(FinalQuery,rs.getString("Title_Url"),rs.getString("Title_image"),rs.getString("Alt_image"));
+				 TotalRank= IR.ImageScore();
+
+				 query="INSERT INTO `rankedurls1` (`Urls`,`Rank`,`description`,`Title`,`id`,`searchQuery`,`image`)"
+						 + " VALUES ('" + tempUrl + "','"
+						 + TotalRank + "','"+ " " +"', '"+" "+"','"+ id+"','"+SearchQuery+"','"+1+"')";
+				 st_InsertFinalRank.executeUpdate(query);
+			 }
+			 rs.close();
+			 query="SELECT * FROM rankedurls1 ORDER BY Rank DESC";
+			 rs =  st.executeQuery(query);
+			 while(rs.next())
+			 {
+				 System.out.println(rs.getString("Rank"));
+				 System.out.println(rs.getString("Urls"));
+			 }
+		 } catch (SQLException e) {
+			 // TODO Auto-generated catch block
+			 e.printStackTrace();
+		 }
+
+
+
+	 }
 }
 
 
