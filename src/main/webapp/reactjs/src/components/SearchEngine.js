@@ -183,7 +183,7 @@ recognition.lang = 'en-US'
                  axios.post("http://localhost:3000/users", posted).then(r => r.data)
              }}
 
-         this.setState({suggestions:[],search:'',image:1})
+         this.setState({suggestions:[],image:1})
      };
     searchData = (currentPage) => {
         this.setState({isLoading:true})
@@ -209,7 +209,7 @@ recognition.lang = 'en-US'
                 axios.post("http://localhost:3000/users", posted).then(r => r.data)
             }}
 
-this.setState({suggestions:[],search:'',image:0})
+this.setState({suggestions:[],image:0})
     };
 
     searchVoiceData = (currentPage) => {

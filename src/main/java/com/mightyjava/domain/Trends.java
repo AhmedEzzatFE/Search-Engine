@@ -10,12 +10,19 @@ import java.net.URL;
 @Entity
 @Table(name = "trends")
 public class Trends {
+
     @Column
     private String name;
     @Column
     private int Count;
     @Column
     private String location;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column
+    private int primary;
+    @Column
+    private int id;
 
     public String getName() {
         return name;
@@ -49,20 +56,26 @@ public class Trends {
         this.id = id;
     }
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column
-    private int id;
-
     @Override
     public String toString() {
         return "Trends{" +
-                "id=" + id +
-                ", name=" + name +
+                "name='" + name + '\'' +
                 ", Count=" + Count +
-                ", location=" + location +
+                ", location='" + location + '\'' +
+                ", primary=" + primary +
+                ", id=" + id +
                 '}';
     }
+
+    public int getPrimary() {
+        return primary;
+    }
+
+    public void setPrimary(int primary) {
+        this.primary = primary;
+    }
+
+
 
 
 }
