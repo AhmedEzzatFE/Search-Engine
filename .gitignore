@@ -1,4 +1,5 @@
 
+<<<<<<< HEAD
 .idea/libraries/Hibernate_5_4_11_5_4_11.xml
 .idea/misc.xml
 book-rest-api-reactjs.iml
@@ -129,3 +130,6 @@ target/classes/com/mightyjava/service/IService.class
 target/classes/com/mightyjava/service/TrendService.class
 target/classes/META-INF/book-rest-api-reactjs.kotlin_module
 target/test-classes/com/mightyjava/ApplicationTests.class
+=======
+*.iml
+>>>>>>> 6cdad0a7054d32e69ca05ecde3788220f631be44

@@ -60,7 +60,8 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/../../Project/mysql-connector-java-8.0.19/mysql-connector-java-8.0.19.jar!/" />
+          <root url="jar://$MODULE_DIR$/../mysql-connector-java-8.0.19.jar!/" />
+          <root url="jar://$MODULE_DIR$/../Apt/mysql-connector-java-8.0.19/mysql-connector-java-8.0.19/mysql-connector-java-8.0.19.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -69,11 +70,11 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/../../Project/stanford-corenlp-4.0.0-models-english-kbp.jar!/" />
+          <root url="jar://$MODULE_DIR$/../stanford-corenlp-4.0.0-models-english-kbp.jar!/" />
+          <root url="jar://$MODULE_DIR$/../Apt/stanford-corenlp-4.0.0-models-english-kbp.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
-<<<<<<< Updated upstream
         <jarDirectory url="jar://$MODULE_DIR$/../Apt/stanford-corenlp-4.0.0-models-english-kbp.jar!/" recursive="false" />
         <jarDirectory url="jar://$MODULE_DIR$/../stanford-corenlp-4.0.0-models-english-kbp.jar!/" recursive="false" />
       </library>
@@ -105,9 +106,6 @@
         <jarDirectory url="file://$MODULE_DIR$/../stanford-corenlp-latest_2/stanford-corenlp-4.0.0" recursive="false" />
         <jarDirectory url="file://$MODULE_DIR$/../Apt/stanford-corenlp-latest/stanford-corenlp-4.0.0" recursive="false" type="SOURCES" />
         <jarDirectory url="file://$MODULE_DIR$/../stanford-corenlp-latest_2/stanford-corenlp-4.0.0" recursive="false" type="SOURCES" />
-=======
-        <jarDirectory url="jar://$MODULE_DIR$/../../Project/stanford-corenlp-4.0.0-models-english-kbp.jar!/" recursive="false" />
->>>>>>> Stashed changes
       </library>
     </orderEntry>
     <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-starter-web:2.1.3.RELEASE" level="project" />
@@ -225,25 +223,16 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-<<<<<<< Updated upstream
           <root url="jar://$USER_HOME$/Desktop/stanford-corenlp-4.0.0-models-english-kbp.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
         <jarDirectory url="jar://$USER_HOME$/Desktop/stanford-corenlp-4.0.0-models-english-kbp.jar!/" recursive="false" />
-=======
-          <root url="jar://$MODULE_DIR$/../../Project/stanford-corenlp-4.0.0-models-english.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-        <jarDirectory url="jar://$MODULE_DIR$/../../Project/stanford-corenlp-4.0.0-models-english.jar!/" recursive="false" />
->>>>>>> Stashed changes
       </library>
     </orderEntry>
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-<<<<<<< Updated upstream
           <root url="jar://$USER_HOME$/Desktop/stanford-corenlp-4.0.0-models-english.jar!/" />
         </CLASSES>
         <JAVADOC />
@@ -271,16 +260,6 @@
         </CLASSES>
         <JAVADOC />
         <SOURCES />
-=======
-          <root url="file://$MODULE_DIR$/../../Project/stanford-corenlp-4.0.0" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES>
-          <root url="file://$MODULE_DIR$/../../Project/stanford-corenlp-4.0.0" />
-        </SOURCES>
-        <jarDirectory url="file://$MODULE_DIR$/../../Project/stanford-corenlp-4.0.0" recursive="false" />
-        <jarDirectory url="file://$MODULE_DIR$/../../Project/stanford-corenlp-4.0.0" recursive="false" type="SOURCES" />
->>>>>>> Stashed changes
       </library>
     </orderEntry>
   </component>

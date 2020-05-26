@@ -1,0 +1,30 @@
+.AutoComplete{
+    align-items: center;
+    width: 50%
+}
+.AutoComplete ul{
+    list-style: none;
+    text-align: left;
+    margin: 0;
+    padding: 0;
+}
+.AutoComplete input{
+
+    width: 50%;
+    border:none;
+    font-family: "Helvetica Neue", Arial;
+    font-size: 14px;
+    padding: 10px 5px;
+    outline: none;
+}
+.AutoComplete ul ::before{
+    content:"";
+}
+.AutoComplete li{
+    padding: 10px 5px;
+    cursor: pointer;
+}
+.AutoComplete li:hover{
+    text-decoration: underline;
+    background-color: rgba(128,128,128,0.20);
+}
