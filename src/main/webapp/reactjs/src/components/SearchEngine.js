@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import './Style.css';
-import {Card, Table,Button, InputGroup, FormControl} from 'react-bootstrap';
+import {Card, Table, Button, InputGroup, FormControl,Row, Col} from 'react-bootstrap';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {
     faStepBackward,
@@ -9,7 +9,7 @@ import {
     faFastForward,
     faSearch,
     faTimes,
-    faMicrophone, faAssistiveListeningSystems
+    faMicrophone, faAssistiveListeningSystems, faImage, faTaxi
 } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
 
@@ -24,6 +24,7 @@ recognition.lang = 'en-US'
         super(props);
         this.state = {
             books : [],
+            image:0,
             ReservedQueries: {},
             countryName: '',
             countryCode: '',
@@ -155,9 +156,33 @@ recognition.lang = 'en-US'
         this.getResponse()
 
     };
+     searchImage = (currentPage) => {
+         currentPage -= 1;
+         axios.get("http://localhost:8081/rest/api/search/"+this.state.countryName+"/"+this.state.id+"/"+this.state.search+"/1?page="+currentPage+"&size="+this.state.booksPerPage)
+             .then(response =>{
+                 this.setState({
+                     books: response.data.content,
+                     totalPages: response.data.totalPages,
+                     totalElements: response.data.totalElements,
+                     currentPage: response.data.number + 1
+                 });}
+             )
+         let x=(this.state.search==="")
+         if(!x){
+             this.getResponse()
+             if(this.state.ReservedQueries.find(element=> element===this.state.search)===undefined) {
+                 const posted = {
+                     "name": this.state.search,
+                     "id": Math.floor((Math.random() * 1000) + 1)
+                 }
+                 axios.post("http://localhost:3000/users", posted).then(r => r.data)
+             }}
+
+         this.setState({suggestions:[],search:'',image:1})
+     };
     searchData = (currentPage) => {
         currentPage -= 1;
-        axios.get("http://localhost:8081/rest/api/search/"+this.state.countryName+"/"+this.state.id+"/"+this.state.search+"?page="+currentPage+"&size="+this.state.booksPerPage)
+        axios.get("http://localhost:8081/rest/api/search/"+this.state.countryName+"/"+this.state.id+"/"+this.state.search+"/0?page="+currentPage+"&size="+this.state.booksPerPage)
        .then(response =>{
         this.setState({
             books: response.data.content,
@@ -177,7 +202,7 @@ recognition.lang = 'en-US'
                 axios.post("http://localhost:3000/users", posted).then(r => r.data)
             }}
 
-this.setState({suggestions:[],search:''})
+this.setState({suggestions:[],search:'',image:0})
     };
 
     searchVoiceData = (currentPage) => {
@@ -253,6 +278,9 @@ render() {
                                 <Button size="sm" variant="outline-info" type="button" onClick={this.searchData}>
                                     <FontAwesomeIcon icon={faSearch}/>
                                 </Button>
+                            <Button size="sm" variant="outline-primary" type="button"  onClick={this.searchImage}>
+                                <FontAwesomeIcon icon={faImage} />
+                            </Button>
                                 <Button size="sm"  type="button"  onClick={this.toggleListen}>
                                     <FontAwesomeIcon icon={faMicrophone} />
                                 </Button>
@@ -270,71 +298,125 @@ render() {
                             <FontAwesomeIcon icon={faAssistiveListeningSystems}/>
                         </Button></p>
                 </div>
-
-                <Card.Body>
-                    <Table bordered hover striped variant="dark">
-                        <thead>
+                {this.state.image===0 ? (
+                    <div>
+                    <Card.Body>
+                        <Table bordered hover striped variant="dark">
+                            <thead>
                             <tr>
-                              <th>Search Results</th>
+                                <th>Search Results</th>
                             </tr>
-                          </thead>
-                          <tbody>
+                            </thead>
+                            <tbody>
                             {
                                 books.length === 0 ?
-                                <tr align="center">
-                                  <td colSpan="7">No Results yet.</td>
-                                </tr> :
-                                books.map((book) => <div>
-                                    {book.title}
-                                    <br/>
-                                   <a href={book.urls}>{book.urls}</a>
-                                    <br/>
-                                    {book.description}
-                                </div>)
+                                    <tr align="center">
+                                        <td colSpan="7">No Results yet.</td>
+                                    </tr> :
+                                    books.map((book) => <div>
+                                        {book.title}
+                                        <br/>
+                                        <a href={book.urls}>{book.urls}</a>
+                                        <br/>
+                                        {book.description}
+                                    </div>)
                             }
-                          </tbody>
-                    </Table>
-                </Card.Body>
-                {books.length > 0 ?
-                    <Card.Footer>
-                        <div style={{"float":"left"}}>
-                            Showing Page {currentPage} of {totalPages}
-                        </div>
-                        <div style={{"float":"right"}}>
-                            <InputGroup size="sm">
-                                <InputGroup.Prepend>
-                                    <Button type="button" variant="outline-info" disabled={currentPage === 1 ? true : false}
-                                        onClick={this.firstPage}>
-                                        <FontAwesomeIcon icon={faFastBackward} /> First
-                                    </Button>
-                                    <Button type="button" variant="outline-info" disabled={currentPage === 1 ? true : false}
-                                        onClick={this.prevPage}>
-                                        <FontAwesomeIcon icon={faStepBackward} /> Prev
-                                    </Button>
-                                </InputGroup.Prepend>
-                                <FormControl className={"page-num bg-dark"} name="currentPage" value={currentPage}
-                                    onChange={this.changePage}/>
-                                <InputGroup.Append>
-                                    <Button type="button" variant="outline-info" disabled={currentPage === totalPages ? true : false}
-                                        onClick={this.nextPage}>
-                                        <FontAwesomeIcon icon={faStepForward} /> Next
-                                    </Button>
-                                    <Button type="button" variant="outline-info" disabled={currentPage === totalPages ? true : false}
-                                        onClick={this.lastPage}>
-                                        <FontAwesomeIcon icon={faFastForward} /> Last
-                                    </Button>
-                                </InputGroup.Append>
-                            </InputGroup>
-                        </div>
+                            </tbody>
+                        </Table>
+                    </Card.Body>
+                    {books.length > 0 ?
+                            <Card.Footer>
+                                <div style={{"float":"left"}}>
+                                    Showing Page {currentPage} of {totalPages}
+                                </div>
+                                <div style={{"float":"right"}}>
+                                    <InputGroup size="sm">
+                                        <InputGroup.Prepend>
+                                            <Button type="button" variant="outline-info" disabled={currentPage === 1 ? true : false}
+                                                    onClick={this.firstPage}>
+                                                <FontAwesomeIcon icon={faFastBackward} /> First
+                                            </Button>
+                                            <Button type="button" variant="outline-info" disabled={currentPage === 1 ? true : false}
+                                                    onClick={this.prevPage}>
+                                                <FontAwesomeIcon icon={faStepBackward} /> Prev
+                                            </Button>
+                                        </InputGroup.Prepend>
+                                        <FormControl className={"page-num bg-dark"} name="currentPage" value={currentPage}
+                                                     onChange={this.changePage}/>
+                                        <InputGroup.Append>
+                                            <Button type="button" variant="outline-info" disabled={currentPage === totalPages ? true : false}
+                                                    onClick={this.nextPage}>
+                                                <FontAwesomeIcon icon={faStepForward} /> Next
+                                            </Button>
+                                            <Button type="button" variant="outline-info" disabled={currentPage === totalPages ? true : false}
+                                                    onClick={this.lastPage}>
+                                                <FontAwesomeIcon icon={faFastForward} /> Last
+                                            </Button>
+                                        </InputGroup.Append>
+                                    </InputGroup>
+                                </div>
 
-                    </Card.Footer> : null
-                 }
+                            </Card.Footer> : null} </div>):(
+                    <div>
+                        <Card.Body>
+                            <Table bordered hover striped variant="dark">
+                                <thead>
+                                <tr>
+                                    <th>Search Results</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {
+                                    books.length === 0 ?
+                                        <tr align="center">
+                                            <td colSpan="7">No Images yet.</td>
+                                        </tr> :
+                                        books.map((book) => <div>
+                                            <img width={200} height={200} src={book.urls}></img>
+                                        </div>)
+                                }
+                                </tbody>
+                            </Table>
+                        </Card.Body>
+                        {books.length > 0 ?
+                            <Card.Footer>
+                                <div style={{"float":"left"}}>
+                                    Showing Page {currentPage} of {totalPages}
+                                </div>
+                                <div style={{"float":"right"}}>
+                                    <InputGroup size="sm">
+                                        <InputGroup.Prepend>
+                                            <Button type="button" variant="outline-info" disabled={currentPage === 1 ? true : false}
+                                                    onClick={this.firstPage}>
+                                                <FontAwesomeIcon icon={faFastBackward} /> First
+                                            </Button>
+                                            <Button type="button" variant="outline-info" disabled={currentPage === 1 ? true : false}
+                                                    onClick={this.prevPage}>
+                                                <FontAwesomeIcon icon={faStepBackward} /> Prev
+                                            </Button>
+                                        </InputGroup.Prepend>
+                                        <FormControl className={"page-num bg-dark"} name="currentPage" value={currentPage}
+                                                     onChange={this.changePage}/>
+                                        <InputGroup.Append>
+                                            <Button type="button" variant="outline-info" disabled={currentPage === totalPages ? true : false}
+                                                    onClick={this.nextPage}>
+                                                <FontAwesomeIcon icon={faStepForward} /> Next
+                                            </Button>
+                                            <Button type="button" variant="outline-info" disabled={currentPage === totalPages ? true : false}
+                                                    onClick={this.lastPage}>
+                                                <FontAwesomeIcon icon={faFastForward} /> Last
+                                            </Button>
+                                        </InputGroup.Append>
+                                    </InputGroup>
+                                </div>
+
+                            </Card.Footer> : null} </div>
+                )}
             </Card>
 
-                )}
-
-            />
-
+            <Button href="/Trending">
+                <FontAwesomeIcon icon={faTaxi} /> Reveal Trends
+            </Button>
         </div>
 
     }
