@@ -694,7 +694,7 @@ public class Indexer {
                 for (Map.Entry<String, Word> word : wordsMap.entrySet()) {
                     try {
                         //
-                        query = "INSERT INTO `indexertable` (`URLs`,`Words`,`Occurrences`,"
+                        query = "INSERT INTO `indexertable1` (`URLs`,`Words`,`Occurrences`,"
                                 + "`H1Occurrences`,`H2Occurrences`,`H3Occurrences`,`H4Occurrences`,"
                                 + "`H5Occurrences`,`H6Occurrences`,`TitleOccurrences`,`BoldOccurrences`"
                                 + ",`NumberOfWordsInThisLink`,`Sentence`)"
@@ -723,7 +723,7 @@ public class Indexer {
                 {
                     //splitter for query processor
                     try {
-                        query = "INSERT INTO `indexertable` (`URLs`,`Words`,`Occurrences`,"
+                        query = "INSERT INTO `indexertable1` (`URLs`,`Words`,`Occurrences`,"
                                 + "`H1Occurrences`,`H2Occurrences`,`H3Occurrences`,`H4Occurrences`,"
                                 + "`H5Occurrences`,`H6Occurrences`,`TitleOccurrences`,`BoldOccurrences`"
                                 + ",`NumberOfWordsInThisLink`,`Sentence`)"
