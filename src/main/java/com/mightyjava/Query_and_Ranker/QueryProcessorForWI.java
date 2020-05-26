@@ -187,9 +187,12 @@ public class QueryProcessorForWI {
 	       	while(rs.next())
 	       	{
 	       		Titles.add(rs.getString("Title"));
+	       		System.out.println(rs.getString("URLs")+ " " + rs.getString("Title"));
 	       		Geographic_and_DatePublished G_D= new Geographic_and_DatePublished(Location,(rs.getString("URLExtension")),rs.getString("DatePublished"));
 	       		Geo_Date.add(G_D.GeographicDateScore());
-	       	}
+				webLinks.add(new URL (rs.getString("URLs")));
+
+			}
 //	          	st_TruncateRT.executeUpdate(deleteQuery); // empty the ranked Table
 	          	List<Double> Popularity = new ArrayList<>();
 	          	double TotalNumberOfDocuments=0;
@@ -197,7 +200,6 @@ public class QueryProcessorForWI {
 	          	while(rs.next())
 	          	{
 	          		TotalNumberOfDocuments++;
-	          		webLinks.add(new URL (rs.getString("URLs")));
 	          		Popularity.add(Double.parseDouble(rs.getString("Popularity")));
 	          	}
 	          	 int Popularity_Geo_Date_Title_Count=0;
@@ -206,7 +208,7 @@ public class QueryProcessorForWI {
 	   				Popularity_Geo_Date=Popularity.get(Popularity_Geo_Date_Title_Count)+Geo_Date.get(Popularity_Geo_Date_Title_Count);
 	   				queryForInsert = "INSERT INTO `rankedurls1` (`Urls`,`Rank`,`description`,`Title`,`id`,`searchQuery`,`image`)"
 	          		 		+ " VALUES ('" + url + "','"
-	          		 		+ Popularity_Geo_Date + "','"+""+"','"
+	          		 		+ Popularity_Geo_Date + "','"+" "+"','"
 	          		 		+ Titles.get(Popularity_Geo_Date_Title_Count) + "','"
 	          		 		+ id + "','"+ QueryWI +"','"+0+"')";
 	   				st_InsertFinalRank.executeUpdate(queryForInsert);
