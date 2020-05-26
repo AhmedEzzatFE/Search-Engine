@@ -162,7 +162,7 @@ public class QueryProcessorForWI {
 			String Desc="";
 		
 	       try {
-	    	   CountQuery = "SELECT COUNT(*) FROM userqueries WHERE id = '"+id+"' AND Query= '"+QueryWI+"' ";
+	    	   CountQuery = "SELECT COUNT(*) FROM userqueries WHERE id = '"+id+"' AND Query= '"+QueryWI+"'";
 	           rs_Count = st_Count.executeQuery(CountQuery);
 	           while(rs_Count.next()){
 	        	   SearchedBefore = Integer.parseInt(rs_Count.getString("COUNT(*)"));
@@ -242,7 +242,7 @@ public class QueryProcessorForWI {
 	   	            			Double.parseDouble(rs.getString("H6Occurrences")),
 	   	            			Double.parseDouble(rs.getString("BoldOccurrences")));
 	   	            	FinalScore_Score=final_score.getFinalScore();
-	   		            query = "SELECT * FROM rankedurls1 WHERE Urls = '"+tempUrl+"' AND id= '"+id+"' ";
+	   		            query = "SELECT * FROM rankedurls1 WHERE Urls = '"+tempUrl+"' AND id= '"+id+"' AND searchQuery= '"+this.QueryWI+"' AND image='"+0+"'";
 	   		            rs_ToGetThePrevRank=st_ToGetThePrevRank.executeQuery(query);
 	   	            	while(rs_ToGetThePrevRank.next())
 	   	            	{
@@ -252,7 +252,7 @@ public class QueryProcessorForWI {
 	   	            	TotalRank=PreviousRank+FinalScore_Score;
 	   	            	Desc=rs.getString("Sentence");
 	   	            	Desc.concat(PreviousDesc);
-	   	            	UpdateQuery="UPDATE `rankedurls1` SET `Rank`= '"+TotalRank +"', `description`= '"+ Desc +"' WHERE Urls = '"+tempUrl+"' AND id='"+id+"'";	
+	   	            	UpdateQuery="UPDATE `rankedurls1` SET `Rank`= '"+TotalRank +"', `description`= '"+ Desc +"' WHERE Urls = '"+tempUrl+"' AND id='"+id+"' AND image='"+0+"' AND searchQuery= '"+this.QueryWI+"'";
 	   					st_InsertFinalRank.executeUpdate(UpdateQuery);
 	   	            	TF_Score=0.0;
 	   	    			IDF_Score=0.0;
@@ -264,7 +264,7 @@ public class QueryProcessorForWI {
 	          	rs.close();
 	          
 	           	if(PhraseSearching == true)
-	           	{   query="SELECT * FROM rankedurls1 WHERE id='"+id+"' ORDER BY Rank DESC ";
+	           	{   query="SELECT * FROM rankedurls1 WHERE id='"+id+"' AND image= '"+0+"' AND searchQuery= '"+this.QueryWI+"' ORDER BY Rank DESC ";
 	           		rs =  st.executeQuery(query);
 	    	       	while(rs.next())
 	    	       	{
@@ -283,7 +283,7 @@ public class QueryProcessorForWI {
 	    	            		PreviousRank=Double.parseDouble(rs_ToGetThePrevRank.getString("Rank"));
 	    	            	}
 	    	            	TotalRank=PreviousRank+100;
-	    	            	UpdateQuery="UPDATE `rankedurls1` SET `Rank`= '"+TotalRank +"' WHERE Urls = '"+tempUrl+"' AND id= '"+id+"'";	
+	    	            	UpdateQuery="UPDATE `rankedurls1` SET `Rank`= '"+TotalRank +"' WHERE Urls = '"+tempUrl+"' AND id= '"+id+"' AND image= '"+0+"' AND searchQuery= '"+this.QueryWI+"'";
 	    					st_InsertFinalRank.executeUpdate(UpdateQuery);
 	    	    		    
 	    	    		}

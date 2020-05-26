@@ -85,32 +85,33 @@ public class ImageProcessorWI {
 		}catch(Exception e){
 			System.out.println(e.getMessage());
 		}
-
 		String query = " ";
+
+		int countImages=0;
 		try {
-
-			query = "SELECT * FROM image";
-			rs =  st.executeQuery(query);
+			query = "SELECT COUNT(*) FROM `rankedurls1` WHERE id = '"+id+"' AND searchQuery= '"+QueryWI+"' AND image = '"+1+"'";
+			rs = st.executeQuery(query);
 			while(rs.next()){
-				tempUrl=rs.getString("SRC");
-				System.out.println( FinalQuery + " ///// " + rs.getString("Title_Url") +" ///// " + rs.getString("Title_image") + " ////// " +rs.getString("Alt_image"));
-
-				ImageRanker IR = new ImageRanker(FinalQuery,rs.getString("Title_Url"),rs.getString("Title_image"),rs.getString("Alt_image"));
-				TotalRank= IR.ImageScore();
-
-				query="INSERT INTO `rankedurls1` (`Urls`,`Rank`,`description`,`Title`,`id`,`searchQuery`,`image`)"
-						+ " VALUES ('" + tempUrl + "','"
-						+ TotalRank + "','"+ " " +"', '"+" "+"','"+ this.id+"','"+this.QueryWI+"','"+1+"')";
-				st_InsertFinalRank.executeUpdate(query);
+				countImages = Integer.parseInt(rs.getString("COUNT(*)"));
 			}
-			rs.close();
-			query="SELECT * FROM rankedurls1 ORDER BY Rank DESC";
-			rs =  st.executeQuery(query);
-			while(rs.next())
-			{
-				System.out.println(rs.getString("Rank"));
-				System.out.println(rs.getString("Urls"));
+			if(countImages==0){
+				query = "SELECT * FROM image";
+				rs =  st.executeQuery(query);
+				while(rs.next()){
+					tempUrl=rs.getString("SRC");
+					System.out.println( FinalQuery + " ///// " + rs.getString("Title_Url") +" ///// " + rs.getString("Title_image") + " ////// " +rs.getString("Alt_image"));
+
+					ImageRanker IR = new ImageRanker(FinalQuery,rs.getString("Title_Url"),rs.getString("Title_image"),rs.getString("Alt_image"));
+					TotalRank= IR.ImageScore();
+
+					query="INSERT INTO `rankedurls1` (`Urls`,`Rank`,`description`,`Title`,`id`,`searchQuery`,`image`)"
+							+ " VALUES ('" + tempUrl + "','"
+							+ TotalRank + "','"+ " " +"', '"+" "+"','"+ this.id+"','"+this.QueryWI+"','"+1+"')";
+					st_InsertFinalRank.executeUpdate(query);
+				}
+				rs.close();
 			}
+
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
