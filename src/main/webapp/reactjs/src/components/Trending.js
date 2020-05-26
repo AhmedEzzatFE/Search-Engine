@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import axios from 'axios';
 import Histogram from 'react-chart-histogram';
+import Spinner from "react-bootstrap/Spinner";
 
 
 class Trending extends Component {
@@ -43,8 +44,10 @@ class Trending extends Component {
         const options = { fillColor: '#7f6464', strokeColor: '#4a4aaa' };
         return (
             <div>
+
                 {this.state.labels.length===0?
-                <div>Getting Trends </div>: <Histogram
+                <div> Getting Trends
+                </div>: <Histogram
                         xLabels={this.state.labels}
                         yValues={this.state.countOccurrences}
                         width='1000'
