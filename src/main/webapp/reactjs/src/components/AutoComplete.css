@@ -28,3 +28,32 @@
     text-decoration: underline;
     background-color: rgba(128,128,128,0.20);
 }
+
+.AutoComplete li:hover{
+    text-decoration: underline;
+    background-color: rgba(128,128,128,0.20);
+}
+
+.FixingTheImage {
+    background: rgb(16, 176, 230); /*for browsers that don't support gradient*/
+    background: -webkit-linear-gradient(to bottom,rgb(16, 176, 230),rgb(43, 44, 44)); /*for safari and chrome*/
+    background: -o-linear-gradient(to bottom,rgb(16, 176, 230),rgb(43, 44, 44)); /*for opera*/
+    background: -moz-linear-gradient(to bottom,rgb(16, 176, 230),rgb(43, 44, 44)); /*for firefox*/
+    background: linear-gradient(to bottom,rgb(16, 176, 230),rgb(43, 44, 44)); /*standard syntax*/
+    text-align: center;
+}
+
+.FixingTheImage .FixingTheImageItself{
+    width:70%;
+    padding: 30px;
+}
+
+.rc{
+    position: relative;
+    display: block;
+}
+.r{
+    line-height: 1.5;
+    font-size: small;
+    font-weight: normal;
+}

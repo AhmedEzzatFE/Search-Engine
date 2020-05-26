@@ -331,22 +331,22 @@ public class Indexer {
                 ////////////////////////////////////////////////////////////////////
                 Elements hTags = document.select("h1, h2, h3, h4, h5, h6");
                 Elements h1Tags = hTags.select("h1");
-                String textH1 = h1Tags.text().toLowerCase();
+                String textH1 = h1Tags.text();
                 Elements h2Tags = hTags.select("h2");
-                String textH2 = h2Tags.text().toLowerCase();
+                String textH2 = h2Tags.text();
                 Elements h3Tags = hTags.select("h3");
-                String textH3 = h3Tags.text().toLowerCase();
+                String textH3 = h3Tags.text();
                 Elements h4Tags = hTags.select("h4");
-                String textH4 = h4Tags.text().toLowerCase();
+                String textH4 = h4Tags.text();
                 Elements h5Tags = hTags.select("h5");
-                String textH5 = h5Tags.text().toLowerCase();
+                String textH5 = h5Tags.text();
                 Elements h6Tags = hTags.select("h6");
-                String textH6 = h6Tags.text().toLowerCase();
+                String textH6 = h6Tags.text();
                 ////////////////////////////////////////////////////////////////////
-                String textTitle = document.title().toLowerCase();
+                String textTitle = document.title();
                 ////////////////////////////////////////////////////////////////////
                 Elements boldTags = document.getElementsByTag("b");
-                String textBold = boldTags.text().toLowerCase();
+                String textBold = boldTags.text();
 
                 //BufferedReader reads text from a character-input stream,
                 //buffering characters so as to provide for the efficient
@@ -392,8 +392,15 @@ public class Indexer {
                 //a carriage return (‘\r’) (enter),
                 //or a carriage return followed immediately by a linefeed.
                 porterStemmer stemmer = new porterStemmer();
-
+                //to be used for the paragraph
+                text=text.replace("\""," ");
+                text=text.replace("\'"," ");
                 while ((line = reader.readLine()) != null) {
+
+                    //String[] words = line.split(" ");
+                    String[] words = line.split("[^A-Za-z0-9]+");
+
+
                     if((lineHeader1 = readerHeader1.readLine()) != null) {
                         //string split() method breaks a given string around
                         //matches of the given regular expression. we can add a second parameter as a limit,
@@ -406,24 +413,16 @@ public class Indexer {
                         //output:
                         //geekss
                         //for@geekss
-
-
                         //String[] words = lineHeader1.split(" ");
-                        //[] is a character set meaning that w search for any of the characters
-                        //inside it and ^ means starting with, but, [^0-9] means anything
-                        //except 012345679
-                        //+ means one or more, so it can be used to split at ?????
-                        //which comes a lot
-                        //source:https://www.youtube.com/watch?v=sa-TUpSx1JA
-
-                        String[] words = lineHeader1.split("[^A-Za-z0-9]+");
-                        for (String word : words) {
+                        String[] words1 = lineHeader1.split("[^A-Za-z0-9]+");
+                        for (String word : words1) {
                             if ("".equals(word)) {
                                 continue;
                             }
 
-                            if (!(Arrays.asList(wordsToIgnore).contains(word))) {
-                                stemmer.setCurrent(word);
+                            String word2=word.toLowerCase();
+                            if (!(Arrays.asList(wordsToIgnore).contains(word2))) {
+                                stemmer.setCurrent(word2);
                                 stemmer.stem();
                                 String stemmedWord= stemmer.getCurrent();
 
@@ -434,6 +433,27 @@ public class Indexer {
                                 if (wordObject == null) {
                                     wordObject = new Word();
                                     wordObject.word = stemmedWord;
+
+                                    int startIndex=0;
+                                    int endIndex=0;
+                                    int after=50;
+                                    int before=50;
+                                    int temp1=text.length();
+                                    int temp2=text.indexOf(word);
+                                    int temp3=temp2+word.length();
+                                    while(temp2-before<0)
+                                    {
+                                        before-=1;
+                                    }
+                                    while(temp3+after>temp1-1)
+                                    {
+                                        after-=1;
+                                    }
+                                    startIndex=temp2-before;
+                                    endIndex=temp3+after;
+                                    String temp4="..."+ text.substring(startIndex, endIndex) +"...";
+                                    wordObject.paragraph=temp4;
+
                                     wordsMap.put(stemmedWord, wordObject);
                                 }
                                 wordObject.noOfOccurrencesHeader1++;
@@ -443,17 +463,16 @@ public class Indexer {
                     }
 
                     if((lineHeader2 = readerHeader2.readLine()) != null) {
-
-
                         //String[] words = lineHeader2.split(" ");
-                        String[] words = lineHeader2.split("[^A-Za-z0-9]+");
-                        for (String word : words) {
+                        String[] words1 = lineHeader2.split("[^A-Za-z0-9]+");
+                        for (String word : words1) {
                             if ("".equals(word)) {
                                 continue;
                             }
 
-                            if (!(Arrays.asList(wordsToIgnore).contains(word))) {
-                                stemmer.setCurrent(word);
+                            String word2=word.toLowerCase();
+                            if (!(Arrays.asList(wordsToIgnore).contains(word2))) {
+                                stemmer.setCurrent(word2);
                                 stemmer.stem();
                                 String stemmedWord= stemmer.getCurrent();
 
@@ -461,6 +480,27 @@ public class Indexer {
                                 if (wordObject == null) {
                                     wordObject = new Word();
                                     wordObject.word = stemmedWord;
+
+                                    int startIndex=0;
+                                    int endIndex=0;
+                                    int after=50;
+                                    int before=50;
+                                    int temp1=text.length();
+                                    int temp2=text.indexOf(word);
+                                    int temp3=temp2+word.length();
+                                    while(temp2-before<0)
+                                    {
+                                        before-=1;
+                                    }
+                                    while(temp3+after>temp1-1)
+                                    {
+                                        after-=1;
+                                    }
+                                    startIndex=temp2-before;
+                                    endIndex=temp3+after;
+                                    String temp4="..."+ text.substring(startIndex, endIndex) +"...";
+                                    wordObject.paragraph=temp4;
+
                                     wordsMap.put(stemmedWord, wordObject);
                                 }
                                 wordObject.noOfOccurrencesHeader2++;
@@ -470,16 +510,16 @@ public class Indexer {
                     }
 
                     if((lineHeader3 = readerHeader3.readLine()) != null) {
-
                         //String[] words = lineHeader3.split(" ");
-                        String[] words = lineHeader3.split("[^A-Za-z0-9]+");
-                        for (String word : words) {
+                        String[] words1 = lineHeader3.split("[^A-Za-z0-9]+");
+                        for (String word : words1) {
                             if ("".equals(word)) {
                                 continue;
                             }
 
-                            if (!(Arrays.asList(wordsToIgnore).contains(word))) {
-                                stemmer.setCurrent(word);
+                            String word2=word.toLowerCase();
+                            if (!(Arrays.asList(wordsToIgnore).contains(word2))) {
+                                stemmer.setCurrent(word2);
                                 stemmer.stem();
                                 String stemmedWord= stemmer.getCurrent();
 
@@ -487,6 +527,27 @@ public class Indexer {
                                 if (wordObject == null) {
                                     wordObject = new Word();
                                     wordObject.word = stemmedWord;
+
+                                    int startIndex=0;
+                                    int endIndex=0;
+                                    int after=50;
+                                    int before=50;
+                                    int temp1=text.length();
+                                    int temp2=text.indexOf(word);
+                                    int temp3=temp2+word.length();
+                                    while(temp2-before<0)
+                                    {
+                                        before-=1;
+                                    }
+                                    while(temp3+after>temp1-1)
+                                    {
+                                        after-=1;
+                                    }
+                                    startIndex=temp2-before;
+                                    endIndex=temp3+after;
+                                    String temp4="..."+ text.substring(startIndex, endIndex) +"...";
+                                    wordObject.paragraph=temp4;
+
                                     wordsMap.put(stemmedWord, wordObject);
                                 }
                                 wordObject.noOfOccurrencesHeader3++;
@@ -496,17 +557,16 @@ public class Indexer {
                     }
 
                     if((lineHeader4 = readerHeader4.readLine()) != null) {
-
-
                         //String[] words = lineHeader4.split(" ");
-                        String[] words = lineHeader4.split("[^A-Za-z0-9]+");
-                        for (String word : words) {
+                        String[] words1 = lineHeader4.split("[^A-Za-z0-9]+");
+                        for (String word : words1) {
                             if ("".equals(word)) {
                                 continue;
                             }
 
-                            if (!(Arrays.asList(wordsToIgnore).contains(word))) {
-                                stemmer.setCurrent(word);
+                            String word2=word.toLowerCase();
+                            if (!(Arrays.asList(wordsToIgnore).contains(word2))) {
+                                stemmer.setCurrent(word2);
                                 stemmer.stem();
                                 String stemmedWord= stemmer.getCurrent();
 
@@ -514,8 +574,28 @@ public class Indexer {
                                 if (wordObject == null) {
                                     wordObject = new Word();
                                     wordObject.word = stemmedWord;
-                                    if(stemmedWord.equals("other"))
-                                        wordsMap.put(stemmedWord, wordObject);
+
+                                    int startIndex=0;
+                                    int endIndex=0;
+                                    int after=50;
+                                    int before=50;
+                                    int temp1=text.length();
+                                    int temp2=text.indexOf(word);
+                                    int temp3=temp2+word.length();
+                                    while(temp2-before<0)
+                                    {
+                                        before-=1;
+                                    }
+                                    while(temp3+after>temp1-1)
+                                    {
+                                        after-=1;
+                                    }
+                                    startIndex=temp2-before;
+                                    endIndex=temp3+after;
+                                    String temp4="..."+ text.substring(startIndex, endIndex) +"...";
+                                    wordObject.paragraph=temp4;
+
+                                    wordsMap.put(stemmedWord, wordObject);
                                 }
                                 wordObject.noOfOccurrencesHeader4++;
                             }
@@ -524,17 +604,16 @@ public class Indexer {
                     }
 
                     if((lineHeader5 = readerHeader5.readLine()) != null) {
-
-
                         //String[] words = lineHeader5.split(" ");
-                        String[] words = lineHeader5.split("[^A-Za-z0-9]+");
-                        for (String word : words) {
+                        String[] words1 = lineHeader5.split("[^A-Za-z0-9]+");
+                        for (String word : words1) {
                             if ("".equals(word)) {
                                 continue;
                             }
 
-                            if (!(Arrays.asList(wordsToIgnore).contains(word))) {
-                                stemmer.setCurrent(word);
+                            String word2=word.toLowerCase();
+                            if (!(Arrays.asList(wordsToIgnore).contains(word2))) {
+                                stemmer.setCurrent(word2);
                                 stemmer.stem();
                                 String stemmedWord= stemmer.getCurrent();
 
@@ -542,6 +621,27 @@ public class Indexer {
                                 if (wordObject == null) {
                                     wordObject = new Word();
                                     wordObject.word = stemmedWord;
+
+                                    int startIndex=0;
+                                    int endIndex=0;
+                                    int after=50;
+                                    int before=50;
+                                    int temp1=text.length();
+                                    int temp2=text.indexOf(word);
+                                    int temp3=temp2+word.length();
+                                    while(temp2-before<0)
+                                    {
+                                        before-=1;
+                                    }
+                                    while(temp3+after>temp1-1)
+                                    {
+                                        after-=1;
+                                    }
+                                    startIndex=temp2-before;
+                                    endIndex=temp3+after;
+                                    String temp4="..."+ text.substring(startIndex, endIndex) +"...";
+                                    wordObject.paragraph=temp4;
+
                                     wordsMap.put(stemmedWord, wordObject);
                                 }
                                 wordObject.noOfOccurrencesHeader5++;
@@ -551,17 +651,16 @@ public class Indexer {
                     }
 
                     if((lineHeader6 = readerHeader6.readLine()) != null) {
-
-
                         //String[] words = lineHeader6.split(" ");
-                        String[] words = lineHeader6.split("[^A-Za-z0-9]+");
-                        for (String word : words) {
+                        String[] words1 = lineHeader6.split("[^A-Za-z0-9]+");
+                        for (String word : words1) {
                             if ("".equals(word)) {
                                 continue;
                             }
 
-                            if (!(Arrays.asList(wordsToIgnore).contains(word))) {
-                                stemmer.setCurrent(word);
+                            String word2=word.toLowerCase();
+                            if (!(Arrays.asList(wordsToIgnore).contains(word2))) {
+                                stemmer.setCurrent(word2);
                                 stemmer.stem();
                                 String stemmedWord= stemmer.getCurrent();
 
@@ -569,6 +668,27 @@ public class Indexer {
                                 if (wordObject == null) {
                                     wordObject = new Word();
                                     wordObject.word = stemmedWord;
+
+                                    int startIndex=0;
+                                    int endIndex=0;
+                                    int after=50;
+                                    int before=50;
+                                    int temp1=text.length();
+                                    int temp2=text.indexOf(word);
+                                    int temp3=temp2+word.length();
+                                    while(temp2-before<0)
+                                    {
+                                        before-=1;
+                                    }
+                                    while(temp3+after>temp1-1)
+                                    {
+                                        after-=1;
+                                    }
+                                    startIndex=temp2-before;
+                                    endIndex=temp3+after;
+                                    String temp4="..."+ text.substring(startIndex, endIndex) +"...";
+                                    wordObject.paragraph=temp4;
+
                                     wordsMap.put(stemmedWord, wordObject);
                                 }
                                 wordObject.noOfOccurrencesHeader6++;
@@ -578,17 +698,15 @@ public class Indexer {
                     }
 
                     if((lineTitle = readerTitle.readLine()) != null) {
-
-
                         //String[] words = lineTitle.split(" ");
-                        String[] words = lineTitle.split("[^A-Za-z0-9]+");
-                        for (String word : words) {
+                        String[] words1 = lineTitle.split("[^A-Za-z0-9]+");
+                        for (String word : words1) {
                             if ("".equals(word)) {
                                 continue;
                             }
-
-                            if (!(Arrays.asList(wordsToIgnore).contains(word))) {
-                                stemmer.setCurrent(word);
+                            String word2=word.toLowerCase();
+                            if (!(Arrays.asList(wordsToIgnore).contains(word2))) {
+                                stemmer.setCurrent(word2);
                                 stemmer.stem();
                                 String stemmedWord= stemmer.getCurrent();
 
@@ -596,6 +714,27 @@ public class Indexer {
                                 if (wordObject == null) {
                                     wordObject = new Word();
                                     wordObject.word = stemmedWord;
+
+                                    int startIndex=0;
+                                    int endIndex=0;
+                                    int after=50;
+                                    int before=50;
+                                    int temp1=text.length();
+                                    int temp2=text.indexOf(word);
+                                    int temp3=temp2+word.length();
+                                    while(temp2-before<0)
+                                    {
+                                        before-=1;
+                                    }
+                                    while(temp3+after>temp1-1)
+                                    {
+                                        after-=1;
+                                    }
+                                    startIndex=temp2-before;
+                                    endIndex=temp3+after;
+                                    String temp4="..."+ text.substring(startIndex, endIndex) +"...";
+                                    wordObject.paragraph=temp4;
+
                                     wordsMap.put(stemmedWord, wordObject);
                                 }
                                 wordObject.noOfOccurrencesTitle++;
@@ -605,17 +744,16 @@ public class Indexer {
                     }
 
                     if((lineBold = readerBold.readLine()) != null) {
-
-
                         //String[] words = lineBold.split(" ");
-                        String[] words = lineBold.split("[^A-Za-z0-9]+");
-                        for (String word : words) {
+                        String[] words1 = lineBold.split("[^A-Za-z0-9]+");
+                        for (String word : words1) {
                             if ("".equals(word)) {
                                 continue;
                             }
 
-                            if (!(Arrays.asList(wordsToIgnore).contains(word))) {
-                                stemmer.setCurrent(word);
+                            String word2=word.toLowerCase();
+                            if (!(Arrays.asList(wordsToIgnore).contains(word2))) {
+                                stemmer.setCurrent(word2);
                                 stemmer.stem();
                                 String stemmedWord= stemmer.getCurrent();
 
@@ -623,8 +761,28 @@ public class Indexer {
                                 if (wordObject == null) {
                                     wordObject = new Word();
                                     wordObject.word = stemmedWord;
-                                    wordsMap.put(stemmedWord, wordObject);
 
+                                    int startIndex=0;
+                                    int endIndex=0;
+                                    int after=50;
+                                    int before=50;
+                                    int temp1=text.length();
+                                    int temp2=text.indexOf(word);
+                                    int temp3=temp2+word.length();
+                                    while(temp2-before<0)
+                                    {
+                                        before-=1;
+                                    }
+                                    while(temp3+after>temp1-1)
+                                    {
+                                        after-=1;
+                                    }
+                                    startIndex=temp2-before;
+                                    endIndex=temp3+after;
+                                    String temp4="..."+ text.substring(startIndex, endIndex) +"...";
+                                    wordObject.paragraph=temp4;
+
+                                    wordsMap.put(stemmedWord, wordObject);
                                 }
                                 wordObject.noOfOccurrencesBold++;
                             }
@@ -632,15 +790,7 @@ public class Indexer {
                         }
                     }
 
-                    //to be used for the paragraph
-                    line=line.replace("\""," ");
-                    line=line.replace("\'"," ");
-                    ///////////
-                    //String[] words = line.split(" ");
-                    String[] words = line.split("[^A-Za-z0-9]+");
-                    for (String word : words) {
-                        System.out.println(word);
-                    }
+
                     for (String word : words) {
                         if ("".equals(word)) {
                             continue;
@@ -651,6 +801,7 @@ public class Indexer {
                             stemmer.setCurrent(word2);
                             stemmer.stem();
                             String stemmedWord= stemmer.getCurrent();
+
                             Word wordObject = wordsMap.get(stemmedWord);
                             if (wordObject == null) {
                                 wordObject = new Word();
@@ -660,8 +811,8 @@ public class Indexer {
                                 int endIndex=0;
                                 int after=50;
                                 int before=50;
-                                int temp1=line.length();
-                                int temp2=line.indexOf(word);
+                                int temp1=text.length();
+                                int temp2=text.indexOf(word);
                                 int temp3=temp2+word.length();
                                 while(temp2-before<0)
                                 {
@@ -673,7 +824,7 @@ public class Indexer {
                                 }
                                 startIndex=temp2-before;
                                 endIndex=temp3+after;
-                                String temp4="..."+ line.substring(startIndex, endIndex) +"...";
+                                String temp4="..."+ text.substring(startIndex, endIndex) +"...";
                                 wordObject.paragraph=temp4;
 
 
