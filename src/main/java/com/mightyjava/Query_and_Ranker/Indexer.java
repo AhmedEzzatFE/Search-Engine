@@ -1,16 +1,18 @@
 package com.mightyjava.Query_and_Ranker;
 
-import java.io.*;
-import java.net.URL;
-import java.util.*;
-
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.tartarus.snowball.ext.porterStemmer;
 
+import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.URL;
 import java.sql.*;
+import java.util.*;
 
 
 
@@ -622,6 +624,7 @@ public class Indexer {
                                     wordObject = new Word();
                                     wordObject.word = stemmedWord;
                                     wordsMap.put(stemmedWord, wordObject);
+
                                 }
                                 wordObject.noOfOccurrencesBold++;
                             }
@@ -722,29 +725,29 @@ public class Indexer {
                 if(counterForNumberOfWords>0)
                 {
                     //splitter for query processor
-                    try {
-                        query = "INSERT INTO `indexertable1` (`URLs`,`Words`,`Occurrences`,"
-                                + "`H1Occurrences`,`H2Occurrences`,`H3Occurrences`,`H4Occurrences`,"
-                                + "`H5Occurrences`,`H6Occurrences`,`TitleOccurrences`,`BoldOccurrences`"
-                                + ",`NumberOfWordsInThisLink`,`Sentence`)"
-                                + " VALUES ('" + "A new url is comming" + "','"
-                                + "0" + "','"
-                                + "0" + "','"
-                                + "0" + "','"
-                                + "0" + "','"
-                                + "0" + "','"
-                                + "0" + "','"
-                                + "0" + "','"
-                                + "0" + "','"
-                                + "0" + "','"
-                                + "0" + "','"
-                                + "0" + "','"
-                                + "0" + "')";
-                        st.executeUpdate(query);
-                    } catch (SQLException e) {
-                        // TODO Auto-generated catch block
-                        e.printStackTrace();
-                    }
+//                    try {
+//                        query = "INSERT INTO `indexertable1` (`URLs`,`Words`,`Occurrences`,"
+//                                + "`H1Occurrences`,`H2Occurrences`,`H3Occurrences`,`H4Occurrences`,"
+//                                + "`H5Occurrences`,`H6Occurrences`,`TitleOccurrences`,`BoldOccurrences`"
+//                                + ",`NumberOfWordsInThisLink`,`Sentence`)"
+//                                + " VALUES ('" + "A new url is comming" + "','"
+//                                + "0" + "','"
+//                                + "0" + "','"
+//                                + "0" + "','"
+//                                + "0" + "','"
+//                                + "0" + "','"
+//                                + "0" + "','"
+//                                + "0" + "','"
+//                                + "0" + "','"
+//                                + "0" + "','"
+//                                + "0" + "','"
+//                                + "0" + "','"
+//                                + "0" + "')";
+//                        st.executeUpdate(query);
+//                    } catch (SQLException e) {
+//                        // TODO Auto-generated catch block
+//                        e.printStackTrace();
+//                    }
                     textTitle=textTitle.replace("\"", " ");
                     textTitle=textTitle.replace("\'", " ");
                     try {

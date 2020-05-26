@@ -1,25 +1,22 @@
 package com.mightyjava.Query_and_Ranker;
 
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
-
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ForPopularity{
 
     //Set is an collection of objects that doesn't take duplicate values
-    public static Set<URL> webLinks = new HashSet<>();
-    public static Integer maxThreads;
+    public static List<URL> webLinks = new ArrayList<>();
+
+	public static Integer maxThreads;
     public URL threadURL;
     public static Connection con;
     public static Statement st;
