@@ -2,15 +2,9 @@ package com.mightyjava.Query_and_Ranker;
 
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 
 
@@ -32,7 +26,7 @@ public class Popularity {
 	 public static double UrlPopularity=0.0; // PR(A)
 	 public static double LinksPopularity = 0.0; // (1-d) + d*(PR(T)/C(T)
 
-	 public static Set<URL> webLinks = new HashSet<>();
+	 public static List<URL> webLinks = new ArrayList<>();
 	 public static double d=0.5;
 	 public static String tempUrl;
 
@@ -73,7 +67,10 @@ public class Popularity {
         	while(rs_IndexedUrls.next())
         	{
         		try {
+					System.out.println(rs_IndexedUrls.getString("URLs"));
 					webLinks.add(new URL(rs_IndexedUrls.getString("URLs")));
+					System.out.println("webLinks");
+					System.out.println(webLinks);
 					TotalNumberOfDocuments++;
 				} catch (MalformedURLException e) {
 					// TODO Auto-generated catch block
@@ -92,13 +89,14 @@ public class Popularity {
         	// Adding the initial value of popularity to each link and the out bounds links
         	for(URL url :webLinks)
         	{
-        		query_InsertInOld = "INSERT INTO `oldpopularity` (`URLs`,`Popularity`,`OutboundLinks`)"
+				query_InsertInOld = "INSERT INTO `oldpopularity` (`URLs`,`Popularity`,`OutboundLinks`)"
         		 		+ " VALUES ('" + url.toString() + "','" 
         		 		+ initialValue +"','"
         		 		+ OutBoundLinks.get(Counter) +"')";
         		st_Old.executeUpdate(query_InsertInOld);
         		Counter++;
-        	}
+
+			}
         	/// here the place for the forLoop
         	for(int i=0;i<5;i++)
         	{

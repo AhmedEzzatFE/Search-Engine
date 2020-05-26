@@ -44,6 +44,28 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="Hibernate 5.4.11-5.4.11" level="project" />
+    <orderEntry type="module-library" exported="">
+      <library>
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/../Apt/libstemmer_java/libstemmer_java/java/libstemmer.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES>
+          <root url="jar://$MODULE_DIR$/../Apt/libstemmer_java/libstemmer_java/java/libstemmer.jar!/" />
+        </SOURCES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library" exported="">
+      <library>
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/../Apt/libstemmer_java/libstemmer_java/java/libstemmer.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES>
+          <root url="jar://$MODULE_DIR$/../Apt/libstemmer_java/libstemmer_java/java/libstemmer.jar!/" />
+        </SOURCES>
+      </library>
+    </orderEntry>
     <orderEntry type="module-library">
       <library>
         <CLASSES>
@@ -199,18 +221,31 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/../../Project/libstemmer_java/java/libstemmer.jar!/" />
+          <root url="file://$USER_HOME$/Desktop/stanford-corenlp-latest_2/stanford-corenlp-4.0.0" />
         </CLASSES>
         <JAVADOC />
         <SOURCES>
-          <root url="jar://$MODULE_DIR$/../../Project/libstemmer_java/java/libstemmer.jar!/" />
+          <root url="file://$USER_HOME$/Desktop/stanford-corenlp-latest_2/stanford-corenlp-4.0.0" />
+        </SOURCES>
+        <jarDirectory url="file://$USER_HOME$/Desktop/stanford-corenlp-latest_2/stanford-corenlp-4.0.0" recursive="false" />
+        <jarDirectory url="file://$USER_HOME$/Desktop/stanford-corenlp-latest_2/stanford-corenlp-4.0.0" recursive="false" type="SOURCES" />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$USER_HOME$/Desktop/libstemmer.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES>
+          <root url="jar://$USER_HOME$/Desktop/libstemmer.jar!/" />
         </SOURCES>
       </library>
     </orderEntry>
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/../../Project/mysql-connector-java-8.0.19/mysql-connector-java-8.0.19.jar!/" />
+          <root url="jar://$USER_HOME$/Desktop/mysql-connector-java-8.0.19.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -219,14 +254,30 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="file://$MODULE_DIR$/../../Project/stanford-corenlp-4.0.0" />
+          <root url="jar://$USER_HOME$/Desktop/jsoup-1.13.1.jar!/" />
         </CLASSES>
         <JAVADOC />
-        <SOURCES>
-          <root url="file://$MODULE_DIR$/../../Project/stanford-corenlp-4.0.0" />
-        </SOURCES>
-        <jarDirectory url="file://$MODULE_DIR$/../../Project/stanford-corenlp-4.0.0" recursive="false" />
-        <jarDirectory url="file://$MODULE_DIR$/../../Project/stanford-corenlp-4.0.0" recursive="false" type="SOURCES" />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$USER_HOME$/Desktop/stanford-corenlp-4.0.0-models-english-kbp.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+        <jarDirectory url="jar://$USER_HOME$/Desktop/stanford-corenlp-4.0.0-models-english-kbp.jar!/" recursive="false" />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$USER_HOME$/Desktop/stanford-corenlp-4.0.0-models-english.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+        <jarDirectory url="jar://$USER_HOME$/Desktop/stanford-corenlp-4.0.0-models-english.jar!/" recursive="false" />
       </library>
     </orderEntry>
   </component>

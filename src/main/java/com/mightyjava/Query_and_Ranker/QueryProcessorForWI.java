@@ -10,9 +10,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -66,7 +64,7 @@ public class QueryProcessorForWI {
 		 ResultSet rs_InsertRT; // for insert 
 		 ResultSet rs_ReadOldPopularity; // for insert 
 		 int UrlsCount;
-		 Set<URL> webLinks = new HashSet<>();
+		 List<URL> webLinks = new ArrayList<>();
 		 String tempUrl =null;
 		 String word ;
 		  public QueryProcessorForWI(String query,String Location,int id){
@@ -187,7 +185,6 @@ public class QueryProcessorForWI {
 	       	while(rs.next())
 	       	{
 	       		Titles.add(rs.getString("Title"));
-	       		System.out.println(rs.getString("URLs")+ " " + rs.getString("Title"));
 	       		Geographic_and_DatePublished G_D= new Geographic_and_DatePublished(Location,(rs.getString("URLExtension")),rs.getString("DatePublished"));
 	       		Geo_Date.add(G_D.GeographicDateScore());
 				webLinks.add(new URL (rs.getString("URLs")));
@@ -253,7 +250,8 @@ public class QueryProcessorForWI {
 	   	            	}
 	   	            	TotalRank=PreviousRank+FinalScore_Score;
 	   	            	Desc=rs.getString("Sentence");
-	   	            	Desc.concat(PreviousDesc);
+	   	            	System.out.println();
+	   	            	Desc.concat(PreviousDesc + Desc);
 	   	            	UpdateQuery="UPDATE `rankedurls1` SET `Rank`= '"+TotalRank +"', `description`= '"+ Desc +"' WHERE Urls = '"+tempUrl+"' AND id='"+id+"' AND image='"+0+"' AND searchQuery= '"+this.QueryWI+"'";
 	   					st_InsertFinalRank.executeUpdate(UpdateQuery);
 	   	            	TF_Score=0.0;

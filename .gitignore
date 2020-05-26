@@ -174,3 +174,4 @@ target/classes/com/mightyjava/service/impl/TrendsServiceImpl.class
 target/classes/com/mightyjava/service/IService.class
 target/classes/com/mightyjava/service/TrendService.class
 target/test-classes/com/mightyjava/ApplicationTests.class
+target/test-classes/META-INF/book-rest-api-reactjs.kotlin_module
