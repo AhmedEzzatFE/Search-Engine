@@ -7,6 +7,8 @@ import edu.stanford.nlp.pipeline.StanfordCoreNLP;
 
 import java.sql.*;
 import java.util.List;
+import java.util.Random;
+
 
 public class TrendsWI {
 	Connection con;
@@ -42,6 +44,9 @@ public class TrendsWI {
 		int Counter = 0;
 		int PreviousCount=0;
 		int FinalCount;
+		int upperbound = 2500;
+		int int_random;
+		Random rand = new Random();
 		while(rs.next()) {
 			UserQuery=rs.getString("Query");
 			Country=rs.getString("Country");
@@ -60,10 +65,12 @@ public class TrendsWI {
 						Counter = Integer.parseInt((rs_temp.getString("COUNT(*)")));
 					}
 					if(Counter==0) {
-						query = "INSERT INTO `trends` (`name`,`Count`,`location`,`id`)"
+						 //instance of random class
+						int_random = rand.nextInt(upperbound);
+						query = "INSERT INTO `trends` (`name`,`Count`,`location`,`id`,`primary`)"
 								+ " VALUES ('" + coreLabel.originalText() + "','"
 								+ 1 +"' , '"
-								+ Country+ "','"+id+"')";
+								+ Country+ "','"+id+"','"+int_random+"')";
 						st_temp.executeUpdate(query);
 						System.out.println("Not Found Before");
 
