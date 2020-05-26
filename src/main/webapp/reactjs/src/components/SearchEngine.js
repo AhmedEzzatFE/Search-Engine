@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import './Style.css';
-import {Card, Table, Button, InputGroup, FormControl,Row, Col} from 'react-bootstrap';
+import './AutoComplete.css'
+import {Card, Table, Button, InputGroup, FormControl} from 'react-bootstrap';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {
     faStepBackward,
@@ -258,7 +259,11 @@ this.setState({suggestions:[],search:'',image:0})
     renderSuggestion(){
          const {suggestions}=this.state;
          if(suggestions.length===0){return null}
-         return(<ul>{suggestions.map(item=><li onClick={()=>this.suggestionselected(item)}>{item}</li>)}</ul>)
+         return(<div className="AutoComplete">
+             <ul>
+                 {suggestions
+                     .map(item=><li className="AutoComplete ul"
+                                    onClick={()=>this.suggestionselected(item)}>{item}</li>)}</ul></div>)
      }
 
 render() {
@@ -268,12 +273,14 @@ render() {
             </div>
             <Card className={"border border-dark  text-black"}>
                 <Card.Header>
-                    <div style={{"float":"left"}}>
-                        Google
+                    <div  id="logo-black">
+Google
                     </div>
-                    <div style={{"float":"right"}}>
+                    <div className="AutoComplete">
                         <InputGroup size="sm">
+
                             <input value={search} onChange={this.onTextChange } type="text" />
+
                         <InputGroup.Append>
                                 <Button size="sm" variant="outline-info" type="button" onClick={this.searchData}>
                                     <FontAwesomeIcon icon={faSearch}/>
@@ -289,8 +296,9 @@ render() {
                                 </Button>
                             </InputGroup.Append>
                         </InputGroup>
-                        {this.renderSuggestion()}
+                       {this.renderSuggestion()}
                     </div>
+
                 </Card.Header>
                 <div className={container}>
                     <p>  Your Voice search is: {this.state.finalTranscript}</p>
@@ -417,6 +425,7 @@ render() {
             <Button href="/Trending">
                 <FontAwesomeIcon icon={faTaxi} /> Reveal Trends
             </Button>
+
         </div>
 
     }
