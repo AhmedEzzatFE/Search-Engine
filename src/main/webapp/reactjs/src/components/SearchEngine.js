@@ -77,30 +77,11 @@ recognition.lang = 'en-US'
         });
     };
 
-
-    findAllBooks(currentPage) {
-        currentPage -= 1;
-        axios.get("http://localhost:8081/rest/api?pageNumber="+currentPage+"&pageSize="+this.state.booksPerPage)
-            .then(response => response.data)
-            .then((data) => {
-                this.setState({
-                    books: data.content,
-                    totalPages: data.totalPages,
-                    totalElements: data.totalElements,
-                    currentPage: data.number + 1
-                });
-            });
-    };
-
-
-
     changePage = event => {
         let targetPage = parseInt(event.target.value);
-        if(this.state.search) {
-            this.searchData(targetPage);
-        } else {
-            this.findAllBooks(targetPage);
-        }
+       if(this.state.image===0){ this.searchData(targetPage);}
+           else {this.searchImage(targetPage);}
+
         this.setState({
             [event.target.name]: targetPage
         });
@@ -109,58 +90,51 @@ recognition.lang = 'en-US'
     firstPage = () => {
         let firstPage = 1;
         if(this.state.currentPage > firstPage) {
-            if(this.state.search) {
-                this.searchData(firstPage);
-            } else {
-                this.findAllBooks(firstPage);
-            }
+            if(this.state.image===0){this.searchData(firstPage);}
+            else {this.searchImage(firstPage);}
+
+
         }
     };
 
     prevPage = () => {
         let prevPage = 1;
         if(this.state.currentPage > prevPage) {
-            if(this.state.search) {
-                this.searchData(this.state.currentPage - prevPage);
-            } else {
-                this.findAllBooks(this.state.currentPage - prevPage);
-            }
+         if(this.state.image===0){this.searchData(this.state.currentPage - prevPage);
+         }
+         else{this.searchImage(this.state.currentPage - prevPage);}
         }
     };
 
     lastPage = () => {
         let condition = Math.ceil(this.state.totalElements / this.state.booksPerPage);
         if(this.state.currentPage < condition) {
-            if(this.state.search) {
-                this.searchData(condition);
-            } else {
-                this.findAllBooks(condition);
-            }
+   if(this.state.image===0){this.searchData(condition);}
+   else {this.searchImage(condition);}
+
+
         }
     };
 
     nextPage = () => {
         if(this.state.currentPage < Math.ceil(this.state.totalElements / this.state.booksPerPage)) {
-            if(this.state.search) {
-                this.searchData(this.state.currentPage + 1);
-            } else {
-                this.findAllBooks(this.state.currentPage + 1);
-            }
+
+                if(this.state.image===0){
+                    this.searchData(this.state.currentPage + 1);
+                }
+                else if(this.state.image===1) {
+                    this.searchImage(this.state.currentPage + 1);
+                }
+
         }
     };
-
-    searchChange = event => {
-        this.setState({
-            search: event.target.value
-        });};
     cancelSearch = () => {
         this.setState({"search" : ''});
-         this.findAllBooks(this.state.currentPage);
         this.getResponse()
 
     };
      searchImage = (currentPage) => {
-         this.setState({isLoading:true})
+         this.setState({isLoading:true,searchTemp:this.state.search})
          currentPage -= 1;
          axios.get("http://localhost:8081/rest/api/search/"+this.state.countryName+"/"+this.state.id+"/"+this.state.search+"/1?page="+currentPage+"&size="+this.state.booksPerPage)
              .then(response =>{
@@ -186,7 +160,7 @@ recognition.lang = 'en-US'
          this.setState({suggestions:[],image:1})
      };
     searchData = (currentPage) => {
-        this.setState({isLoading:true})
+        this.setState({isLoading:true,searchTemp:this.state.search})
         currentPage -= 1;
         axios.get("http://localhost:8081/rest/api/search/"+this.state.countryName+"/"+this.state.id+"/"+this.state.search+"/0?page="+currentPage+"&size="+this.state.booksPerPage)
        .then(response =>{
@@ -276,7 +250,7 @@ this.setState({suggestions:[],image:0})
 
 render() {
         const {books, currentPage, totalPages, search} = this.state;
-        return <div>
+        return <div className="WrappingElement">
             <div style={{"display":this.state.show ? "block" : "none"}}>
             </div>
             <Card className={"border border-dark  text-black"}>

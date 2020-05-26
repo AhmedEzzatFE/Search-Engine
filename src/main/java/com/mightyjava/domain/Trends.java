@@ -20,7 +20,7 @@ public class Trends {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column
-    private int primary;
+    private int primaryid;
     @Column
     private int id;
 
@@ -62,17 +62,17 @@ public class Trends {
                 "name='" + name + '\'' +
                 ", Count=" + Count +
                 ", location='" + location + '\'' +
-                ", primary=" + primary +
+                ", primary=" + primaryid +
                 ", id=" + id +
                 '}';
     }
 
     public int getPrimary() {
-        return primary;
+        return primaryid;
     }
 
     public void setPrimary(int primary) {
-        this.primary = primary;
+        this.primaryid = primary;
     }
 
 

@@ -67,7 +67,7 @@ public class TrendsWI {
 					if(Counter==0) {
 						 //instance of random class
 						int_random = rand.nextInt(upperbound);
-						query = "INSERT INTO `trends` (`name`,`Count`,`location`,`id`,`primary`)"
+						query = "INSERT INTO `trends` (`name`,`Count`,`location`,`id`,`primaryid`)"
 								+ " VALUES ('" + coreLabel.originalText() + "','"
 								+ 1 +"' , '"
 								+ Country+ "','"+id+"','"+int_random+"')";
