@@ -373,14 +373,14 @@ Google
                                     <th>Search Results</th>
                                 </tr>
                                 </thead>
-                                <tbody>
+                                <tbody className="FixingTheImage">
                                 {
                                     books.length === 0 ?
                                         <tr align="center">
                                             <td colSpan="7">No Images yet.</td>
                                         </tr> :
                                         books.map((book) => <div>
-                                            <img width={200} height={200} src={book.urls}></img>
+                                            <img className="FixingTheImageItself" src={book.urls}></img>
                                         </div>)
                                 }
                                 </tbody>
