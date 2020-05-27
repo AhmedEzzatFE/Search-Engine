@@ -103,7 +103,7 @@ public class ImageProcessorWI {
 					+ Location + "')";
 			st.executeUpdate(query);
 
-			query = "SELECT COUNT(*) FROM `userqueries` WHERE id = '"+id+"' AND searchQuery= '"+QueryWI+"' AND image = '"+1+"'";
+			query = "SELECT COUNT(*) FROM userqueries WHERE id = '"+id+"' AND Query= '"+QueryWI+"' AND image='"+0+"'";
 			rs = st.executeQuery(query);
 			while(rs.next()){
 				countImages = Integer.parseInt(rs.getString("COUNT(*)"));
