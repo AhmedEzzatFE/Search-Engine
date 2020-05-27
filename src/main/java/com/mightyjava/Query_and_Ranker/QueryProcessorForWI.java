@@ -117,7 +117,6 @@ public class QueryProcessorForWI {
 	             FinalQuery.add(stemmedWord);
 
 	         }
-	   	  System.out.println(FinalQuery);
 
 			 try {
 		        	Class.forName("com.mysql.jdbc.Driver");
@@ -211,15 +210,14 @@ public class QueryProcessorForWI {
 	   				st_InsertFinalRank.executeUpdate(queryForInsert);
 	   				Popularity_Geo_Date_Title_Count++;
 	          	}
-	   			
-//	          	List<Double> RelvanceRank = new ArrayList<>();
-	   			
-	          	for (String word : FinalQuery) {
+
+	   			 for (String word : FinalQuery) {
 	   	            query = "SELECT * FROM indexertable1 WHERE Words = '"+word+"'";
 	   	        	rs =  st.executeQuery(query);
 	   				while(rs.next()){
+						if(Integer.parseInt(rs.getString("Occurrences"))<6 & Integer.parseInt(rs.getString("Title"))==0 & Integer.parseInt(rs.getString("H1Occurrences"))<3 &Integer.parseInt(rs.getString("H2Occurrences"))<2){}
+						else{
 	   					tempUrl=rs.getString("URLs");
-	   					
 	   		            CountQuery = "SELECT COUNT(*) FROM indexertable1 WHERE Words = '"+word+"'";
 	   		            rs_Count = st_Count.executeQuery(CountQuery);
 	   		            while(rs_Count.next()){
@@ -250,8 +248,8 @@ public class QueryProcessorForWI {
 	   	            	}
 	   	            	TotalRank=PreviousRank+FinalScore_Score;
 	   	            	Desc=rs.getString("Sentence");
-	   	            	System.out.println();
 	   	            	Desc.concat(PreviousDesc + Desc);
+
 	   	            	UpdateQuery="UPDATE `rankedurls1` SET `Rank`= '"+TotalRank +"', `description`= '"+ Desc +"' WHERE Urls = '"+tempUrl+"' AND id='"+id+"' AND image='"+0+"' AND searchQuery= '"+this.QueryWI+"'";
 	   					st_InsertFinalRank.executeUpdate(UpdateQuery);
 	   	            	TF_Score=0.0;
@@ -260,7 +258,7 @@ public class QueryProcessorForWI {
 	   	    			FinalScore_Score=0.0;
 	   			            	
 	   			              }
-	   			          }
+	   			          }}
 	          	rs.close();
 	          
 	           	if(PhraseSearching == true)

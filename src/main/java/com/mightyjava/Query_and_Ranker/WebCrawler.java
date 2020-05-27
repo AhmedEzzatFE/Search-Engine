@@ -223,8 +223,7 @@ public class WebCrawler implements Runnable{
 		{
 			System.out.println(e.getMessage());
 		}
-		System.out.println(webLinks.size());
-		System.out.println(URLs.size());
+
 		if(!URLs.isEmpty()) {
 			synchronized(webLinks) {
 				if(webLinks.size()>5000) {
@@ -326,7 +325,6 @@ public class WebCrawler implements Runnable{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		System.out.println(webLinks.size());
 		//new URL is taken from java url
 		new WebCrawler(new URL("https://www.google.com/search?q=football&oq=football&aqs=chrome.0.69i59j46j0l5j69i60.3048j0j4&sourceid=chrome&ie=UTF-8"));
 		//System.out.println("Finished");

@@ -106,9 +106,7 @@ public class ImageIndexer {
 									st.executeUpdate(query);
 
 								} catch (SQLException e) {
-							        System.out.println(websiteTitle);
-							        System.out.println(alt);
-							        System.out.println("aaaaaaaaaaaaaa");
+
 									// TODO Auto-generated catch block
 									e.printStackTrace();
 								}
@@ -135,9 +133,7 @@ public class ImageIndexer {
 									
 
 								} catch (SQLException e) {
-									System.out.println(websiteTitle);
-							        System.out.println(title);
-							        System.out.println("bbbbbbbbbb");
+
 									e.printStackTrace();
 								}
 			        	}

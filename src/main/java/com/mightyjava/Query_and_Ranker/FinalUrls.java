@@ -50,9 +50,7 @@ public class FinalUrls{
 							break;
 						}
 					}
-					System.out.println(foundCount);
 					if(foundCount == 0) {
-					System.out.println("entered here");
 					QueryDeleteSelected="DELETE FROM indexedurls WHERE URLs = '"+url_Final+"' ";
 					st3.executeUpdate(QueryDeleteSelected);
 					

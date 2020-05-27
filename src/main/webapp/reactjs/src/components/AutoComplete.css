@@ -1,6 +1,6 @@
 .AutoComplete{
     align-items: center;
-    width: 50%
+    width: 70%
 }
 .AutoComplete ul{
     list-style: none;
@@ -10,7 +10,7 @@
 }
 .AutoComplete input{
 
-    width: 50%;
+    width: 70%;
     border:none;
     font-family: "Helvetica Neue", Arial;
     font-size: 14px;
@@ -33,7 +33,13 @@
     text-decoration: underline;
     background-color: rgba(128,128,128,0.20);
 }
-
+.WrappingElement{
+    padding: 10%;
+    background: rgb(16, 176, 230); /*for browsers that don't support gradient*/
+    background: -webkit-linear-gradient(to bottom,rgb(16, 176, 230),rgb(43, 44, 44)); /*for safari and chrome*/
+    background: -o-linear-gradient(to bottom,rgb(16, 176, 230),rgb(43, 44, 44)); /*for opera*/
+    background: -moz-linear-gradient(to bottom,rgb(16, 176, 230),rgb(43, 44, 44)); /*for firefox*/
+    background: linear-gradient(to bottom,rgb(16, 176, 230),rgb(43, 44, 44)); /*standard syntax*/}
 .FixingTheImage {
     background: rgb(16, 176, 230); /*for browsers that don't support gradient*/
     background: -webkit-linear-gradient(to bottom,rgb(16, 176, 230),rgb(43, 44, 44)); /*for safari and chrome*/
