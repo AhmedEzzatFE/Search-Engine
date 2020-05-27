@@ -75,7 +75,6 @@ public class NewQueryProcessor {
 	 public static void main(String[] args) throws IOException {
 		  int id=2;
 		  Scanner myObj = new Scanner(System.in);  // Create a Scanner object
-		  System.out.println("Enter the Search Query");
 		  String SearchQuery = myObj.nextLine();  // Read user input
 		  String[] words = SearchQuery.replace("\"", "").split(" ");
 		 boolean PhraseSearching=false;
@@ -121,7 +120,6 @@ public class NewQueryProcessor {
 			 FinalQuery.add(stemmedWord);
 
 		 }
-		 System.out.println(FinalQuery);
 
 		 try {
 			 Class.forName("com.mysql.jdbc.Driver");
@@ -254,7 +252,6 @@ public class NewQueryProcessor {
 						 }
 						 TotalRank=PreviousRank+FinalScore_Score;
 						 Desc=rs.getString("Sentence");
-						 System.out.println(rs.getString("URLs"));
 						 Desc.concat(PreviousDesc + Desc);
 						 UpdateQuery="UPDATE `rankedurls1` SET `Rank`= '"+TotalRank +"', `description`= '"+ Desc +"' WHERE Urls = '"+tempUrl+"' AND id='"+id+"' AND image='"+0+"' AND searchQuery= '"+SearchQuery+"'";
 						 st_InsertFinalRank.executeUpdate(UpdateQuery);

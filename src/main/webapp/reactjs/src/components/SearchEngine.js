@@ -251,13 +251,15 @@ this.setState({suggestions:[],image:0})
 render() {
         const {books, currentPage, totalPages, search} = this.state;
         return <div className="WrappingElement">
-            <div style={{"display":this.state.show ? "block" : "none"}}>
-            </div>
             <Card className={"border border-dark  text-black"}>
+                <div>
+                    <img alt="Google" height="140" id="hplogo"
+                         src="https://www.3m.com/wps/wcm/connect/fd542ff6-2e40-4c53-b152-27a818bcdf23/3M-Scotchlite-Black-Reflective-stretch-icon.jpg?MOD=AJPERES&CACHEID=ROOTWORKSPACE-fd542ff6-2e40-4c53-b152-27a818bcdf23-lL4hDG0"
+                         width="300">
+                    </img>
+                </div>
                 <Card.Header>
-                    <div  id="logo-black">
-Google
-                    </div>
+
                     <div className="AutoComplete">
                         <InputGroup size="sm">
 
@@ -304,16 +306,15 @@ Google
                                        <LoadingComponent/>
                                     </tr> :
                                     books.map((book) =>
-                                        <div className="rc">
+                                        <div className="rc" >
                                             <div className="r">
                                                 <h3>{book.title}</h3>
                                             </div>
                                         <h4><a href={book.urls}>{book.urls}</a></h4>
                                         <span>
-                                        {book.description===''?book.description:<p>...</p>}
+                                        {book.description}
                                         </span>
                                             <hr/>
-                                            <br/>
                                         </div>)
                             }
                             </tbody>

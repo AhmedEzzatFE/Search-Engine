@@ -62,7 +62,6 @@ public class ImageQueryProcessor {
 
 		int id=2;
 		Scanner myObj = new Scanner(System.in);  // Create a Scanner object
-		System.out.println("Enter the Search Query");
 		String SearchQuery = myObj.nextLine();  // Read user input
 		String[] words = SearchQuery.split(" ");
 		// List to add the Query after Removing the Stopping words
@@ -86,7 +85,6 @@ public class ImageQueryProcessor {
 			addable=true;
 		}
 
-		System.out.println(FinalQuery);
 		double TotalRank=0.0;
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
@@ -107,8 +105,6 @@ public class ImageQueryProcessor {
 			rs =  st.executeQuery(query);
 			while(rs.next()){
 				tempUrl=rs.getString("SRC");
-				System.out.println( FinalQuery + " ///// " + rs.getString("Title_Url") +" ///// " + rs.getString("Title_image") + " ////// " +rs.getString("Alt_image"));
-
 				ImageRanker IR = new ImageRanker(FinalQuery,rs.getString("Title_Url"),rs.getString("Title_image"),rs.getString("Alt_image"));
 				TotalRank= IR.ImageScore();
 
@@ -118,13 +114,6 @@ public class ImageQueryProcessor {
 				st_InsertFinalRank.executeUpdate(query);
 			}
 			rs.close();
-			query="SELECT * FROM rankedurls1 ORDER BY Rank DESC";
-			rs =  st.executeQuery(query);
-			while(rs.next())
-			{
-				System.out.println(rs.getString("Rank"));
-				System.out.println(rs.getString("Urls"));
-			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

@@ -90,7 +90,6 @@ target/test-classes/com/mightyjava/ApplicationTests.class
 .idea/libraries/Hibernate_5_4_11_5_4_11.xml
 .idea/misc.xml
 book-rest-api-reactjs.iml
-src/main/java/com/mightyjava/Query_and_Ranker/Piepline.java
 target/classes/com/mightyjava/Application.class
 target/classes/com/mightyjava/domain/SearchQuery.class
 target/classes/com/mightyjava/domain/Trends.class
