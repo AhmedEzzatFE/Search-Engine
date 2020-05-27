@@ -67,10 +67,7 @@ public class Popularity {
         	while(rs_IndexedUrls.next())
         	{
         		try {
-					System.out.println(rs_IndexedUrls.getString("URLs"));
 					webLinks.add(new URL(rs_IndexedUrls.getString("URLs")));
-					System.out.println("webLinks");
-					System.out.println(webLinks);
 					TotalNumberOfDocuments++;
 				} catch (MalformedURLException e) {
 					// TODO Auto-generated catch block
@@ -98,8 +95,9 @@ public class Popularity {
 
 			}
         	/// here the place for the forLoop
-        	for(int i=0;i<5;i++)
+        	for(int i=0;i<1;i++)
         	{
+        		System.out.println("Iteration Number:"+i);
         		UrlPopularity=0.0; // PR(A)
       		  	LinksPopularity = 0.0; // (1-d) + d*(PR(T)/C(T)
       		  	Counter =0;
@@ -129,7 +127,6 @@ public class Popularity {
     	        		 		+ " VALUES ('" + tempUrl + "','" 
     	        		 		+ UrlPopularity +"','"
     	        		 		+ OutBoundLinks.get(Counter) +"')";
-    					System.out.println(UrlPopularity);
     					st_New.executeUpdate(query_InsertInNew);
     	        		Counter++;
     	        		UrlPopularity=0.0;

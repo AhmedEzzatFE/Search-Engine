@@ -73,7 +73,6 @@ public class ImageProcessorWI {
 			addable=true;
 		}
 
-		System.out.println(FinalQuery);
 		double TotalRank=0.0;
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
@@ -99,8 +98,6 @@ public class ImageProcessorWI {
 				rs =  st.executeQuery(query);
 				while(rs.next()){
 					tempUrl=rs.getString("SRC");
-					System.out.println( FinalQuery + " ///// " + rs.getString("Title_Url") +" ///// " + rs.getString("Title_image") + " ////// " +rs.getString("Alt_image"));
-
 					ImageRanker IR = new ImageRanker(FinalQuery,rs.getString("Title_Url"),rs.getString("Title_image"),rs.getString("Alt_image"));
 					TotalRank= IR.ImageScore();
 
