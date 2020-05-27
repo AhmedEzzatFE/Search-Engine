@@ -159,7 +159,7 @@ recognition.lang = 'en-US'
                      "name": this.state.search,
                      "id": Math.floor((Math.random() * 1000) + 1)
                  }
-                 axios.post("http://localhost:3000/users", posted).then(r => r.data)
+                 axios.post("http://localhost:3000/Queries", posted).then(r => r.data)
              }}
 
          this.setState({suggestions:[],image:1})
