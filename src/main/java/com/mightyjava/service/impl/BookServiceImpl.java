@@ -32,7 +32,7 @@ public class BookServiceImpl implements IService<SearchQuery> {
 		}
 		System.out.println("Search Query Finished");}
 		else if(isImage==1){
-			ImageProcessorWI y = new ImageProcessorWI(searchText,id);
+			ImageProcessorWI y = new ImageProcessorWI(searchText,id,Country,erase);
 			y.Processor_Image();
 			System.out.println("Search Image Finished");
 		}
