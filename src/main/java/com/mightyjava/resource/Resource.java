@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 public interface Resource<T> {
-	@GetMapping("/search/{Country}/{id}/{searchText}/{isImage}")
-	ResponseEntity<Page<T>> findAll(Pageable pageable,@PathVariable String Country, @PathVariable int id,@PathVariable String searchText,@PathVariable int isImage);
+	@GetMapping("/search/{Country}/{id}/{searchText}/{isImage}/{Erase}")
+	ResponseEntity<Page<T>> findAll(Pageable pageable,@PathVariable String Country, @PathVariable int id,@PathVariable String searchText,@PathVariable int isImage,@PathVariable boolean Erase);
 
 
 	@GetMapping
