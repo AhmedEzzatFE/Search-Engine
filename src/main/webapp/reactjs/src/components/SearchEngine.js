@@ -138,7 +138,7 @@ recognition.lang = 'en-US'
         this.getResponse()
 
     };
-     searchImage = (currentPage) => {        alert(this.state.isToggled)
+     searchImage = (currentPage) => {
 
          this.setState({isLoading:true,searchTemp:this.state.search})
          currentPage -= 1;
@@ -165,7 +165,7 @@ recognition.lang = 'en-US'
 
          this.setState({suggestions:[],image:1})
      };
-    searchData = (currentPage) => {        alert(this.state.isToggled)
+    searchData = (currentPage) => {
 
         this.setState({isLoading:true,searchTemp:this.state.search})
         currentPage -= 1;
@@ -195,7 +195,7 @@ this.setState({suggestions:[],image:0})
     };
 
     searchVoiceData = (currentPage) => {
-        alert(this.state.isToggled)
+
         this.setState({isLoading:true})
          currentPage -= 1;
          axios.get("http://localhost:8081/rest/api/search/"+this.state.countryName+"/"+this.state.id+"/"+this.state.finalTranscript+"/"+this.state.isToggled+"/0?page="+currentPage+"&size="+this.state.booksPerPage)
