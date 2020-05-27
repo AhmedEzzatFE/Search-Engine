@@ -67,10 +67,12 @@ public class QueryProcessorForWI {
 	List<URL> webLinks = new ArrayList<>();
 	String tempUrl =null;
 	String word ;
-	public QueryProcessorForWI(String query,String Location,int id){
+	boolean deleteRankedurls;
+	public QueryProcessorForWI(String query,String Location,int id, boolean delete){
 		this.QueryWI=query;
 		this.Location=Location;
 		this.id=id;
+		this.deleteRankedurls=delete;
 	}
 	public void Processor() throws IOException {
 		String[] words = QueryWI.replace("\"", "").split(" ");
@@ -134,7 +136,7 @@ public class QueryProcessorForWI {
 			System.out.println(e.getMessage());
 		}
 		String query;
-//			String deleteQuery = "TRUNCATE TABLE rankedurls1";
+		String deleteQuery = "TRUNCATE TABLE rankedurls1";
 		String queryForInsert;
 		String query_ReadOld="SELECT * FROM `oldpopularity`";
 		String UpdateQuery;
@@ -160,7 +162,13 @@ public class QueryProcessorForWI {
 		String Desc="";
 
 		try {
-			CountQuery = "SELECT COUNT(*) FROM userqueries WHERE id = '"+id+"' AND Query= '"+QueryWI+"'";
+			if(this.deleteRankedurls){
+				st_TruncateRT.executeUpdate(deleteQuery); // empty the ranked Table
+				deleteQuery = "TRUNCATE TABLE userqueries";
+				st_TruncateRT.executeUpdate(deleteQuery); // empty the userQueries
+			}
+
+			CountQuery = "SELECT COUNT(*) FROM userqueries WHERE id = '"+id+"' AND Query= '"+QueryWI+"' AND image='"+0+"'";
 			rs_Count = st_Count.executeQuery(CountQuery);
 			while(rs_Count.next()){
 				SearchedBefore = Integer.parseInt(rs_Count.getString("COUNT(*)"));
@@ -173,9 +181,9 @@ public class QueryProcessorForWI {
 
 			if(SearchedBefore == 0)
 			{
-				queryForInsert = "INSERT INTO `userqueries` (`Query`,`Country`,`id`)"
+				queryForInsert = "INSERT INTO `userqueries` (`Query`,`Country`,`id`,`image`)"
 						+ " VALUES ('" + QueryWI + "','"
-						+ Location + "','"+id+"')";
+						+ Location + "','"+id+"','"+0+"')";
 				st.executeUpdate(queryForInsert);
 				List<Double> Geo_Date = new ArrayList<>();
 				List<String> Titles = new ArrayList<>();
@@ -190,7 +198,6 @@ public class QueryProcessorForWI {
 					webLinks.add(new URL (rs.getString("URLs")));
 
 				}
-//	          	st_TruncateRT.executeUpdate(deleteQuery); // empty the ranked Table
 				List<Double> Popularity = new ArrayList<>();
 				double TotalNumberOfDocuments=0;
 				rs =  st.executeQuery(query_ReadOld);
@@ -220,12 +227,16 @@ public class QueryProcessorForWI {
 					while(rs_Count.next()){
 						DocCounter = Double.parseDouble(rs_Count.getString("COUNT(*)"));
 					}
-					if(DocCounter > 1200 ){
+					if(DocCounter > 1500 ){
+						query = "SELECT * FROM indexertable1 WHERE Words = '"+word+"' AND Occurrences > '"+ 18 +"'";
+
+					}
+					else if(DocCounter > 1200 ){
 						query = "SELECT * FROM indexertable1 WHERE Words = '"+word+"' AND Occurrences > '"+ 15 +"'";
 
 					}
 					else if(DocCounter > 800 ){
-						query = "SELECT * FROM indexertable1 WHERE Words = '"+word+"' AND Occurrences > '"+ 7 +"'";
+						query = "SELECT * FROM indexertable1 WHERE Words = '"+word+"' AND Occurrences > '"+ 8 +"'";
 
 					}
 

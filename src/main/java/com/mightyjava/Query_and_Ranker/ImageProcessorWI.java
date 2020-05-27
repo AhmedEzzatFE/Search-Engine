@@ -46,9 +46,13 @@ public class ImageProcessorWI {
 	ResultSet rs;
 	ResultSet rs_ToGetThePrevRank;
 	String tempUrl =null;
-	public ImageProcessorWI(String query,int id){
+	String Location;
+	boolean erase;
+	public ImageProcessorWI(String query,int id,String location,boolean delete){
 		QueryWI=query;
 		this.id=id;
+		this.Location=location;
+		this.erase=delete;
 	}
 	public void Processor_Image() {
 		String[] words = QueryWI.split(" ");
@@ -88,12 +92,27 @@ public class ImageProcessorWI {
 
 		int countImages=0;
 		try {
-			query = "SELECT COUNT(*) FROM `rankedurls1` WHERE id = '"+id+"' AND searchQuery= '"+QueryWI+"' AND image = '"+1+"'";
+			if(this.erase){
+				query = "TRUNCATE TABLE rankedurls1";
+				st_TruncateRT.executeUpdate(query); // empty the ranked Table
+				query = "TRUNCATE TABLE userqueries";
+				st_TruncateRT.executeUpdate(query); // empty the userQueries
+			}
+			query = "INSERT INTO `userqueriestrends` (`Query`,`Country`)"
+					+ " VALUES ('" + QueryWI + "','"
+					+ Location + "')";
+			st.executeUpdate(query);
+
+			query = "SELECT COUNT(*) FROM `userqueries` WHERE id = '"+id+"' AND searchQuery= '"+QueryWI+"' AND image = '"+1+"'";
 			rs = st.executeQuery(query);
 			while(rs.next()){
 				countImages = Integer.parseInt(rs.getString("COUNT(*)"));
 			}
 			if(countImages==0){
+				query = "INSERT INTO `userqueries` (`Query`,`Country`,`id`,`image`)"
+						+ " VALUES ('" + QueryWI + "','"
+						+ Location + "','"+id+"','"+1+"')";
+				st.executeUpdate(query);
 				query = "SELECT * FROM image";
 				rs =  st.executeQuery(query);
 				while(rs.next()){
