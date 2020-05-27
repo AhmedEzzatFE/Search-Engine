@@ -50,6 +50,7 @@ public class Indexer {
             "you'll", "you're", "you've", "your", "yours", "yourself", "yourselves","z",
             "!","@","#","$","%","^","&","*","(",")","-","_","=","+","/","\\",">","<",";",
             ":","\'","{","}","`","[","]"};
+    public static Long start= 0L;
     //This class will implement comparable because I want
     //to sort objects according to no. of occurrences using the compareTo() method
     public static class Word {
@@ -132,6 +133,7 @@ public class Indexer {
 
         webLinks.removeAll(indexedWebLinks);
 
+        start = System.currentTimeMillis();
 
         for(URL url : webLinks) {
             //The try catch block is here because sometimes Jsoup.connect(url.toString()).get()
@@ -919,7 +921,7 @@ public class Indexer {
             }catch(final Exception | Error ignored) {}
 
         }
-
+        System.out.println(System.currentTimeMillis() - start);
 
     }
 

@@ -34,7 +34,9 @@ public class ForPopularity{
 			insideLink=discoveredURL;
         }
     }
-    
+	public static Long start1= 0L;
+	public static Long start2= 0L;
+	public static Long start3= 0L;;
     public static void main(String[] args) throws MalformedURLException {
     	List<Link> LinkAndLinkesInsideIt = new ArrayList<Link>();
 
@@ -62,6 +64,7 @@ public class ForPopularity{
         
         
         Document document;
+
         for(URL url : webLinks) {
 			try {
 				document = Jsoup.connect(url.toString()).get();
@@ -91,8 +94,8 @@ public class ForPopularity{
 			// TODO Auto-generated catch block
 			e2.printStackTrace();
 		}
-    	
-      
+
+		start1 = System.currentTimeMillis();
       //For finding the urls (in the database) that point to a url (in the database)
       for(URL url : webLinks) {
       	//to make everything consistent
@@ -140,7 +143,9 @@ public class ForPopularity{
 			}
       	
       }
-      
+
+	System.out.println(System.currentTimeMillis() - start1);
+	start2 = System.currentTimeMillis();
     //For finding the number of urls (in the database) inside a url (in the database)
     for(URL url : webLinks) {
     	int counter=0;
@@ -177,7 +182,8 @@ public class ForPopularity{
 		
 		 
 		}
-
+		System.out.println(System.currentTimeMillis() - start2);
+		System.out.println(System.currentTimeMillis() - start1);
           
 
        

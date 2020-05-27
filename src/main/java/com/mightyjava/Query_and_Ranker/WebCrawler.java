@@ -32,7 +32,6 @@ public class WebCrawler implements Runnable{
 	public static ResultSet rs;
 	public static Integer counter=0;
 	public static Long start= 0L;
-	public static Long end= 0L;
 
 	public WebCrawler(URL firstURL) {
 		Set<URL> initialSet = new HashSet<>();
