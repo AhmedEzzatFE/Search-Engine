@@ -67,8 +67,8 @@ public class QueryProcessorForWI {
 	List<URL> webLinks = new ArrayList<>();
 	String tempUrl =null;
 	String word ;
-	boolean deleteRankedurls;
-	public QueryProcessorForWI(String query,String Location,int id, boolean delete){
+	int deleteRankedurls;
+	public QueryProcessorForWI(String query, String Location, int id, int delete){
 		this.QueryWI=query;
 		this.Location=Location;
 		this.id=id;
@@ -162,7 +162,7 @@ public class QueryProcessorForWI {
 		String Desc="";
 
 		try {
-			if(this.deleteRankedurls){
+			if(this.deleteRankedurls==1){
 				st_TruncateRT.executeUpdate(deleteQuery); // empty the ranked Table
 				deleteQuery = "TRUNCATE TABLE userqueries";
 				st_TruncateRT.executeUpdate(deleteQuery); // empty the userQueries

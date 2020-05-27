@@ -47,8 +47,8 @@ public class ImageProcessorWI {
 	ResultSet rs_ToGetThePrevRank;
 	String tempUrl =null;
 	String Location;
-	boolean erase;
-	public ImageProcessorWI(String query,int id,String location,boolean delete){
+	int erase;
+	public ImageProcessorWI(String query, int id, String location, int delete){
 		QueryWI=query;
 		this.id=id;
 		this.Location=location;
@@ -92,7 +92,7 @@ public class ImageProcessorWI {
 
 		int countImages=0;
 		try {
-			if(this.erase){
+			if(this.erase==1){
 				query = "TRUNCATE TABLE rankedurls1";
 				st_TruncateRT.executeUpdate(query); // empty the ranked Table
 				query = "TRUNCATE TABLE userqueries";
@@ -103,7 +103,7 @@ public class ImageProcessorWI {
 					+ Location + "')";
 			st.executeUpdate(query);
 
-			query = "SELECT COUNT(*) FROM userqueries WHERE id = '"+id+"' AND Query= '"+QueryWI+"' AND image='"+0+"'";
+			query = "SELECT COUNT(*) FROM `userqueries` WHERE id = '"+id+"' AND Query= '"+QueryWI+"' AND image = '"+1+"'";
 			rs = st.executeQuery(query);
 			while(rs.next()){
 				countImages = Integer.parseInt(rs.getString("COUNT(*)"));
@@ -120,7 +120,7 @@ public class ImageProcessorWI {
 					ImageRanker IR = new ImageRanker(FinalQuery,rs.getString("Title_Url"),rs.getString("Title_image"),rs.getString("Alt_image"));
 					TotalRank= IR.ImageScore();
 
-					query="INSERT INTO `rankedurls1` (`Urls`,`Rank`,`description`,`Title`,`id`,`searchQuery`,`image`)"
+					query="INSERT INTO `rankedurls1` (`Urls`,`Rank`,`description`,`Title`,`id`,`searchquery`,`image`)"
 							+ " VALUES ('" + tempUrl + "','"
 							+ TotalRank + "','"+ " " +"', '"+" "+"','"+ this.id+"','"+this.QueryWI+"','"+1+"')";
 					st_InsertFinalRank.executeUpdate(query);
