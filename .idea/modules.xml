@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/book-rest-api-reactjs.iml" filepath="$PROJECT_DIR$/book-rest-api-reactjs.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Search-Engine.iml" filepath="$PROJECT_DIR$/Search-Engine.iml" />
     </modules>
   </component>
 </project>

@@ -9,16 +9,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.mightyjava.domain.SearchQuery;
-import com.mightyjava.repository.BookRepository;
+import com.mightyjava.repository.QueryRepository;
 import com.mightyjava.service.IService;
 
 import java.io.IOException;
 
 @Service
-public class BookServiceImpl implements IService<SearchQuery> {
+public class QueryServiceImpl implements IService<SearchQuery> {
 
 	@Autowired
-	private BookRepository bookRepository;
+	private QueryRepository queryRepository;
 
 	@Override
 	public Page<SearchQuery> findAll(Pageable pageable,String Country,int id, String searchText,int isImage,int Erase) {
@@ -37,20 +37,20 @@ public class BookServiceImpl implements IService<SearchQuery> {
 			y.Processor_Image();
 			System.out.println("Search Image Finished");
 		}
-		return bookRepository.findAllBooks(pageable,id,searchText,isImage);
+		return queryRepository.findAllUrls(pageable,id,searchText,isImage);
 	}
 
 
 
 	@Override
 	public Page<SearchQuery> findAll(Pageable pageable) {
-		return bookRepository.findAll(pageable);
+		return queryRepository.findAll(pageable);
 	}
 
 //
 	@Override
 	public SearchQuery saveOrUpdate(SearchQuery searchQuery) {
-		return bookRepository.save(searchQuery);
+		return queryRepository.save(searchQuery);
 	}
 
 }
