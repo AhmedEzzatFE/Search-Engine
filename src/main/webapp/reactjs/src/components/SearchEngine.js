@@ -45,10 +45,7 @@ recognition.lang = 'en-US'
         this.toggleListen = this.toggleListen.bind(this)
         this.handleListen = this.handleListen.bind(this)
         this.erase = this.erase.bind(this)
-
-
     }
-
      toggleListen() {
          this.setState({
              listening: !this.state.listening
@@ -59,7 +56,6 @@ recognition.lang = 'en-US'
          let finalTranscript = ''
          recognition.onresult = event => {
              let interimTranscript = ''
-
              for (let i = event.resultIndex; i < event.results.length; i++) {
                  const transcript = event.results[i][0].transcript;
                  if (event.results[i].isFinal) finalTranscript += transcript + ' ';
@@ -68,7 +64,6 @@ recognition.lang = 'en-US'
             this.setState({interimTranscript: interimTranscript,finalTranscript:finalTranscript})
          }
     }
-
     getGeoInfo = () => {
         axios.get('https://ipapi.co/json/').then((response) => {
             let data = response.data;
@@ -79,7 +74,6 @@ recognition.lang = 'en-US'
             console.log(error);
         });
     };
-
     changePage = event => {
         let targetPage = parseInt(event.target.value);
        if(this.state.image===0){ this.searchData(targetPage);}
@@ -89,7 +83,6 @@ recognition.lang = 'en-US'
             [event.target.name]: targetPage
         });
     };
-
     firstPage = () => {
         let firstPage = 1;
         if(this.state.currentPage > firstPage) {
@@ -99,7 +92,6 @@ recognition.lang = 'en-US'
 
         }
     };
-
     prevPage = () => {
         let prevPage = 1;
         if(this.state.currentPage > prevPage) {
@@ -108,7 +100,6 @@ recognition.lang = 'en-US'
          else{this.searchImage(this.state.currentPage - prevPage);}
         }
     };
-
     lastPage = () => {
         let condition = Math.ceil(this.state.totalElements / this.state.SearchResultsPerPage);
         if(this.state.currentPage < condition) {
@@ -118,7 +109,6 @@ recognition.lang = 'en-US'
 
         }
     };
-
     nextPage = () => {
         if(this.state.currentPage < Math.ceil(this.state.totalElements / this.state.SearchResultsPerPage)) {
 
@@ -192,7 +182,6 @@ recognition.lang = 'en-US'
 
 this.setState({suggestions:[],image:0})
     };
-
     searchVoiceData = (currentPage) => {
 
         this.setState({isLoading:true})
