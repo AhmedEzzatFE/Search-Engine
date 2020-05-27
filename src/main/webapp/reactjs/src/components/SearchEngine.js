@@ -306,16 +306,15 @@ render() {
                                        <LoadingComponent/>
                                     </tr> :
                                     books.map((book) =>
-                                        <div className="rc">
+                                        <div className="rc" >
                                             <div className="r">
                                                 <h3>{book.title}</h3>
                                             </div>
                                         <h4><a href={book.urls}>{book.urls}</a></h4>
                                         <span>
-                                        {book.description===''?book.description:<p>...</p>}
+                                        {book.description}
                                         </span>
                                             <hr/>
-                                            <br/>
                                         </div>)
                             }
                             </tbody>

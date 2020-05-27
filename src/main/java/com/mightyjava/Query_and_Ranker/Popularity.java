@@ -95,7 +95,7 @@ public class Popularity {
 
 			}
         	/// here the place for the forLoop
-        	for(int i=0;i<1000;i++)
+        	for(int i=0;i<1;i++)
         	{
         		System.out.println("Iteration Number:"+i);
         		UrlPopularity=0.0; // PR(A)
