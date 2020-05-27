@@ -105,12 +105,7 @@ public class ImageIndexer {
 				 	        		 		+ temp6 + "')"; 
 									st.executeUpdate(query);
 
-								} catch (SQLException e) {
-
-									// TODO Auto-generated catch block
-									e.printStackTrace();
-								}
-				        	
+								} catch(final Exception | Error ignored) {}
 			        	}
 			        	else
 			        	{
@@ -132,10 +127,7 @@ public class ImageIndexer {
 									st.executeUpdate(query);
 									
 
-								} catch (SQLException e) {
-
-									e.printStackTrace();
-								}
+								} catch(final Exception | Error ignored) {}
 			        	}
 			        	
 		        	}

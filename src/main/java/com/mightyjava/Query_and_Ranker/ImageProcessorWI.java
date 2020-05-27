@@ -103,7 +103,7 @@ public class ImageProcessorWI {
 					+ Location + "')";
 			st.executeUpdate(query);
 
-			query = "SELECT COUNT(*) FROM `userqueries` WHERE id = '"+id+"' AND searchQuery= '"+QueryWI+"' AND image = '"+1+"'";
+			query = "SELECT COUNT(*) FROM `userqueries` WHERE id = '"+id+"' AND Query= '"+QueryWI+"' AND image = '"+1+"'";
 			rs = st.executeQuery(query);
 			while(rs.next()){
 				countImages = Integer.parseInt(rs.getString("COUNT(*)"));
@@ -120,7 +120,7 @@ public class ImageProcessorWI {
 					ImageRanker IR = new ImageRanker(FinalQuery,rs.getString("Title_Url"),rs.getString("Title_image"),rs.getString("Alt_image"));
 					TotalRank= IR.ImageScore();
 
-					query="INSERT INTO `rankedurls1` (`Urls`,`Rank`,`description`,`Title`,`id`,`searchQuery`,`image`)"
+					query="INSERT INTO `rankedurls1` (`Urls`,`Rank`,`description`,`Title`,`id`,`searchquery`,`image`)"
 							+ " VALUES ('" + tempUrl + "','"
 							+ TotalRank + "','"+ " " +"', '"+" "+"','"+ this.id+"','"+this.QueryWI+"','"+1+"')";
 					st_InsertFinalRank.executeUpdate(query);
