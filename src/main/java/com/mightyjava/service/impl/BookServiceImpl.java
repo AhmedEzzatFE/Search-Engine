@@ -21,10 +21,11 @@ public class BookServiceImpl implements IService<SearchQuery> {
 	private BookRepository bookRepository;
 
 	@Override
-	public Page<SearchQuery> findAll(Pageable pageable,String Country,int id, String searchText,int isImage,boolean erase) {
+	public Page<SearchQuery> findAll(Pageable pageable,String Country,int id, String searchText,int isImage,int Erase) {
+		System.out.println(Erase);
 
 		if(isImage==0){
-		QueryProcessorForWI x = new QueryProcessorForWI(searchText,Country,id,erase);
+		QueryProcessorForWI x = new QueryProcessorForWI(searchText,Country,id,Erase);
 		try {
 			x.Processor();
 		} catch (IOException e) {
@@ -32,7 +33,7 @@ public class BookServiceImpl implements IService<SearchQuery> {
 		}
 		System.out.println("Search Query Finished");}
 		else if(isImage==1){
-			ImageProcessorWI y = new ImageProcessorWI(searchText,id,Country,erase);
+			ImageProcessorWI y = new ImageProcessorWI(searchText,id,Country,Erase);
 			y.Processor_Image();
 			System.out.println("Search Image Finished");
 		}

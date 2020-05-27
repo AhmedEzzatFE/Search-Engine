@@ -24,8 +24,8 @@ public class BookResourceImpl implements Resource<SearchQuery> {
 
 	//for searching by query
 	@Override
-	public ResponseEntity<Page<SearchQuery>> findAll(Pageable pageable,String Country,int id, String searchText,int isImage,boolean erase) {
-		return new ResponseEntity<>(bookService.findAll(pageable,Country,id, searchText,isImage,erase), HttpStatus.OK);
+	public ResponseEntity<Page<SearchQuery>> findAll(Pageable pageable,String Country,int id, String searchText,int isImage,int Erase) {
+		return new ResponseEntity<>(bookService.findAll(pageable,Country,id, searchText,isImage,Erase), HttpStatus.OK);
 	}
 
 

@@ -26,7 +26,8 @@ recognition.lang = 'en-US'
         super(props);
         this.state = {
             books : [],
-            isToggled:false,
+            isToggled:0,
+
             image:0,
             ReservedQueries: {},
             countryName: '',
@@ -137,7 +138,8 @@ recognition.lang = 'en-US'
         this.getResponse()
 
     };
-     searchImage = (currentPage) => {
+     searchImage = (currentPage) => {        alert(this.state.isToggled)
+
          this.setState({isLoading:true,searchTemp:this.state.search})
          currentPage -= 1;
          axios.get("http://localhost:8081/rest/api/search/"+this.state.countryName+"/"+this.state.id+"/"+this.state.search+"/"+this.state.isToggled+"/1?page="+currentPage+"&size="+this.state.booksPerPage)
@@ -148,7 +150,7 @@ recognition.lang = 'en-US'
                      totalElements: response.data.totalElements,
                      currentPage: response.data.number + 1,
                      isLoading:false
-                 }); if(this.state.isToggled){this.setState({isToggled:!this.state.isToggled})};}
+                 }); if(this.state.isToggled===1){this.setState({isToggled:0})};}
              )
          let x=(this.state.search==="")
          if(!x){
@@ -163,7 +165,8 @@ recognition.lang = 'en-US'
 
          this.setState({suggestions:[],image:1})
      };
-    searchData = (currentPage) => {
+    searchData = (currentPage) => {        alert(this.state.isToggled)
+
         this.setState({isLoading:true,searchTemp:this.state.search})
         currentPage -= 1;
         axios.get("http://localhost:8081/rest/api/search/"+this.state.countryName+"/"+this.state.id+"/"+this.state.search+"/"+this.state.isToggled+"/0?page="+currentPage+"&size="+this.state.booksPerPage)
@@ -175,7 +178,7 @@ recognition.lang = 'en-US'
             totalElements: response.data.totalElements,
             currentPage: response.data.number + 1
         });
-           if(this.state.isToggled){this.setState({isToggled:!this.state.isToggled})};}
+           if(this.state.isToggled===1){this.setState({isToggled:0})};}
        )
         let x=(this.state.search==="")
         if(!x){
@@ -192,6 +195,7 @@ this.setState({suggestions:[],image:0})
     };
 
     searchVoiceData = (currentPage) => {
+        alert(this.state.isToggled)
         this.setState({isLoading:true})
          currentPage -= 1;
          axios.get("http://localhost:8081/rest/api/search/"+this.state.countryName+"/"+this.state.id+"/"+this.state.finalTranscript+"/"+this.state.isToggled+"/0?page="+currentPage+"&size="+this.state.booksPerPage)
@@ -204,7 +208,7 @@ this.setState({suggestions:[],image:0})
                      totalElements: data.totalElements,
                      currentPage: data.number + 1
                  });
-                 if(this.state.isToggled){this.setState({isToggled:!this.state.isToggled})};
+                 if(this.state.isToggled===1){this.setState({isToggled:0})};
              });
         this.getResponse()
         let x=(this.state.finalTranscript==="")
@@ -254,8 +258,13 @@ this.setState({suggestions:[],image:0})
                                     onClick={()=>this.suggestionselected(item)}>{item}</li>)}</ul></div>)
      }
      erase(){
-        this.setState({isToggled:!this.state.isToggled})
-     }
+        if(this.state.isToggled===1){
+            this.setState({isToggled:0})
+        }
+    else{
+            this.setState({isToggled:1})
+        }
+    }
 
 render() {
         const {books, currentPage, totalPages, search} = this.state;
@@ -287,12 +296,12 @@ render() {
                                 <Button size="sm" variant="outline-danger" type="button" onClick={this.cancelSearch}>
                                     <FontAwesomeIcon icon={faTimes} />
                                 </Button>
-                            {this.state.isToggled?(<Button size="sm" variant="outline-danger" type="button" onClick={this.erase}>
-                                <FontAwesomeIcon icon={faToggleOn} />
-                            </Button>):(
+                            {this.state.isToggled===0?(
                                 <Button size="sm" variant="outline-danger" type="button" onClick={this.erase}>
                                     <FontAwesomeIcon icon={faToggleOff} />
-                                </Button>)}
+                                </Button>):(<Button size="sm" variant="outline-danger" type="button" onClick={this.erase}>
+                                <FontAwesomeIcon icon={faToggleOn} />
+                            </Button>)}
 
                             </InputGroup.Append>
                         </InputGroup>

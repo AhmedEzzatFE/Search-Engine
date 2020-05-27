@@ -47,8 +47,8 @@ public class ImageProcessorWI {
 	ResultSet rs_ToGetThePrevRank;
 	String tempUrl =null;
 	String Location;
-	boolean erase;
-	public ImageProcessorWI(String query,int id,String location,boolean delete){
+	int erase;
+	public ImageProcessorWI(String query, int id, String location, int delete){
 		QueryWI=query;
 		this.id=id;
 		this.Location=location;
@@ -92,7 +92,7 @@ public class ImageProcessorWI {
 
 		int countImages=0;
 		try {
-			if(this.erase){
+			if(this.erase==1){
 				query = "TRUNCATE TABLE rankedurls1";
 				st_TruncateRT.executeUpdate(query); // empty the ranked Table
 				query = "TRUNCATE TABLE userqueries";
