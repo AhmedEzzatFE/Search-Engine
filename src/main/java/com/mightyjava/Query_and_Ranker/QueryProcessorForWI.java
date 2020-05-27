@@ -73,7 +73,7 @@ public class QueryProcessorForWI {
 			  this.id=id;
 		  }
 		  public void Processor() throws IOException {
-			  String[] words = QueryWI.replace("\"", "").split(" "); 
+			  String[] words = QueryWI.replace("\"", "").split(" ");
 			  boolean PhraseSearching=false;
 			  List<String> tokens = new ArrayList<>();
 
@@ -81,7 +81,7 @@ public class QueryProcessorForWI {
 				  PhraseSearching=true;
 				  word = QueryWI.replace("\"", "");
 				  tokens.add(word.toLowerCase());
-				  
+
 			  }
 			  porterStemmer stemmer = new porterStemmer();
 			  // List to add the Query after Removing the Stopping words
@@ -90,17 +90,17 @@ public class QueryProcessorForWI {
 			  List<String> FinalQuery = new ArrayList<>();
 			  String stemmedWord = null;
 			  // if true, so the word isnt a stopping word and it will be added to the semiFinalQuery
-			  boolean addable=true; 
+			  boolean addable=true;
 
-			  // looping on the query word by word, then looping on the Stopping words, if the query 
+			  // looping on the query word by word, then looping on the Stopping words, if the query
 			  //word is a stopping word it won't be added to the list
 			  for (int i=0; i<words.length;i++) {
 				  for (String StoppingWords : wordsToIgnore) {
 		              if (words[i].equals(StoppingWords)) {
 		            	  addable=false;
 		            	  break;
-		              }	  
-		          }  
+		              }
+		          }
 				  if(addable== true) {
 					  semiFinalQuery.add(words[i]);
 				  }
@@ -132,7 +132,7 @@ public class QueryProcessorForWI {
 
 		        }catch(Exception e){
 		        	System.out.println(e.getMessage());
-	       }   
+	       }
 			String query;
 //			String deleteQuery = "TRUNCATE TABLE rankedurls1";
 			String queryForInsert;
@@ -153,12 +153,12 @@ public class QueryProcessorForWI {
 			double IDF_Score=0.0;
 			double TF_IDF_Score=0.0;
 			double FinalScore_Score=0.0;
-			double DocCounter =0.0; // to count how many documents have the word 
+			double DocCounter =0.0; // to count how many documents have the word
 			double TotalRank=0.0; // for every link
 			double PreviousRank=0.0;
 			String PreviousDesc="";
 			String Desc="";
-		
+
 	       try {
 	    	   CountQuery = "SELECT COUNT(*) FROM userqueries WHERE id = '"+id+"' AND Query= '"+QueryWI+"'";
 	           rs_Count = st_Count.executeQuery(CountQuery);
@@ -179,7 +179,7 @@ public class QueryProcessorForWI {
 				   st.executeUpdate(queryForInsert);
 				   List<Double> Geo_Date = new ArrayList<>();
 				   List<String> Titles = new ArrayList<>();
-	           
+
 	       	query= "SELECT * FROM `indexedurls`";
 	       	rs=st.executeQuery(query);
 	       	while(rs.next())
@@ -211,20 +211,35 @@ public class QueryProcessorForWI {
 	   				st_InsertFinalRank.executeUpdate(queryForInsert);
 	   				Popularity_Geo_Date_Title_Count++;
 	          	}
-	   			
+
 //	          	List<Double> RelvanceRank = new ArrayList<>();
-	   			
+
 	          	for (String word : FinalQuery) {
-	   	            query = "SELECT * FROM indexertable1 WHERE Words = '"+word+"'";
+					CountQuery = "SELECT COUNT(*) FROM indexertable1 WHERE Words = '"+word+"'";
+					rs_Count = st_Count.executeQuery(CountQuery);
+					while(rs_Count.next()){
+						DocCounter = Double.parseDouble(rs_Count.getString("COUNT(*)"));
+					}
+					if(DocCounter > 1200 ){
+						query = "SELECT * FROM indexertable1 WHERE Words = '"+word+"' AND Occurrences > '"+ 15 +"'";
+
+					}
+					else if(DocCounter > 800 ){
+						query = "SELECT * FROM indexertable1 WHERE Words = '"+word+"' AND Occurrences > '"+ 7 +"'";
+
+					}
+
+					else if(DocCounter > 200 ){
+						query = "SELECT * FROM indexertable1 WHERE Words = '"+word+"' AND Occurrences > '"+ 2 +"'";
+
+					}
+					else {
+						query = "SELECT * FROM indexertable1 WHERE Words = '"+word+"'";
+					}
 	   	        	rs =  st.executeQuery(query);
 	   				while(rs.next()){
 	   					tempUrl=rs.getString("URLs");
-	   					
-	   		            CountQuery = "SELECT COUNT(*) FROM indexertable1 WHERE Words = '"+word+"'";
-	   		            rs_Count = st_Count.executeQuery(CountQuery);
-	   		            while(rs_Count.next()){
-	   		            	DocCounter = Double.parseDouble(rs_Count.getString("COUNT(*)"));
-	   		            }
+
 	   		            DocCounter=2;
 	   		            tf=new TF(Double.parseDouble(rs.getString("Occurrences")),Double.parseDouble(rs.getString("NumberOfWordsInThisLink")));
 	   					TF_Score=tf.getNormalizedTf();
@@ -258,11 +273,11 @@ public class QueryProcessorForWI {
 	   	    			IDF_Score=0.0;
 	   	    			TF_IDF_Score=0.0;
 	   	    			FinalScore_Score=0.0;
-	   			            	
+
 	   			              }
 	   			          }
 	          	rs.close();
-	          
+
 	           	if(PhraseSearching == true)
 	           	{   query="SELECT * FROM rankedurls1 WHERE id='"+id+"' AND image= '"+0+"' AND searchQuery= '"+this.QueryWI+"' ORDER BY Rank DESC ";
 	           		rs =  st.executeQuery(query);
@@ -274,7 +289,7 @@ public class QueryProcessorForWI {
 	    	       		patternString = "\\b(" + StringUtils.join(tokens, "|") + ")\\b";
 	    	    		pattern = Pattern.compile(patternString);
 	    	    		matcher = pattern.matcher(text);
-	    	
+
 	    	    		while (matcher.find()) {
 	    	    		    query = "SELECT * FROM rankedurls1 WHERE Urls = '"+tempUrl+"' AND id= '"+id+"' ";
 	    		            rs_ToGetThePrevRank=st_ToGetThePrevRank.executeQuery(query);
@@ -285,7 +300,7 @@ public class QueryProcessorForWI {
 	    	            	TotalRank=PreviousRank+100;
 	    	            	UpdateQuery="UPDATE `rankedurls1` SET `Rank`= '"+TotalRank +"' WHERE Urls = '"+tempUrl+"' AND id= '"+id+"' AND image= '"+0+"' AND searchQuery= '"+this.QueryWI+"'";
 	    					st_InsertFinalRank.executeUpdate(UpdateQuery);
-	    	    		    
+
 	    	    		}
 	    	    		count++;
 	    	       		if(count == 20)
