@@ -25,9 +25,8 @@ recognition.lang = 'en-US'
     constructor(props) {
         super(props);
         this.state = {
-            books : [],
+            SearchResults : [],
             isToggled:0,
-
             image:0,
             ReservedQueries: {},
             countryName: '',
@@ -41,7 +40,7 @@ recognition.lang = 'en-US'
             listening: false,
             id:Math.floor((Math.random() * 10000) + 1),
             currentPage : 1,
-            booksPerPage : 10,
+            SearchResultsPerPage : 10,
         };
         this.toggleListen = this.toggleListen.bind(this)
         this.handleListen = this.handleListen.bind(this)
@@ -111,7 +110,7 @@ recognition.lang = 'en-US'
     };
 
     lastPage = () => {
-        let condition = Math.ceil(this.state.totalElements / this.state.booksPerPage);
+        let condition = Math.ceil(this.state.totalElements / this.state.SearchResultsPerPage);
         if(this.state.currentPage < condition) {
    if(this.state.image===0){this.searchData(condition);}
    else {this.searchImage(condition);}
@@ -121,7 +120,7 @@ recognition.lang = 'en-US'
     };
 
     nextPage = () => {
-        if(this.state.currentPage < Math.ceil(this.state.totalElements / this.state.booksPerPage)) {
+        if(this.state.currentPage < Math.ceil(this.state.totalElements / this.state.SearchResultsPerPage)) {
 
                 if(this.state.image===0){
                     this.searchData(this.state.currentPage + 1);
@@ -142,10 +141,10 @@ recognition.lang = 'en-US'
 
          this.setState({isLoading:true,searchTemp:this.state.search})
          currentPage -= 1;
-         axios.get("http://localhost:8081/rest/api/search/"+this.state.countryName+"/"+this.state.id+"/"+this.state.search+"/"+this.state.isToggled+"/1?page="+currentPage+"&size="+this.state.booksPerPage)
+         axios.get("http://localhost:8081/rest/api/search/"+this.state.countryName+"/"+this.state.id+"/"+this.state.search+"/"+this.state.isToggled+"/1?page="+currentPage+"&size="+this.state.SearchResultsPerPage)
              .then(response =>{
                  this.setState({
-                     books: response.data.content,
+                     SearchResults: response.data.content,
                      totalPages: response.data.totalPages,
                      totalElements: response.data.totalElements,
                      currentPage: response.data.number + 1,
@@ -169,10 +168,10 @@ recognition.lang = 'en-US'
 
         this.setState({isLoading:true,searchTemp:this.state.search})
         currentPage -= 1;
-        axios.get("http://localhost:8081/rest/api/search/"+this.state.countryName+"/"+this.state.id+"/"+this.state.search+"/"+this.state.isToggled+"/0?page="+currentPage+"&size="+this.state.booksPerPage)
+        axios.get("http://localhost:8081/rest/api/search/"+this.state.countryName+"/"+this.state.id+"/"+this.state.search+"/"+this.state.isToggled+"/0?page="+currentPage+"&size="+this.state.SearchResultsPerPage)
        .then(response =>{
         this.setState({
-            books: response.data.content,
+            SearchResults: response.data.content,
             isLoading:false,
             totalPages: response.data.totalPages,
             totalElements: response.data.totalElements,
@@ -198,11 +197,11 @@ this.setState({suggestions:[],image:0})
 
         this.setState({isLoading:true})
          currentPage -= 1;
-         axios.get("http://localhost:8081/rest/api/search/"+this.state.countryName+"/"+this.state.id+"/"+this.state.finalTranscript+"/"+this.state.isToggled+"/0?page="+currentPage+"&size="+this.state.booksPerPage)
+         axios.get("http://localhost:8081/rest/api/search/"+this.state.countryName+"/"+this.state.id+"/"+this.state.finalTranscript+"/"+this.state.isToggled+"/0?page="+currentPage+"&size="+this.state.SearchResultsPerPage)
              .then(response => response.data)
              .then((data) => {
                  this.setState({
-                     books: data.content,
+                     SearchResults: data.content,
                      isLoading:false,
                      totalPages: data.totalPages,
                      totalElements: data.totalElements,
@@ -267,7 +266,7 @@ this.setState({suggestions:[],image:0})
     }
 
 render() {
-        const {books, currentPage, totalPages, search} = this.state;
+        const {SearchResults, currentPage, totalPages, search} = this.state;
         return <div className="WrappingElement">
             <Card className={"border border-dark  text-black"}>
                 <div>
@@ -330,14 +329,14 @@ render() {
                                     <tr align="center">
                                        <LoadingComponent/>
                                     </tr> :
-                                    books.map((book) =>
+                                    SearchResults.map((SearchResult) =>
                                         <div className="rc" >
                                             <div className="r">
-                                                <h3>{book.title}</h3>
+                                                <h3>{SearchResult.title}</h3>
                                             </div>
-                                        <h4><a href={book.urls}>{book.urls}</a></h4>
+                                        <h4><a href={SearchResult.urls}>{SearchResult.urls}</a></h4>
                                         <span>
-                                        {book.description}
+                                        {SearchResult.description}
                                         </span>
                                             <hr/>
                                         </div>)
@@ -345,7 +344,7 @@ render() {
                             </tbody>
                         </Table>
                     </Card.Body>
-                    {books.length > 0 ?
+                    {SearchResults.length > 0 ?
                             <Card.Footer>
                                 <div style={{"float":"left"}}>
                                     Showing Page {currentPage} of {totalPages}
@@ -390,14 +389,14 @@ render() {
                                 {
                                     this.state.isLoading ?
                                         <LoadingComponent/>:
-                                        books.map((book) => <div>
-                                            <img className="FixingTheImageItself" src={book.urls}></img>
+                                        SearchResults.map((SearchResult) => <div>
+                                            <img className="FixingTheImageItself" src={SearchResult.urls}></img>
                                         </div>)
                                 }
                                 </tbody>
                             </Table>
                         </Card.Body>
-                        {books.length > 0 ?
+                        {SearchResults.length > 0 ?
                             <Card.Footer>
                                 <div style={{"float":"left"}}>
                                     Showing Page {currentPage} of {totalPages}

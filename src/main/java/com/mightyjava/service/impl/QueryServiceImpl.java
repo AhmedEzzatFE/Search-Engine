@@ -37,7 +37,7 @@ public class QueryServiceImpl implements IService<SearchQuery> {
 			y.Processor_Image();
 			System.out.println("Search Image Finished");
 		}
-		return queryRepository.findAllBooks(pageable,id,searchText,isImage);
+		return queryRepository.findAllUrls(pageable,id,searchText,isImage);
 	}
 
 

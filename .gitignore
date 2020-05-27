@@ -2,7 +2,7 @@
 <<<<<<< HEAD
 .idea/libraries/Hibernate_5_4_11_5_4_11.xml
 .idea/misc.xml
-book-rest-api-reactjs.iml
+Search-Engine.iml
 src/main/java/com/mightyjava/Query_and_Ranker/Piepline.java
 src/main/main.iml
 target/classes/com/mightyjava/Application.class
@@ -46,7 +46,7 @@ target/classes/META-INF/book-rest-api-reactjs.kotlin_module
 target/test-classes/com/mightyjava/ApplicationTests.class
 .idea/libraries/Hibernate_5_4_11_5_4_11.xml
 .idea/misc.xml
-book-rest-api-reactjs.iml
+Search-Engine.iml
 src/main/java/com/mightyjava/Query_and_Ranker/Piepline.java
 target/classes/com/mightyjava/Application.class
 target/classes/com/mightyjava/domain/SearchQuery.class
@@ -89,7 +89,7 @@ target/classes/META-INF/book-rest-api-reactjs.kotlin_module
 target/test-classes/com/mightyjava/ApplicationTests.class
 .idea/libraries/Hibernate_5_4_11_5_4_11.xml
 .idea/misc.xml
-book-rest-api-reactjs.iml
+Search-Engine.iml
 target/classes/com/mightyjava/Application.class
 target/classes/com/mightyjava/domain/SearchQuery.class
 target/classes/com/mightyjava/domain/Trends.class
@@ -136,7 +136,7 @@ target/test-classes/com/mightyjava/ApplicationTests.class
 target/classes/com/mightyjava/Query_and_Ranker/Piepline.class
 .idea/misc.xml
 .idea/libraries/Hibernate_5_4_11_5_4_11.xml
-book-rest-api-reactjs.iml
+Search-Engine.iml
 target/classes/com/mightyjava/domain/SearchQuery.class
 target/classes/com/mightyjava/Application.class
 target/classes/com/mightyjava/domain/Trends.class
@@ -174,4 +174,4 @@ target/classes/com/mightyjava/service/IService.class
 target/classes/com/mightyjava/service/TrendService.class
 target/test-classes/com/mightyjava/ApplicationTests.class
 target/test-classes/META-INF/book-rest-api-reactjs.kotlin_module
-book-rest-api-reactjs.iml
+Search-Engine.iml
