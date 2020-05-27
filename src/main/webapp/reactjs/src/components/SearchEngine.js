@@ -11,7 +11,7 @@ import {
     faFastForward,
     faSearch,
     faTimes,
-    faMicrophone, faAssistiveListeningSystems, faImage, faTaxi
+    faMicrophone, faAssistiveListeningSystems, faImage, faTaxi, faToggleOn, faToggleOff
 } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
 
@@ -26,6 +26,7 @@ recognition.lang = 'en-US'
         super(props);
         this.state = {
             books : [],
+            isToggled:false,
             image:0,
             ReservedQueries: {},
             countryName: '',
@@ -43,6 +44,8 @@ recognition.lang = 'en-US'
         };
         this.toggleListen = this.toggleListen.bind(this)
         this.handleListen = this.handleListen.bind(this)
+        this.erase = this.erase.bind(this)
+
 
     }
 
@@ -129,6 +132,7 @@ recognition.lang = 'en-US'
         }
     };
     cancelSearch = () => {
+
         this.setState({"search" : ''});
         this.getResponse()
 
@@ -136,7 +140,7 @@ recognition.lang = 'en-US'
      searchImage = (currentPage) => {
          this.setState({isLoading:true,searchTemp:this.state.search})
          currentPage -= 1;
-         axios.get("http://localhost:8081/rest/api/search/"+this.state.countryName+"/"+this.state.id+"/"+this.state.search+"/1?page="+currentPage+"&size="+this.state.booksPerPage)
+         axios.get("http://localhost:8081/rest/api/search/"+this.state.countryName+"/"+this.state.id+"/"+this.state.search+"/"+this.state.isToggled+"/1?page="+currentPage+"&size="+this.state.booksPerPage)
              .then(response =>{
                  this.setState({
                      books: response.data.content,
@@ -144,7 +148,7 @@ recognition.lang = 'en-US'
                      totalElements: response.data.totalElements,
                      currentPage: response.data.number + 1,
                      isLoading:false
-                 });}
+                 }); if(this.state.isToggled){this.setState({isToggled:!this.state.isToggled})};}
              )
          let x=(this.state.search==="")
          if(!x){
@@ -162,7 +166,7 @@ recognition.lang = 'en-US'
     searchData = (currentPage) => {
         this.setState({isLoading:true,searchTemp:this.state.search})
         currentPage -= 1;
-        axios.get("http://localhost:8081/rest/api/search/"+this.state.countryName+"/"+this.state.id+"/"+this.state.search+"/0?page="+currentPage+"&size="+this.state.booksPerPage)
+        axios.get("http://localhost:8081/rest/api/search/"+this.state.countryName+"/"+this.state.id+"/"+this.state.search+"/"+this.state.isToggled+"/0?page="+currentPage+"&size="+this.state.booksPerPage)
        .then(response =>{
         this.setState({
             books: response.data.content,
@@ -170,7 +174,8 @@ recognition.lang = 'en-US'
             totalPages: response.data.totalPages,
             totalElements: response.data.totalElements,
             currentPage: response.data.number + 1
-        });}
+        });
+           if(this.state.isToggled){this.setState({isToggled:!this.state.isToggled})};}
        )
         let x=(this.state.search==="")
         if(!x){
@@ -189,7 +194,7 @@ this.setState({suggestions:[],image:0})
     searchVoiceData = (currentPage) => {
         this.setState({isLoading:true})
          currentPage -= 1;
-         axios.get("http://localhost:8081/rest/api/search/"+this.state.countryName+"/"+this.state.id+"/"+this.state.finalTranscript+"/0?page="+currentPage+"&size="+this.state.booksPerPage)
+         axios.get("http://localhost:8081/rest/api/search/"+this.state.countryName+"/"+this.state.id+"/"+this.state.finalTranscript+"/"+this.state.isToggled+"/0?page="+currentPage+"&size="+this.state.booksPerPage)
              .then(response => response.data)
              .then((data) => {
                  this.setState({
@@ -199,6 +204,7 @@ this.setState({suggestions:[],image:0})
                      totalElements: data.totalElements,
                      currentPage: data.number + 1
                  });
+                 if(this.state.isToggled){this.setState({isToggled:!this.state.isToggled})};
              });
         this.getResponse()
         let x=(this.state.finalTranscript==="")
@@ -247,6 +253,9 @@ this.setState({suggestions:[],image:0})
                      .map(item=><li className="AutoComplete ul"
                                     onClick={()=>this.suggestionselected(item)}>{item}</li>)}</ul></div>)
      }
+     erase(){
+        this.setState({isToggled:!this.state.isToggled})
+     }
 
 render() {
         const {books, currentPage, totalPages, search} = this.state;
@@ -278,6 +287,13 @@ render() {
                                 <Button size="sm" variant="outline-danger" type="button" onClick={this.cancelSearch}>
                                     <FontAwesomeIcon icon={faTimes} />
                                 </Button>
+                            {this.state.isToggled?(<Button size="sm" variant="outline-danger" type="button" onClick={this.erase}>
+                                <FontAwesomeIcon icon={faToggleOn} />
+                            </Button>):(
+                                <Button size="sm" variant="outline-danger" type="button" onClick={this.erase}>
+                                    <FontAwesomeIcon icon={faToggleOff} />
+                                </Button>)}
+
                             </InputGroup.Append>
                         </InputGroup>
                        {this.renderSuggestion()}
@@ -363,10 +379,8 @@ render() {
                                 </thead>
                                 <tbody className="FixingTheImage">
                                 {
-                                    books.length === 0 ?
-                                        <tr align="center">
-                                            <td colSpan="7">No Images yet.</td>
-                                        </tr> :
+                                    this.state.isLoading ?
+                                        <LoadingComponent/>:
                                         books.map((book) => <div>
                                             <img className="FixingTheImageItself" src={book.urls}></img>
                                         </div>)
