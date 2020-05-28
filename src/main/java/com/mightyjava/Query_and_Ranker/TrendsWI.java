@@ -17,11 +17,19 @@ public class TrendsWI {
 	int id;
 	Statement st_temp;
 	ResultSet rs_temp;
+	long Start;
+	long End;
+
+	long StartTotal;
+	long EndTotal;
+
 	public TrendsWI(int id)
 	{
 		this.id=id;
 	}
 	public void GetTrends() throws SQLException {
+
+		StartTotal=System.nanoTime();
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 			con=DriverManager.getConnection("jdbc:mysql://localhost/projectdb1?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC", "root", "");
@@ -48,8 +56,10 @@ public class TrendsWI {
 		int int_random;
 		Random rand = new Random();
 		while(rs.next()) {
+			Start=System.nanoTime();
 			UserQuery=rs.getString("Query");
 			Country=rs.getString("Country");
+
 			CoreDocument coreDocument = new CoreDocument (UserQuery);
 			stanfordCoreNLP.annotate(coreDocument);
 			List <CoreLabel> coreLabels = coreDocument.tokens();
@@ -72,7 +82,6 @@ public class TrendsWI {
 								+ 1 +"' , '"
 								+ Country+ "','"+id+"','"+int_random+"')";
 						st_temp.executeUpdate(query);
-						System.out.println("Not Found Before");
 
 					}
 					else if(Counter !=0)
@@ -87,15 +96,17 @@ public class TrendsWI {
 						query="UPDATE `trends` SET `Count`= '"+FinalCount +"' WHERE name = '"+coreLabel.originalText()+"' AND location = '"+Country+"'";
 						st_temp.executeUpdate(query);
 					}
-
+					End = System.nanoTime() - Start;
+					System.out.println(End + "Total time per query");
 				}
 			}
 
 		}
-
 		query= "TRUNCATE TABLE userqueriestrends";
-		st.executeUpdate(query); // empty the ranked Table
+		st.executeUpdate(query); // empty the  Table
 
+		EndTotal = System.nanoTime() - StartTotal;
+		System.out.println(EndTotal + "Total time to calculate the trends");
 
 	}
 }

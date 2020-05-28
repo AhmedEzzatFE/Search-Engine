@@ -42,9 +42,6 @@ public class QueryProcessorForWI {
 			"won", "won't","would","wouldn", "wouldn't", "y", "you", "you'd",
 			"you'll", "you're", "you've", "your", "yours", "yourself", "yourselves","!","@","#","$",
 			"%","^","&","*","(",")","-","_","=","+","/","\\",">","<",";",":","\'","{","}","`","[","]","\""};
-
-
-
 	String QueryWI;
 	String Location;
 	int id;
@@ -68,6 +65,13 @@ public class QueryProcessorForWI {
 	String tempUrl =null;
 	String word ;
 	int deleteRankedurls;
+	long StartTotal;
+	long EndTotal;
+	long StartTemp;
+	long EndTemp;
+	long Start;
+	long End;
+
 	public QueryProcessorForWI(String query, String Location, int id, int delete){
 		this.QueryWI=query;
 		this.Location=Location;
@@ -75,6 +79,7 @@ public class QueryProcessorForWI {
 		this.deleteRankedurls=delete;
 	}
 	public void Processor() throws IOException {
+		StartTotal=System.nanoTime();
 		String[] words = QueryWI.replace("\"", "").split(" ");
 		boolean PhraseSearching=false;
 		List<String> tokens = new ArrayList<>();
@@ -162,31 +167,47 @@ public class QueryProcessorForWI {
 		String Desc="";
 
 		try {
+			Start = System.nanoTime();
 			if(this.deleteRankedurls==1){
 				st_TruncateRT.executeUpdate(deleteQuery); // empty the ranked Table
 				deleteQuery = "TRUNCATE TABLE userqueries";
 				st_TruncateRT.executeUpdate(deleteQuery); // empty the userQueries
 			}
+			End = System.nanoTime() - Start;
+			System.out.println(End + "To delete the rankedUrls and Userqueries Tables");
+
+			Start = System.nanoTime();
 
 			CountQuery = "SELECT COUNT(*) FROM userqueries WHERE id = '"+id+"' AND Query= '"+QueryWI+"' AND image='"+0+"'";
 			rs_Count = st_Count.executeQuery(CountQuery);
 			while(rs_Count.next()){
 				SearchedBefore = Integer.parseInt(rs_Count.getString("COUNT(*)"));
 			}
+			End = System.nanoTime() - Start;
+			System.out.println(End + "To check if the user searched this query before (Count the userqueries table for matched ones)");
 
+			Start = System.nanoTime();
 			queryForInsert = "INSERT INTO `userqueriestrends` (`Query`,`Country`)"
 					+ " VALUES ('" + QueryWI + "','"
 					+ Location + "')";
 			st.executeUpdate(queryForInsert);
+			End = System.nanoTime() - Start;
+			System.out.println(End + "To insert in the userqueriestrends the searched query )");
 
 			if(SearchedBefore == 0)
 			{
+				Start = System.nanoTime();
 				queryForInsert = "INSERT INTO `userqueries` (`Query`,`Country`,`id`,`image`)"
 						+ " VALUES ('" + QueryWI + "','"
 						+ Location + "','"+id+"','"+0+"')";
 				st.executeUpdate(queryForInsert);
+				End = System.nanoTime() - Start;
+				System.out.println(End + "To insert in the userqueries the searched query )");
+
 				List<Double> Geo_Date = new ArrayList<>();
 				List<String> Titles = new ArrayList<>();
+
+				Start = System.nanoTime();
 
 				query= "SELECT * FROM `indexedurls`";
 				rs=st.executeQuery(query);
@@ -198,17 +219,28 @@ public class QueryProcessorForWI {
 					webLinks.add(new URL (rs.getString("URLs")));
 
 				}
+				End = System.nanoTime() - Start;
+				System.out.println(End + "To Select all the links in indexed urls + Calculating the Geographic and Date Rank + Getting the Titles and Add it to a List and Save the Urls )");
 				List<Double> Popularity = new ArrayList<>();
 				double TotalNumberOfDocuments=0;
+
+				Start = System.nanoTime();
 				rs =  st.executeQuery(query_ReadOld);
 				while(rs.next())
 				{
 					TotalNumberOfDocuments++;
 					Popularity.add(Double.parseDouble(rs.getString("Popularity")));
 				}
+				End = System.nanoTime() - Start;
+				System.out.println(End + "To Select all the links in oldPopularity + Getting the Popularity Add it to a List and count the no. of documents )");
+
 				int Popularity_Geo_Date_Title_Count=0;
 				double Popularity_Geo_Date=0.0;
+
+				Start = System.nanoTime();
+
 				for(URL url : webLinks) {
+
 					Popularity_Geo_Date=Popularity.get(Popularity_Geo_Date_Title_Count)+Geo_Date.get(Popularity_Geo_Date_Title_Count);
 					queryForInsert = "INSERT INTO `rankedurls1` (`Urls`,`Rank`,`description`,`Title`,`id`,`searchQuery`,`image`)"
 							+ " VALUES ('" + url + "','"
@@ -218,15 +250,22 @@ public class QueryProcessorForWI {
 					st_InsertFinalRank.executeUpdate(queryForInsert);
 					Popularity_Geo_Date_Title_Count++;
 				}
+				End = System.nanoTime() - Start;
+				System.out.println(End + "Inserting All the Links I will going to rank and putting the rank of the Popularity ,Date, Geographic Location + Inserting the Title of each Url )");
 
 //	          	List<Double> RelvanceRank = new ArrayList<>();
+				Start = System.nanoTime();
 
 				for (String word : FinalQuery) {
+					StartTemp = System.nanoTime();
 					CountQuery = "SELECT COUNT(*) FROM indexertable1 WHERE Words = '"+word+"'";
 					rs_Count = st_Count.executeQuery(CountQuery);
 					while(rs_Count.next()){
 						DocCounter = Double.parseDouble(rs_Count.getString("COUNT(*)"));
 					}
+					EndTemp = System.nanoTime() - StartTemp;
+					System.out.println(EndTemp + "Counting the Number Of Documents the Word " + word + "excist in");
+
 					if(DocCounter > 1500 ){
 						query = "SELECT * FROM indexertable1 WHERE Words = '"+word+"' AND Occurrences > '"+ 18 +"'";
 
@@ -248,6 +287,8 @@ public class QueryProcessorForWI {
 						query = "SELECT * FROM indexertable1 WHERE Words = '"+word+"'";
 					}
 					rs =  st.executeQuery(query);
+
+					StartTemp = System.nanoTime();
 					while(rs.next()){
 						tempUrl=rs.getString("URLs");
 
@@ -288,6 +329,10 @@ public class QueryProcessorForWI {
 					}
 				}
 				rs.close();
+				End = System.nanoTime() - Start;
+				System.out.println(End + "Time Of the Actual Ranking");
+
+				Start = System.nanoTime();
 
 				if(PhraseSearching == true)
 				{   query="SELECT * FROM rankedurls1 WHERE id='"+id+"' AND image= '"+0+"' AND searchQuery= '"+this.QueryWI+"' ORDER BY Rank DESC ";
@@ -320,11 +365,15 @@ public class QueryProcessorForWI {
 						}
 					}
 				}
+				End = System.nanoTime() - Start;
+				System.out.println(End + "Phrase Searching");
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		EndTotal = System.nanoTime() - StartTotal;
+		System.out.println(EndTotal + "Total time of both The Query Processor and the ranker");
 	}
 
 

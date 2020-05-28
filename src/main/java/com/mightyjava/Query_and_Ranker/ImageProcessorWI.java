@@ -48,6 +48,10 @@ public class ImageProcessorWI {
 	String tempUrl =null;
 	String Location;
 	int erase;
+	long Start;
+	long End;
+	long StartTotal;
+	long EndTotal;
 	public ImageProcessorWI(String query, int id, String location, int delete){
 		QueryWI=query;
 		this.id=id;
@@ -55,6 +59,7 @@ public class ImageProcessorWI {
 		this.erase=delete;
 	}
 	public void Processor_Image() {
+		StartTotal=System.nanoTime();
 		String[] words = QueryWI.split(" ");
 		// List to add the Query after Removing the Stopping words
 		// List to add the Query after stemming
@@ -109,6 +114,7 @@ public class ImageProcessorWI {
 				countImages = Integer.parseInt(rs.getString("COUNT(*)"));
 			}
 			if(countImages==0){
+				Start=System.nanoTime();
 				query = "INSERT INTO `userqueries` (`Query`,`Country`,`id`,`image`)"
 						+ " VALUES ('" + QueryWI + "','"
 						+ Location + "','"+id+"','"+1+"')";
@@ -119,20 +125,22 @@ public class ImageProcessorWI {
 					tempUrl=rs.getString("SRC");
 					ImageRanker IR = new ImageRanker(FinalQuery,rs.getString("Title_Url"),rs.getString("Title_image"),rs.getString("Alt_image"));
 					TotalRank= IR.ImageScore();
-
 					query="INSERT INTO `rankedurls1` (`Urls`,`Rank`,`description`,`Title`,`id`,`searchquery`,`image`)"
 							+ " VALUES ('" + tempUrl + "','"
 							+ TotalRank + "','"+ " " +"', '"+" "+"','"+ this.id+"','"+this.QueryWI+"','"+1+"')";
 					st_InsertFinalRank.executeUpdate(query);
 				}
 				rs.close();
+				End = System.nanoTime() - Start;
+				System.out.println(End + "Ranking the Images Urls");
 			}
 
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
+		EndTotal = System.nanoTime() - StartTotal;
+		System.out.println(EndTotal + "Total time of both The Query Processor and the ranker------Image");
 	}
 
 

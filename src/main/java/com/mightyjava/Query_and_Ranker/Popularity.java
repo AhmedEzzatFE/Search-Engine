@@ -29,12 +29,15 @@ public class Popularity {
 	 public static List<URL> webLinks = new ArrayList<>();
 	 public static double d=0.5;
 	 public static String tempUrl;
+	 public static long Start;
+	 public static long End;
 
+	public static long StartTotal;
+	public static long EndTotal;
 
-	 
 
 	public static void main(String[] args) {
-
+		StartTotal=System.nanoTime();
 		 try {
 	        	Class.forName("com.mysql.jdbc.Driver");
 	        	con=DriverManager.getConnection("jdbc:mysql://localhost/projectdb1?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC", "root", "");
@@ -95,9 +98,10 @@ public class Popularity {
 
 			}
         	/// here the place for the forLoop
-        	for(int i=0;i<1;i++)
+        	for(int i=0;i<5;i++)
         	{
-        		System.out.println("Iteration Number:"+i);
+				Start = System.nanoTime();
+				System.out.println("Iteration Number:"+i);
         		UrlPopularity=0.0; // PR(A)
       		  	LinksPopularity = 0.0; // (1-d) + d*(PR(T)/C(T)
       		  	Counter =0;
@@ -116,7 +120,6 @@ public class Popularity {
     									{
     								LinksPopularity+=(Double.parseDouble(rs_OldPopularity.getString("Popularity")))/(Double.parseDouble(rs_OldPopularity.getString("OutboundLinks")));
     									}
-    							    
 //    						}
     					}				 
     				}
@@ -144,6 +147,8 @@ public class Popularity {
             		st_Old.executeUpdate(query_InsertInOld);
     			}
     			st_New.executeUpdate(query_DeleteNew);
+				End = System.nanoTime() - Start;
+				System.out.println(End + "Calculating the Popularity Per iteration");
         	}
         	
 			
@@ -151,7 +156,8 @@ public class Popularity {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
+		EndTotal = System.nanoTime() - StartTotal;
+		System.out.println(EndTotal + "Total Time of the Page Rank (Populirty)");
 	}
 
 }
