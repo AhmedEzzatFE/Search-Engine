@@ -20,7 +20,7 @@ public class ImageIndexer {
 	 public static Connection con;
 	 public static Statement st;
 	 public static ResultSet rs;
-
+	 public static Long start= 0L;
 	
 
 	 public static void main(String[] args) throws IOException {
@@ -60,7 +60,7 @@ public class ImageIndexer {
 		}
         
         webLinks.removeAll(indexedWebLinks);
-
+        start = System.currentTimeMillis();
         for(URL url : webLinks) {
 	        //The try catch block is here because sometimes Jsoup.connect(url.toString()).get() 
         	//can throw an exception
@@ -140,7 +140,7 @@ public class ImageIndexer {
 	        }catch(final Exception | Error ignored) {}
 	       
         }
-
+		 System.out.println(System.currentTimeMillis() - start);
 
     }
 

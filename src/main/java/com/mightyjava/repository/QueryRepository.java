@@ -11,8 +11,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.PathVariable;
 
 @Repository
-public interface BookRepository extends PagingAndSortingRepository<SearchQuery, Long> {
+public interface QueryRepository extends PagingAndSortingRepository<SearchQuery, Long> {
 
     @Query("From SearchQuery b where b.id=:id and b.searchquery=:searchText and b.image=:isImage order by b.Rank desc ")
-    Page<SearchQuery> findAllBooks(Pageable pageable, @Param("id") int id, @Param("searchText") String searchText,@Param("isImage") int isImage);
+    Page<SearchQuery> findAllUrls(Pageable pageable, @Param("id") int id, @Param("searchText") String searchText, @Param("isImage") int isImage);
 }

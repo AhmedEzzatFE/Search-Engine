@@ -17,28 +17,28 @@ import com.mightyjava.service.IService;
 @RestController
 @RequestMapping("/api")
 @CrossOrigin(origins = "*")
-public class BookResourceImpl implements Resource<SearchQuery> {
+public class QueryResourceImpl implements Resource<SearchQuery> {
 	
 	@Autowired
-	private IService<SearchQuery> bookService;
+	private IService<SearchQuery> searchQueryIService;
 
 	//for searching by query
 	@Override
 	public ResponseEntity<Page<SearchQuery>> findAll(Pageable pageable,String Country,int id, String searchText,int isImage,int Erase) {
-		return new ResponseEntity<>(bookService.findAll(pageable,Country,id, searchText,isImage,Erase), HttpStatus.OK);
+		return new ResponseEntity<>(searchQueryIService.findAll(pageable,Country,id, searchText,isImage,Erase), HttpStatus.OK);
 	}
 
 
 	//for page number searching
 	@Override
 	public ResponseEntity<Page<SearchQuery>> findAll(int pageNumber, int pageSize) {
-		return new ResponseEntity<>(bookService.findAll(
+		return new ResponseEntity<>(searchQueryIService.findAll(
 				PageRequest.of(
 						pageNumber, pageSize)
 		), HttpStatus.OK);
 	}
 	@Override
 	public ResponseEntity<SearchQuery> save(SearchQuery searchQuery) {
-		return new ResponseEntity<>(bookService.saveOrUpdate(searchQuery), HttpStatus.CREATED);
+		return new ResponseEntity<>(searchQueryIService.saveOrUpdate(searchQuery), HttpStatus.CREATED);
 	}
 }
