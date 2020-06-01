@@ -329,7 +329,7 @@ public class WebCrawler implements Runnable{
 		}
 		//new URL is taken from java url
 		start = System.currentTimeMillis();
-		new WebCrawler(new URL("https://www.google.com/search?q=videogames&oq=videogames&aqs=chrome..69i57j0l4j46j0l2.5077j0j7&sourceid=chrome&ie=UTF-8"));
+		new WebCrawler(new URL("https://www.google.com/search?client=firefox-b-d&q=football"));
 		System.out.println(System.currentTimeMillis() - start);
 		//System.out.println("Finished");
 		//System.out.println(webLinks);

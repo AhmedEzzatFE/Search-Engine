@@ -177,7 +177,7 @@ recognition.lang = 'en-US'
                     "name": this.state.search,
                     "id": Math.floor((Math.random() * 1000) + 1)
                 }
-                axios.post("http://localhost:3000/users", posted).then(r => r.data)
+                axios.post("http://localhost:3000/Queries", posted).then(r => r.data)
             }}
 
 this.setState({suggestions:[],image:0})
@@ -206,7 +206,7 @@ this.setState({suggestions:[],image:0})
                 "name": this.state.finalTranscript,
                 "id": Math.floor((Math.random() * 1000) + 1)
             }
-            axios.post("http://localhost:3000/users", posted).then(r => r.data)
+            axios.post("http://localhost:3000/Queries", posted).then(r => r.data)
         }}
 
 
@@ -217,7 +217,7 @@ this.setState({suggestions:[],image:0})
     }
     getResponse(){
         let ReservedQ=[]
-        axios.get("http://localhost:3000/users")
+        axios.get("http://localhost:3000/Queries")
             .then((response) => { ReservedQ = response.data.map(x => x.name)
                 this.setState({ReservedQueries: ReservedQ})})
     }
@@ -265,12 +265,9 @@ render() {
                     </img>
                 </div>
                 <Card.Header>
-
                     <div className="AutoComplete">
                         <InputGroup size="sm">
-
                             <input value={search} onChange={this.onTextChange } type="text" />
-
                         <InputGroup.Append>
                                 <Button size="sm" variant="outline-info" type="button" onClick={this.searchData}>
                                     <FontAwesomeIcon icon={faSearch}/>
