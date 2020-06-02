@@ -8,7 +8,7 @@
         <datasource-mapping>
           <factory-entry name="Entities" />
           <factory-entry name="Search-Engine" value="3d940305-91f4-4d41-bd71-048729b793b3" />
-          <factory-entry name="entityManagerFactory" value="a3e97a5c-2e5e-41a3-8e29-64469d8e08a5" />
+          <factory-entry name="entityManagerFactory" value="e2d23edf-e6ac-495c-b0ec-5ec26c334cf7" />
         </datasource-mapping>
         <naming-strategy-map />
       </configuration>
@@ -87,7 +87,6 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$USER_HOME$/Project/mysql-connector-java-8.0.19/mysql-connector-java-8.0.19.jar!/" />
           <root url="jar://$MODULE_DIR$/../Apt/mysql-connector-java-8.0.19/mysql-connector-java-8.0.19/mysql-connector-java-8.0.19.jar!/" />
         </CLASSES>
         <JAVADOC />
@@ -97,36 +96,29 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$USER_HOME$/Project/stanford-corenlp-4.0.0-models-english-kbp.jar!/" />
           <root url="jar://$MODULE_DIR$/../Apt/stanford-corenlp-4.0.0-models-english-kbp.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
         <jarDirectory url="jar://$MODULE_DIR$/../Apt/stanford-corenlp-4.0.0-models-english-kbp.jar!/" recursive="false" />
-        <jarDirectory url="jar://$USER_HOME$/Project/stanford-corenlp-4.0.0-models-english-kbp.jar!/" recursive="false" />
       </library>
     </orderEntry>
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="file://$USER_HOME$/Project/stanford-corenlp-4.0.0" />
           <root url="file://$MODULE_DIR$/../Apt/stanford-corenlp-latest/stanford-corenlp-4.0.0" />
         </CLASSES>
         <JAVADOC />
         <SOURCES>
-          <root url="file://$USER_HOME$/Project/stanford-corenlp-4.0.0" />
           <root url="file://$MODULE_DIR$/../Apt/stanford-corenlp-latest/stanford-corenlp-4.0.0" />
         </SOURCES>
         <jarDirectory url="file://$MODULE_DIR$/../Apt/stanford-corenlp-latest/stanford-corenlp-4.0.0" recursive="false" />
-        <jarDirectory url="file://$USER_HOME$/Project/stanford-corenlp-4.0.0" recursive="false" />
         <jarDirectory url="file://$MODULE_DIR$/../Apt/stanford-corenlp-latest/stanford-corenlp-4.0.0" recursive="false" type="SOURCES" />
-        <jarDirectory url="file://$USER_HOME$/Project/stanford-corenlp-4.0.0" recursive="false" type="SOURCES" />
       </library>
     </orderEntry>
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$USER_HOME$/Project/mysql-connector-java-8.0.19/mysql-connector-java-8.0.19.jar!/" />
           <root url="jar://$MODULE_DIR$/../Apt/mysql-connector-java-8.0.19/mysql-connector-java-8.0.19/mysql-connector-java-8.0.19.jar!/" />
         </CLASSES>
         <JAVADOC />
@@ -142,16 +134,6 @@
         <SOURCES>
           <root url="jar://$MODULE_DIR$/../Apt/libstemmer_java/libstemmer_java/java/libstemmer.jar!/" />
         </SOURCES>
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library">
-      <library>
-        <CLASSES>
-          <root url="jar://$USER_HOME$/Project/stanford-corenlp-4.0.0-models-english-kbp.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-        <jarDirectory url="jar://$USER_HOME$/Project/stanford-corenlp-4.0.0-models-english-kbp.jar!/" recursive="false" />
       </library>
     </orderEntry>
     <orderEntry type="module-library">
