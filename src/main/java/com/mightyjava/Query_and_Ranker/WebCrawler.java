@@ -55,7 +55,7 @@ public class WebCrawler implements Runnable{
 		Set<URL> initialSetThread = new HashSet<>();
 		initialSetThread.add(this.threadURL);
 		crawling(initialSetThread);
-		System.out.println(System.currentTimeMillis() - start);
+//		System.out.println(System.currentTimeMillis() - start);
 		//System.out.println("Finished Thread");
 		//System.out.println(webLinks);
 		//System.out.println("Finished Thread, webLinks' size:");
@@ -245,9 +245,7 @@ public class WebCrawler implements Runnable{
 								counter++;
 								query = "INSERT INTO `crawlertableurls1` (`URLs`) VALUES ('" + url.toString() + "')";
 								st.executeUpdate(query);
-							}catch(Exception e){
-								System.out.println(e.getMessage());
-							}
+							}catch (final Exception | Error ignored) {}
 						}
 					}
 				}
@@ -330,7 +328,7 @@ public class WebCrawler implements Runnable{
 		//new URL is taken from java url
 		start = System.currentTimeMillis();
 		new WebCrawler(new URL("https://www.google.com/search?client=firefox-b-d&q=football"));
-		System.out.println(System.currentTimeMillis() - start);
+//		System.out.println(System.currentTimeMillis() - start);
 		//System.out.println("Finished");
 		//System.out.println(webLinks);
 		//System.out.println(webLinks.size());

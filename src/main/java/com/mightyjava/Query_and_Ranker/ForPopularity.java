@@ -110,10 +110,7 @@ public class ForPopularity{
   	    			 
 					st.executeUpdate(query);
 					validation++;
-				} catch (SQLException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				} 
+				} catch (final Exception | Error ignored) {}
             }
 	 
 		}    
@@ -144,7 +141,6 @@ public class ForPopularity{
       	
       }
 
-	System.out.println(System.currentTimeMillis() - start1);
 	start2 = System.currentTimeMillis();
     //For finding the number of urls (in the database) inside a url (in the database)
     for(URL url : webLinks) {
@@ -182,9 +178,9 @@ public class ForPopularity{
 		
 		 
 		}
-		System.out.println(System.currentTimeMillis() - start2);
-		System.out.println(System.currentTimeMillis() - start1);
-          
+//		System.out.println(System.currentTimeMillis() - start2);
+//		System.out.println(System.currentTimeMillis() - start1);
+//
 
        
           

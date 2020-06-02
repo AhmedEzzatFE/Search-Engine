@@ -98,10 +98,10 @@ public class Popularity {
 
 			}
         	/// here the place for the forLoop
-        	for(int i=0;i<5;i++)
+        	for(int i=0;i<9;i++)
         	{
 				Start = System.nanoTime();
-				System.out.println("Iteration Number:"+i);
+				System.out.println("Iteration Number:"+i+1);
         		UrlPopularity=0.0; // PR(A)
       		  	LinksPopularity = 0.0; // (1-d) + d*(PR(T)/C(T)
       		  	Counter =0;

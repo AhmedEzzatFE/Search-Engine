@@ -921,7 +921,7 @@ public class Indexer {
             }catch(final Exception | Error ignored) {}
 
         }
-        System.out.println(System.currentTimeMillis() - start);
+//        System.out.println(System.currentTimeMillis() - start);
 
     }
 
