@@ -70,6 +70,7 @@ public class Popularity {
         	while(rs_IndexedUrls.next())
         	{
         		try {
+
 					webLinks.add(new URL(rs_IndexedUrls.getString("URLs")));
 					TotalNumberOfDocuments++;
 				} catch (MalformedURLException e) {
@@ -98,7 +99,7 @@ public class Popularity {
 
 			}
         	/// here the place for the forLoop
-        	for(int i=0;i<9;i++)
+        	for(int i=0;i<5;i++)
         	{
 				Start = System.nanoTime();
 				System.out.println("Iteration Number:"+i+1);
@@ -110,7 +111,7 @@ public class Popularity {
     			String pointingToit;
     			while(rs.next()){
     				if(!("A new url is comming".equals(rs.getString("URLs"))))
-    				{	tempUrl=rs.getString("URLs");
+    				{	tempUrl=rs.getString("URLs");System.out.println(tempUrl);System.out.println(rs.getString("URLs"));
     					pointingToit=rs.getString("PointingToIt");
     					query_ReadOld_NewEdition="SELECT * FROM `oldpopularity` WHERE URLs= '"+pointingToit+"'";
     					rs_OldPopularity =  st_Old.executeQuery(query_ReadOld_NewEdition);
@@ -125,6 +126,7 @@ public class Popularity {
     				}
     				// insert the urls and its rank in the ranked urls
     				else if(("A new url is comming".equals(rs.getString("URLs")))) {
+						System.out.println(tempUrl+"new insert");
     					UrlPopularity= (1-d) + d*(LinksPopularity);
     					query_InsertInNew = "INSERT INTO `newpopularity` (`URLs`,`Popularity`,`OutboundLinks`)"
     	        		 		+ " VALUES ('" + tempUrl + "','" 

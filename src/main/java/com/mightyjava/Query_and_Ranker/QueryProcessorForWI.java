@@ -267,20 +267,20 @@ public class QueryProcessorForWI {
 					System.out.println(EndTemp + "Counting the Number Of Documents the Word " + word + "excist in");
 
 					if(DocCounter > 1500 ){
-						query = "SELECT * FROM indexertable1 WHERE Words = '"+word+"' AND Occurrences > '"+ 18 +"'";
+						query = "SELECT * FROM indexertable1 WHERE Words = '"+word+"' AND Occurrences > '"+ 15 +"' AND TitleOccurrences > '"+ 0 +"'";
 
 					}
 					else if(DocCounter > 1200 ){
-						query = "SELECT * FROM indexertable1 WHERE Words = '"+word+"' AND Occurrences > '"+ 15 +"'";
+						query = "SELECT * FROM indexertable1 WHERE Words = '"+word+"' AND Occurrences > '"+ 10 +"' AND TitleOccurrences > '"+ 0 +"'";
 
 					}
 					else if(DocCounter > 800 ){
-						query = "SELECT * FROM indexertable1 WHERE Words = '"+word+"' AND Occurrences > '"+ 8 +"'";
+						query = "SELECT * FROM indexertable1 WHERE Words = '"+word+"' AND Occurrences > '"+ 8 +"' AND TitleOccurrences > '"+ 0 +"'";
 
 					}
 
 					else if(DocCounter > 200 ){
-						query = "SELECT * FROM indexertable1 WHERE Words = '"+word+"' AND Occurrences > '"+ 2 +"'";
+						query = "SELECT * FROM indexertable1 WHERE Words = '"+word+"' AND Occurrences > '"+ 3 +"'";
 
 					}
 					else {
