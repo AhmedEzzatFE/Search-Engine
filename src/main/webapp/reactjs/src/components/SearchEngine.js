@@ -77,43 +77,41 @@ recognition.lang = 'en-US'
         });
     };
     changePage = event => {
-        let targetPage = parseInt(event.target.value);
-       if(this.state.image===0){ this.searchData(targetPage);}
-           else {this.searchImage(targetPage);}
+       if(this.state.image===0){ this.searchData(parseInt(event.target.value));}
+           else {this.searchImage(parseInt(event.target.value));}
 
         this.setState({
-            [event.target.name]: targetPage
+            [event.target.name]: parseInt(event.target.value)
         });
     };
     firstPage = () => {
-        let firstPage = 1;
-        if(this.state.currentPage > firstPage) {
-            if(this.state.image===0){this.searchData(firstPage);}
-            else {this.searchImage(firstPage);}
+
+        if(this.state.currentPage > 1) {
+            if(this.state.image===0){this.searchData(1);}
+            else {this.searchImage(1);}
 
 
         }
     };
     prevPage = () => {
-        let prevPage = 1;
-        if(this.state.currentPage > prevPage) {
-         if(this.state.image===0){this.searchData(this.state.currentPage - prevPage);
+
+        if(this.state.currentPage > 1) {
+         if(this.state.image===0){this.searchData(this.state.currentPage - 1);
          }
-         else{this.searchImage(this.state.currentPage - prevPage);}
+         else{this.searchImage(this.state.currentPage - 1);}
         }
     };
     lastPage = () => {
-        let condition = Math.ceil(this.state.totalElements / this.state.SearchResultsPerPage);
-        if(this.state.currentPage < condition) {
-   if(this.state.image===0){this.searchData(condition);}
-   else {this.searchImage(condition);}
+
+        if(this.state.currentPage < Math.ceil(this.state.totalElements / this.state.SearchResultsPerPage)) {
+   if(this.state.image===0){this.searchData(Math.ceil(this.state.totalElements / this.state.SearchResultsPerPage));}
+   else {this.searchImage(Math.ceil(this.state.totalElements / this.state.SearchResultsPerPage));}
 
 
         }
     };
     nextPage = () => {
         if(this.state.currentPage < Math.ceil(this.state.totalElements / this.state.SearchResultsPerPage)) {
-
                 if(this.state.image===0){
                     this.searchData(this.state.currentPage + 1);
                 }
@@ -159,7 +157,6 @@ recognition.lang = 'en-US'
          this.setState({suggestions:[],image:1})
      };
     searchData = (currentPage) => {
-
         this.setState({isLoading:true})
         currentPage -= 1;
         axios.get("http://localhost:8081/rest/api/search/"+this.state.countryName+"/"+this.state.id+"/"+this.state.search+"/"+this.state.isToggled+"/0?page="+currentPage+"&size="+this.state.SearchResultsPerPage)
