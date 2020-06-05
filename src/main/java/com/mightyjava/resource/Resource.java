@@ -16,7 +16,4 @@ public interface Resource<T> {
 	ResponseEntity<Page<T>> findAll(Pageable pageable,@PathVariable String Country, @PathVariable int id,@PathVariable String searchText,@PathVariable int Erase,@PathVariable int isImage);
 
 
-	@GetMapping
-	ResponseEntity<Page<T>> findAll(int pageNumber, int pageSize);
-
 }

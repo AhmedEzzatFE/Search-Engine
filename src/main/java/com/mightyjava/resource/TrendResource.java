@@ -13,8 +13,4 @@ public interface TrendResource<T> {
     @GetMapping("/trend/{id}/{Country}")
     ResponseEntity<Page<T>> findAll(Pageable pageable,@PathVariable("id")int id,@PathVariable("Country")String Country);
 
-
-    @GetMapping
-    ResponseEntity<Page<T>> findAll(int pageNumber, int pageSize);
-
 }

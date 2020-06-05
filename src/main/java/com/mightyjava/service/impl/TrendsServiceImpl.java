@@ -32,11 +32,4 @@ public class TrendsServiceImpl implements TrendService<Trends> {
 
 
 
-    @Override
-    public Page<Trends> findAll(Pageable pageable) {
-        return indexRepo.findAll(pageable);
-    }
-
-
-
 }

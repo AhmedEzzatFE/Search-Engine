@@ -39,13 +39,4 @@ public class QueryServiceImpl implements IService<SearchQuery> {
 		}
 		return queryRepository.findAllUrls(pageable,id,searchText,isImage);
 	}
-
-
-
-	@Override
-	public Page<SearchQuery> findAll(Pageable pageable) {
-		return queryRepository.findAll(pageable);
 	}
-
-
-}

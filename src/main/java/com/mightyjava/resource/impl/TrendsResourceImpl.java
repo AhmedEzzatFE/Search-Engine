@@ -30,12 +30,5 @@ public class TrendsResourceImpl implements TrendResource<Trends> {
     public ResponseEntity<Page<Trends>> findAll(Pageable pageable,int id,String Country) {
         return new ResponseEntity<>(trendService.findAllTrends(pageable,id,Country), HttpStatus.OK);
     }
-    @Override
-    public ResponseEntity<Page<Trends>> findAll(int pageNumber, int pageSize) {
-        return new ResponseEntity<>(trendService.findAll(
-                PageRequest.of(
-                        pageNumber, pageSize)
-        ), HttpStatus.OK);
-    }
 
 }

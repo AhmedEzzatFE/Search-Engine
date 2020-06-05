@@ -21,21 +21,10 @@ public class QueryResourceImpl implements Resource<SearchQuery> {
 	
 	@Autowired
 	private IService<SearchQuery> searchQueryIService;
-
 	//for searching by query
 	@Override
 	public ResponseEntity<Page<SearchQuery>> findAll(Pageable pageable,String Country,int id, String searchText,int isImage,int Erase) {
 		return new ResponseEntity<>(searchQueryIService.findAll(pageable,Country,id, searchText,isImage,Erase), HttpStatus.OK);
-	}
-
-
-	//for page number searching
-	@Override
-	public ResponseEntity<Page<SearchQuery>> findAll(int pageNumber, int pageSize) {
-		return new ResponseEntity<>(searchQueryIService.findAll(
-				PageRequest.of(
-						pageNumber, pageSize)
-		), HttpStatus.OK);
 	}
 
 }
