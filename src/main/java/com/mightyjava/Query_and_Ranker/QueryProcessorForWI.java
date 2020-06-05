@@ -177,7 +177,6 @@ public class QueryProcessorForWI {
 			System.out.println(End + "To delete the rankedUrls and Userqueries Tables");
 
 			Start = System.nanoTime();
-
 			CountQuery = "SELECT COUNT(*) FROM userqueries WHERE id = '"+id+"' AND Query= '"+QueryWI+"' AND image='"+0+"'";
 			rs_Count = st_Count.executeQuery(CountQuery);
 			while(rs_Count.next()){
@@ -329,15 +328,17 @@ public class QueryProcessorForWI {
 						FinalScore_Score=0.0;
 
 					}
+					EndTemp = System.nanoTime() - StartTemp;
+					System.out.println(EndTemp + "Time Of the Actual Ranking For the Word "+ word);
+
 				}
 				rs.close();
-				End = System.nanoTime() - Start;
-				System.out.println(End + "Time Of the Actual Ranking");
+
 
 				Start = System.nanoTime();
-
 				if(PhraseSearching == true)
-				{   query="SELECT * FROM rankedurls1 WHERE id='"+id+"' AND image= '"+0+"' AND searchQuery= '"+this.QueryWI+"' ORDER BY Rank DESC ";
+				{   System.out.println("Phrase is here");
+					query="SELECT * FROM rankedurls1 WHERE id='"+id+"' AND image= '"+0+"' AND searchQuery= '"+this.QueryWI+"' ORDER BY Rank DESC ";
 					rs =  st.executeQuery(query);
 					while(rs.next())
 					{

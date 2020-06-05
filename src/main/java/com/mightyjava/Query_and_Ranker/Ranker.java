@@ -172,15 +172,15 @@ public class Ranker {
 		public double ImageScore() {
 			double totalRank=0;
 			for (String word : Words) {
-				if(Title_url.contains(word) )
+				if(Title_url.contains(word.toLowerCase()) )
 				{
 					totalRank+=7;
 
 				}
-				if(!Title_image.equals("0") && Title_image.contains(word) ) {
+				if(!Title_image.equals("0") && Title_image.contains(word.toLowerCase()) ) {
 					totalRank+=10;
 				}
-				if(!Alt.equals("0") && Alt.contains(word) ) {
+				if(!Alt.equals("0") && Alt.contains(word.toLowerCase()) ) {
 					totalRank+=15;
 				}
 			}
