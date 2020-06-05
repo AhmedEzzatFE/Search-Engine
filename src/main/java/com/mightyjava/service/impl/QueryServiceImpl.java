@@ -47,10 +47,5 @@ public class QueryServiceImpl implements IService<SearchQuery> {
 		return queryRepository.findAll(pageable);
 	}
 
-//
-	@Override
-	public SearchQuery saveOrUpdate(SearchQuery searchQuery) {
-		return queryRepository.save(searchQuery);
-	}
 
 }

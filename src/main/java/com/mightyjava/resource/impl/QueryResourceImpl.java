@@ -37,8 +37,5 @@ public class QueryResourceImpl implements Resource<SearchQuery> {
 						pageNumber, pageSize)
 		), HttpStatus.OK);
 	}
-	@Override
-	public ResponseEntity<SearchQuery> save(SearchQuery searchQuery) {
-		return new ResponseEntity<>(searchQueryIService.saveOrUpdate(searchQuery), HttpStatus.CREATED);
-	}
+
 }

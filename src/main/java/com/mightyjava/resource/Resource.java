@@ -18,9 +18,5 @@ public interface Resource<T> {
 
 	@GetMapping
 	ResponseEntity<Page<T>> findAll(int pageNumber, int pageSize);
-	
-
-	@PostMapping(consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	ResponseEntity<T> save(@RequestBody T t);
 
 }
