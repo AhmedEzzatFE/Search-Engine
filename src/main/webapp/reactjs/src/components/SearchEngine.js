@@ -37,6 +37,7 @@ recognition.lang = 'en-US'
             finalTranscript:'',
             isLoading:false,
             text:'',
+            previousSearch:'',
             listening: false,
             id:Math.floor((Math.random() * 10000) + 1),
             currentPage : 1,
@@ -128,8 +129,7 @@ recognition.lang = 'en-US'
 
     };
      searchImage = (currentPage) => {
-
-         this.setState({isLoading:true,searchTemp:this.state.search})
+         this.setState({isLoading:true})
          currentPage -= 1;
          axios.get("http://localhost:8081/rest/api/search/"+this.state.countryName+"/"+this.state.id+"/"+this.state.search+"/"+this.state.isToggled+"/1?page="+currentPage+"&size="+this.state.SearchResultsPerPage)
              .then(response =>{
@@ -149,14 +149,17 @@ recognition.lang = 'en-US'
                      "name": this.state.search,
                      "id": Math.floor((Math.random() * 1000) + 1)
                  }
+                 if(this.state.previousSearch!==this.state.search){
                  axios.post("http://localhost:3000/Queries", posted).then(r => r.data)
-             }}
+                    this.setState({previousSearch:this.state.search})
+                 }}
+         }
 
          this.setState({suggestions:[],image:1})
      };
     searchData = (currentPage) => {
 
-        this.setState({isLoading:true,searchTemp:this.state.search})
+        this.setState({isLoading:true})
         currentPage -= 1;
         axios.get("http://localhost:8081/rest/api/search/"+this.state.countryName+"/"+this.state.id+"/"+this.state.search+"/"+this.state.isToggled+"/0?page="+currentPage+"&size="+this.state.SearchResultsPerPage)
        .then(response =>{
@@ -177,7 +180,10 @@ recognition.lang = 'en-US'
                     "name": this.state.search,
                     "id": Math.floor((Math.random() * 1000) + 1)
                 }
-                axios.post("http://localhost:3000/Queries", posted).then(r => r.data)
+                if(this.state.previousSearch!==this.state.search){
+                    axios.post("http://localhost:3000/Queries", posted).then(r => r.data)
+                    this.setState({previousSearch:this.state.search})
+                }
             }}
 
 this.setState({suggestions:[],image:0})
@@ -206,11 +212,11 @@ this.setState({suggestions:[],image:0})
                 "name": this.state.finalTranscript,
                 "id": Math.floor((Math.random() * 1000) + 1)
             }
-            axios.post("http://localhost:3000/Queries", posted).then(r => r.data)
+             if(this.state.previousSearch!==this.state.search){
+                 axios.post("http://localhost:3000/Queries", posted).then(r => r.data)
+                 this.setState({previousSearch:this.state.search})
+             }}
         }}
-
-
-    };
     componentDidMount() {
         this.getGeoInfo()
         this.getResponse()

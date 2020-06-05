@@ -240,7 +240,6 @@ public class QueryProcessorForWI {
 				Start = System.nanoTime();
 
 				for(URL url : webLinks) {
-
 					Popularity_Geo_Date=Popularity.get(Popularity_Geo_Date_Title_Count)+Geo_Date.get(Popularity_Geo_Date_Title_Count);
 					queryForInsert = "INSERT INTO `rankedurls1` (`Urls`,`Rank`,`description`,`Title`,`id`,`searchQuery`,`image`)"
 							+ " VALUES ('" + url + "','"
@@ -265,17 +264,20 @@ public class QueryProcessorForWI {
 					}
 					EndTemp = System.nanoTime() - StartTemp;
 					System.out.println(EndTemp + "Counting the Number Of Documents the Word " + word + "excist in");
+					if(DocCounter > 3500 ){
+						query = "SELECT * FROM indexertable1 WHERE Words = '"+word+"' AND Occurrences > '"+ 200 +"' AND TitleOccurrences > '"+ 0 +"'";
 
-					if(DocCounter > 1500 ){
-						query = "SELECT * FROM indexertable1 WHERE Words = '"+word+"' AND Occurrences > '"+ 15 +"' AND TitleOccurrences > '"+ 0 +"'";
+					}
+					else if(DocCounter > 1500 ){
+						query = "SELECT * FROM indexertable1 WHERE Words = '"+word+"' AND Occurrences > '"+ 20 +"' AND TitleOccurrences > '"+ 0 +"'";
 
 					}
 					else if(DocCounter > 1200 ){
-						query = "SELECT * FROM indexertable1 WHERE Words = '"+word+"' AND Occurrences > '"+ 10 +"' AND TitleOccurrences > '"+ 0 +"'";
+						query = "SELECT * FROM indexertable1 WHERE Words = '"+word+"' AND Occurrences > '"+ 15 +"' AND TitleOccurrences > '"+ 0 +"'";
 
 					}
 					else if(DocCounter > 800 ){
-						query = "SELECT * FROM indexertable1 WHERE Words = '"+word+"' AND Occurrences > '"+ 8 +"' AND TitleOccurrences > '"+ 0 +"'";
+						query = "SELECT * FROM indexertable1 WHERE Words = '"+word+"' AND Occurrences > '"+ 10 +"' AND TitleOccurrences > '"+ 0 +"'";
 
 					}
 
