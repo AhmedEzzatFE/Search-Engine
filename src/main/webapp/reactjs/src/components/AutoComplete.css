@@ -34,9 +34,10 @@
     background-color: rgba(128,128,128,0.20);
 }
 .WrappingElement{
+
     padding: 10%;
     background: rgb(16, 176, 230); /*for browsers that don't support gradient*/
-    background: -webkit-linear-gradient(to bottom,rgb(16, 176, 230),rgb(43, 44, 44)); /*for safari and chrome*/
+    background: -webkit-linear-gradient(to bottom,rgb(16, 176, 230), rgb(13, 82, 82)); /*for safari and chrome*/
     background: -o-linear-gradient(to bottom,rgb(16, 176, 230),rgb(43, 44, 44)); /*for opera*/
     background: -moz-linear-gradient(to bottom,rgb(16, 176, 230),rgb(43, 44, 44)); /*for firefox*/
     background: linear-gradient(to bottom,rgb(16, 176, 230),rgb(43, 44, 44)); /*standard syntax*/}
@@ -64,4 +65,10 @@
     line-height: 1.5;
     font-size: small;
     font-weight: normal;
+}
+.blackDiv{
+    background-color: #2c445c;
+}
+.blackDiv.imageinsideit{
+
 }

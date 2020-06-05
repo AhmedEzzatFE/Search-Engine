@@ -14,6 +14,7 @@ import {
     faMicrophone, faAssistiveListeningSystems, faImage, faTaxi, faToggleOn, faToggleOff
 } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
+import {black} from "color-name";
 
 const SpeechRecognition = window.webkitSpeechRecognition
 var recognition = new SpeechRecognition();
@@ -150,8 +151,8 @@ recognition.lang = 'en-US'
                      "id": Math.floor((Math.random() * 1000) + 1)
                  }
                  if(this.state.previousSearch!==this.state.search){
-                 axios.post("http://localhost:3000/Queries", posted).then(r => r.data)
-                    this.setState({previousSearch:this.state.search})
+                     axios.post("http://localhost:3000/Queries", posted).then(r => r.data)
+                     this.setState({previousSearch:this.state.search})
                  }}
          }
 
@@ -183,8 +184,8 @@ recognition.lang = 'en-US'
                 if(this.state.previousSearch!==this.state.search){
                     axios.post("http://localhost:3000/Queries", posted).then(r => r.data)
                     this.setState({previousSearch:this.state.search})
-                }
-            }}
+                }}
+            }
 
 this.setState({suggestions:[],image:0})
     };
@@ -264,10 +265,10 @@ render() {
         const {SearchResults, currentPage, totalPages, search} = this.state;
         return <div className="WrappingElement">
             <Card className={"border border-dark  text-black"}>
-                <div>
-                    <img alt="Google" height="140" id="hplogo"
-                         src="https://www.3m.com/wps/wcm/connect/fd542ff6-2e40-4c53-b152-27a818bcdf23/3M-Scotchlite-Black-Reflective-stretch-icon.jpg?MOD=AJPERES&CACHEID=ROOTWORKSPACE-fd542ff6-2e40-4c53-b152-27a818bcdf23-lL4hDG0"
-                         width="300">
+                <div className="blackDiv">
+                    <img  className="blackDiv imageinsideit" alt="Google" height="140" id="hplogo"
+                         src="https://static.clubs.nfl.com/image/private/t_editorial_landscape_8_desktop_mobile/f_auto/eagles/iorjkertc3xp7hoo2qax.jpg"
+                         width="886">
                     </img>
                 </div>
                 <Card.Header>
