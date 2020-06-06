@@ -17,9 +17,9 @@
     4-Getting the inbound and outbound links for every link
 ### Ahmed Mohammed Ahmed Hassan   
 ####ID:1162057
-      1-Query processor 
+      1-Text Query processor 
       2-Ranker (content relevanve +page rank 'popularity '+ Geographic and date rank)
       3-Trends generation
-      4-Image processor and ranking the images 
+      4-Image Query processor and ranking the images 
       5-Phrase searching
 Performance analysis module was performed by all of us 
