@@ -39,5 +39,5 @@ https://docs.google.com/document/d/19y2QSoPQLgJ-x0ty24qc1n8n88J-Ee7XqoIEm99Qnk0/
 	23- Paste and replace(do not include "bin" "scripts" "share"  in transfering the files to your mysql file)
 	Follow Step 24 if you want to create the database on your own.If you are willing to run ours just go to step 25 right away
 	24- Run WebCrawler->Indexer->ForPopularity->Populairty->ImageIndexer->FinalUrls
-	25- Search-Engine->src->main->java->com.mightyjava->Right click on Application and click "Run 'Application.main()'"
+	25- Search-Engine->src->main->java->com.SearchEngine->Right click on Application and click "Run 'Application.main()'"
 
