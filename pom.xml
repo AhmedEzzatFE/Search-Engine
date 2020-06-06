@@ -8,10 +8,10 @@
 		<version>2.1.3.RELEASE</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.mightyjava</groupId>
-	<artifactId>searchQuery-rest-api-reactjs</artifactId>
+	<groupId>com.SearchEngine</groupId>
+	<artifactId>searchQuery</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>searchQuery-rest-api-reactjs</name>
+	<name>searchQuery</name>
 	<description>Demo project for Spring Boot and ReactJS</description>
 
 	<properties>
