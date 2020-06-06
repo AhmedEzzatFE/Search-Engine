@@ -14,14 +14,11 @@ public class ForPopularity{
 
 	//Set is an collection of objects that doesn't take duplicate values
 	public static List<URL> webLinks = new ArrayList<>();
-
-	public static Integer maxThreads;
-	public URL threadURL;
 	public static Connection con;
 	public static Statement st;
 	public static ResultSet rs;
 
-	public static Integer counter=0;
+	public static Integer counter2=0;
 	public static Integer counter3=0;
 
 	public static class Link {
@@ -124,8 +121,8 @@ public class ForPopularity{
 			{
 				try {
 					query = "INSERT INTO `urlspointingtourl` (`URLs`,`PointingToIt`)"
-							+ " VALUES ('" + url.toString() + "','"
-							+ url.toString() + "')";
+							+ " VALUES ('" + url + "','"
+							+ url + "')";
 
 					st.executeUpdate(query);
 					superValidation++;
@@ -172,7 +169,7 @@ public class ForPopularity{
 
 			try {
 				query = "INSERT INTO `numberoflinksinurl` (`URLs`,`NumberOfLinks`)"
-						+ " VALUES ('" + url.toString() + "','"
+						+ " VALUES ('" + url + "','"
 						+ counter + "')";
 				st.executeUpdate(query);
 			} catch (SQLException e1) {
@@ -181,7 +178,7 @@ public class ForPopularity{
 			}
 			try {
 				query = "INSERT INTO `urlstoberanked` (`URLs`)"
-						+ " VALUES ('" + url.toString() + "')";
+						+ " VALUES ('" + url + "')";
 				st.executeUpdate(query);
 			} catch (SQLException e1) {
 				// TODO Auto-generated catch block

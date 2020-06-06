@@ -51,8 +51,7 @@ public class Indexer {
             "!","@","#","$","%","^","&","*","(",")","-","_","=","+","/","\\",">","<",";",
             ":","\'","{","}","`","[","]"};
     public static Long start= 0L;
-    //This class will implement comparable because I want
-    //to sort objects according to no. of occurrences using the compareTo() method
+
     public static class Word {
         String word;
         int noOfOccurrences;
@@ -79,18 +78,7 @@ public class Indexer {
             noOfOccurrencesBold=0;
             paragraph="";
         }
-        //Overriding the original function in Java.lang.object because equals() method
-        //was overridden
-        //This method returns the hash code value
-        //for the word member of the object on which this method is invoked.
-        //The value will be used in HashMap later
-        @Override
-        public int hashCode() { return word.hashCode(); }
 
-        //Overriding the original function in Java.lang.object
-        //compares word member in obj with word member in the calling object
-        @Override
-        public boolean equals(Object obj) { return word.equals(((Word)obj).word); }
 
 
     }

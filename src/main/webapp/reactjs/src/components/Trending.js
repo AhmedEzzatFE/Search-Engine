@@ -63,9 +63,7 @@ class Trending extends Component {
                 </Button>
                 </Col></Row>
                 {this.state.isLoading ?
-                <Loading/>:
-
-                    <Histogram
+                <Loading/>:<Histogram
                         xLabels={this.state.labels}
                         yValues={this.state.countOccurrences}
                         width='1000'
