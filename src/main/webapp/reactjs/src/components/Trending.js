@@ -36,12 +36,6 @@ class Trending extends Component {
         this.setState({isLoading:true})
         let ReservedLabels=[]
         let ReservedY=[]
-
-        axios.get('https://ipapi.co/json/').then((response) => {
-            let data = response.data;
-            this.setState({
-                countryName: data.country_name,
-            });
             console.log(this.state.value.label)
             axios.get("http://localhost:8081/rest/Trending/trend/"+this.state.id+"/"+this.state.value.label)
                 .then((response) =>
@@ -50,7 +44,7 @@ class Trending extends Component {
                     ReservedY=response.data.content.map(x => x.count);
                     this.setState({countOccurrences: ReservedY,isLoading:false}
 
-                    )})})
+                    )})
   }
     changeHandler = value => {
         this.setState({ value })
@@ -69,7 +63,9 @@ class Trending extends Component {
                 </Button>
                 </Col></Row>
                 {this.state.isLoading ?
-                <Loading/>:<Histogram
+                <Loading/>:
+
+                    <Histogram
                         xLabels={this.state.labels}
                         yValues={this.state.countOccurrences}
                         width='1000'
