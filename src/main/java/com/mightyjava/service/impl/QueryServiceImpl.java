@@ -1,7 +1,7 @@
 package com.mightyjava.service.impl;
 
-import com.mightyjava.Query_and_Ranker.ImageProcessorWI;
-import com.mightyjava.Query_and_Ranker.QueryProcessorForWI;
+import com.mightyjava.CR_IND_QP_RK.ImageProcessorWI;
+import com.mightyjava.CR_IND_QP_RK.QueryProcessorForWI;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 

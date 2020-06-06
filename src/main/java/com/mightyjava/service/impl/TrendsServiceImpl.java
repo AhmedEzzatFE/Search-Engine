@@ -1,6 +1,6 @@
 package com.mightyjava.service.impl;
 
-import com.mightyjava.Query_and_Ranker.TrendsWI;
+import com.mightyjava.CR_IND_QP_RK.TrendsWI;
 import com.mightyjava.domain.Trends;
 import com.mightyjava.repository.IndexRepo;
 import com.mightyjava.service.TrendService;
